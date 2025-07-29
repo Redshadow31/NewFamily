@@ -46,3 +46,11 @@ h2 {
     font-size: 0.9em;
     margin-top: 0.3em;
 }
+.user-card:not(.offline) .username {
+    color: red;
+}
+
+.user-card:not(.offline) .title {
+    color: black;
+}
+
