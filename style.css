@@ -1,0 +1,48 @@
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+header {
+    background-color: #e74c3c;
+    color: white;
+    text-align: center;
+    padding: 2em 1em;
+}
+header img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+h2 {
+    text-align: center;
+    margin-top: 2em;
+}
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1em;
+    padding: 1em;
+}
+.user-card {
+    background: white;
+    border-radius: 10px;
+    text-align: center;
+    padding: 1em;
+}
+.user-card.offline {
+    filter: grayscale(100%);
+    opacity: 0.6;
+}
+.user-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+.username {
+    font-weight: bold;
+    margin-top: 0.5em;
+}
+.title {
+    font-size: 0.9em;
+    margin-top: 0.3em;
+}
