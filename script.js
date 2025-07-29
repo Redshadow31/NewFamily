@@ -16,8 +16,8 @@ async function fetchStreams(logins) {
     const url = `https://api.twitch.tv/helix/streams?${query}`;
     const response = await fetch(url, {
         headers: {
-            'Client-ID': 'rr75kdousbzbp8qfjy0xtppwpljuke',
-            'Authorization': `Bearer ${4dac4j69keeckddjaqp5617uenbav6}`
+            'Client-ID': clientId,
+            'Authorization': 'Bearer ' + token
         }
     });
     return response.json();
