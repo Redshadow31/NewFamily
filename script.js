@@ -23,31 +23,35 @@ async function fetchStreams(logins) {
     return response.json();
 }
 
-async function fetchUsersInfo(logins) {
-    const query = logins.map(user => `login=${user}`).join('&');
-    const url = `https://api.twitch.tv/helix/users?${query}`;
-    const response = await fetch(url, {
-        headers: {
-            'Client-ID': clientId,
-            'Authorization': 'Bearer ' + token
-        }
-    });
-    return response.json();
+async function fetchUsersInfo(allUsers) {
+    const results = [];
+    for (let i = 0; i < allUsers.length; i += 100) {
+        const chunk = allUsers.slice(i, i + 100);
+        const query = chunk.map(user => `login=${user}`).join('&');
+        const url = `https://api.twitch.tv/helix/users?${query}`;
+        const response = await fetch(url, {
+            headers: {
+                'Client-ID': clientId,
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        const data = await response.json();
+        results.push(...data.data);
+    }
+    return results;
 }
 
 async function init() {
     const allUsers = await fetchUserLists();
+    const usersInfo = await fetchUsersInfo(allUsers);
 
-    const chunks = [allUsers.slice(0, 100), allUsers.slice(100)];
+    const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
     const onlineUsers = [];
 
-    for (const group of chunks) {
+    for (const group of streamChunks) {
         const data = await fetchStreams(group);
         onlineUsers.push(...data.data);
     }
-
-    const usersInfoData = await fetchUsersInfo(allUsers);
-    const usersInfo = usersInfoData.data;
 
     const liveContainer = document.getElementById('live-users');
     const offlineContainer = document.getElementById('offline-users');
@@ -66,13 +70,13 @@ async function init() {
         const title = isOnline ? streamData.title : 'Hors ligne';
         const img = isOnline
             ? streamData.thumbnail_url.replace('{width}', '320').replace('{height}', '180')
-            : (userInfo ? userInfo.profile_image_url : 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png');
+            : (userInfo?.profile_image_url || 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png');
 
         card.innerHTML = `
             <a href="${link}" target="_blank">
                 <img src="${img}" alt="Preview">
-                <div class="username">${user}</div>
-                <div class="title">${title}</div>
+                <div class="username" style="color: red; font-weight: bold;">${user}</div>
+                <div class="title" style="color: black;">${title}</div>
             </a>
         `;
 
