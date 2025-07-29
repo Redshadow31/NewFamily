@@ -23,6 +23,18 @@ async function fetchStreams(logins) {
     return response.json();
 }
 
+async function fetchUsersInfo(logins) {
+    const query = logins.map(user => `login=${user}`).join('&');
+    const url = `https://api.twitch.tv/helix/users?${query}`;
+    const response = await fetch(url, {
+        headers: {
+            'Client-ID': clientId,
+            'Authorization': 'Bearer ' + token
+        }
+    });
+    return response.json();
+}
+
 async function init() {
     const allUsers = await fetchUserLists();
 
@@ -34,22 +46,27 @@ async function init() {
         onlineUsers.push(...data.data);
     }
 
+    const usersInfoData = await fetchUsersInfo(allUsers);
+    const usersInfo = usersInfoData.data;
+
     const liveContainer = document.getElementById('live-users');
     const offlineContainer = document.getElementById('offline-users');
     const onlineLogins = onlineUsers.map(user => user.user_login.toLowerCase());
 
     for (const user of allUsers) {
         const isOnline = onlineLogins.includes(user.toLowerCase());
-        const data = onlineUsers.find(u => u.user_login.toLowerCase() === user.toLowerCase());
+        const streamData = onlineUsers.find(u => u.user_login.toLowerCase() === user.toLowerCase());
+        const userInfo = usersInfo.find(u => u.login.toLowerCase() === user.toLowerCase());
+
         const card = document.createElement('div');
         card.classList.add('user-card');
         if (!isOnline) card.classList.add('offline');
 
         const link = `https://twitch.tv/${user}`;
-        const title = isOnline ? data.title : 'Hors ligne';
+        const title = isOnline ? streamData.title : 'Hors ligne';
         const img = isOnline
-            ? data.thumbnail_url.replace('{width}', '320').replace('{height}', '180')
-            : 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png';
+            ? streamData.thumbnail_url.replace('{width}', '320').replace('{height}', '180')
+            : (userInfo ? userInfo.profile_image_url : 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png');
 
         card.innerHTML = `
             <a href="${link}" target="_blank">
