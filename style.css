@@ -1,58 +1,43 @@
 
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
+    margin: 0;
     background-color: #f2f2f2;
 }
 header {
     background-color: #e74c3c;
     color: white;
+    padding: 20px;
     text-align: center;
-    padding: 2em 1em;
 }
-header img {
-    width: 100px;
+.back-button {
+    display: inline-block;
     margin-bottom: 10px;
+    color: white;
+    text-decoration: none;
 }
-h2 {
-    text-align: center;
-    margin-top: 2em;
-}
-.user-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1em;
-    padding: 1em;
-}
-.user-card {
+.about-section {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
     background: white;
     border-radius: 10px;
-    text-align: center;
-    padding: 1em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-.user-card.offline {
-    filter: grayscale(100%);
-    opacity: 0.6;
+.about-section ul {
+    padding-left: 20px;
 }
-.user-card img {
-    width: 100%;
+.link-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.link-buttons a {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #e74c3c;
+    color: white;
+    text-decoration: none;
     border-radius: 5px;
 }
-.username {
-    font-weight: bold;
-    margin-top: 0.5em;
-}
-.title {
-    font-size: 0.9em;
-    margin-top: 0.3em;
-}
-.user-card:not(.offline) a .username {
-    color: red !important;
-    text-decoration: none;
-}
-
-.user-card:not(.offline) a .title {
-    color: black !important;
-    text-decoration: none;
-}
-
