@@ -1,85 +1,66 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Twitch Entraide - New Family</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Twitch Entraide - New Family</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <img src="assets/logo.png" alt="Logo Twitch Entraide New Family">
-        <h1>Bienvenue sur le site de la New Family !</h1>
-        <p>Retrouvez ici tous les lives de notre communauté bienveillante, passionnée et unie autour du partage !</p>
-    </header>
-<div class="button-container">
+  <header>
+    <img src="assets/logo.png" alt="Logo Twitch Entraide New Family">
+    <h1>Bienvenue sur le site de la New Family !</h1>
+    <p>Retrouvez ici tous les lives de notre communauté bienveillante, passionnée et unie autour du partage !</p>
+  </header>
+
+  <!-- Boutons du haut -->
+  <div class="button-container">
     <a href="index.html" class="about-button">🎭 En savoir plus sur la New Family</a>
-</div>
-<div class="button-container">
+  </div>
+  <div class="button-container">
     <a href="vip.html" class="event-button">⭐ VIP du mois</a>
     <a href="evenements.html" class="event-button">📅 Événements</a>
     <a href="clips.html" class="event-button">📽️ Clips à découvrir</a>
-    <a href="interviews.html" class="event-button">🎤 Interviews</a> <!-- ✅ même classe -->
-</div>
-<div class="flex justify-center flex-wrap gap-4 mt-6">
-  <a href="..." class="...">Événements</a>
-  <a href="..." class="...">Clips à découvrir</a>
-  ...
-<section class="px-4 py-10 bg-white rounded-2xl shadow-lg max-w-5xl mx-auto mt-8">
-  <h2 class="text-3xl font-bold text-center mb-4">🌴 NewFamily Aventura 2026</h2>
-  <p class="text-center text-lg mb-6">
-    Du 13 au 17 mai 2026, la communauté se retrouve pour un voyage exceptionnel à PortAventura ! 🏖️
-  </p>
-
-  <div class="flex justify-center mb-6">
-    <iframe 
-      class="rounded-xl shadow-xl w-full max-w-[800px] aspect-video"
-      src="https://www.youtube.com/embed/WVgvUKb3-XQ"
-      title="Trailer NewFamily Aventura 2026"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen>
-    </iframe>
+    <a href="interviews.html" class="event-button">🎤 Interviews</a>
   </div>
 
-  <div class="flex justify-center">
-    <a href="aventura2026.html" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition">
-      En savoir plus sur New Family Aventura 2026
-    </a>
-  </div>
-</section>
+  <!-- 🔽 Section Trailer NewFamily Aventura 2026 -->
+  <section class="px-4 py-10 bg-white rounded-2xl shadow-lg max-w-5xl mx-auto mt-8">
+    <h2 class="text-3xl font-bold text-center mb-4">🌴 NewFamily Aventura 2026</h2>
+    <p class="text-center text-lg mb-6">
+      Du 13 au 17 mai 2026, la communauté se retrouve pour un voyage exceptionnel à PortAventura ! 🏖️
+    </p>
 
-    <video controls class="rounded-xl shadow-xl max-w-full w-[800px]">
-      <source src="NFA_trailer.mp4" type="video/mp4">
-      Votre navigateur ne supporte pas la lecture vidéo.
-    </video>
-  </div>
+    <div class="flex justify-center mb-6">
+      <iframe 
+        class="rounded-xl shadow-xl w-full max-w-[800px] aspect-video"
+        src="https://www.youtube.com/embed/WVgvUKb3-XQ"
+        title="Trailer NewFamily Aventura 2026"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
 
-  <div class="flex justify-center">
-    <a href="aventura2026.html" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition">
-      En savoir plus sur New Family Aventura 2026
-    </a>
-  </div>
-</section>
-<!-- 🔼 Fin de la section -->
+    <div class="flex justify-center">
+      <a href="aventura2026.html" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition">
+        En savoir plus sur New Family Aventura 2026
+      </a>
+    </div>
+  </section>
+  <!-- 🔼 Fin de la section trailer -->
 
-<!-- Ensuite tu peux laisser la section qui liste les membres en direct -->
-<div id="live-users" class="...">
+  <!-- 🔽 Section des lives -->
+  <section id="online">
+    <h2>Actuellement en direct 🎥</h2>
+    <p id="live-count" style="text-align: center; font-weight: bold; font-size: 1.2em;"></p>
+    <div id="live-users" class="user-grid"></div>
+  </section>
 
+  <section id="offline">
+    <h2>À découvrir bientôt 👀</h2>
+    <div id="offline-users" class="user-grid"></div>
+  </section>
 
-
-</div>
-    <section id="online">
-        <h2>Actuellement en direct 🎥</h2>
-<p id="live-count" style="text-align: center; font-weight: bold; font-size: 1.2em;"></p>
-        <div id="live-users" class="user-grid"></div>
-    </section>
-
-    <section id="offline">
-        <h2>À découvrir bientôt 👀</h2>
-        <div id="offline-users" class="user-grid"></div>
-    </section>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
