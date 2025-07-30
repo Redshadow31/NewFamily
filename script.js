@@ -1,5 +1,12 @@
 const clientId = 'rr75kdousbzbp8qfjy0xtppwpljuke';
-const token = 'y79txd7hy55cuteevpigkzhl7jt5hi';
+let token = '';
+
+async function getToken() {
+    const response = await fetch('/.netlify/functions/getTwitchData');
+    const data = await response.json();
+    token = data.access_token;
+}
+
 
 async function fetchUserLists() {
     const [res1, res2] = await Promise.all([
