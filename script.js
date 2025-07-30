@@ -104,21 +104,20 @@ async function init() {
         const link = `https://twitch.tv/${user}`;
         const game = isOnline ? streamData.game_name : '';
         const title = isOnline
-    ? `<strong>Venez soutenir</strong> ce membre de la New Family qui joue actuellement à <em>${game}</em>`
-    : 'Hors ligne';
+            ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue actuellement à <em>${game}</em>.`
+            : 'Hors ligne';
 
-        const game = isOnline ? streamData.game_name : '';
         const img = isOnline
             ? streamData.thumbnail_url.replace('{width}', '320').replace('{height}', '180')
             : (userInfo?.profile_image_url || 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png');
 
-       card.innerHTML = `
-    <a href="${link}" target="_blank">
-        <img src="${img}" alt="Preview">
-        <div class="username">${user}</div>
-        <div class="title">${title}</div>
-    </a>
-`;
+        card.innerHTML = `
+            <a href="${link}" target="_blank">
+                <img src="${img}" alt="Preview">
+                <div class="username">${user}</div>
+                <div class="title">${title}</div>
+            </a>
+        `;
 
         if (isOnline) {
             liveContainer.appendChild(card);
