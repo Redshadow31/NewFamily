@@ -58,22 +58,39 @@ h2 {
     border-radius: 10px;
     text-align: center;
     padding: 1em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.user-card.offline {
-    filter: grayscale(100%);
-    opacity: 0.6;
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
+
 .user-card img {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 8px;
+    margin-bottom: 0.5em;
 }
+
 .username {
     font-weight: bold;
+    font-size: 1.1em;
+    color: #e74c3c;
     margin-top: 0.5em;
+    margin-bottom: 0.3em;
 }
+
 .title {
-    font-size: 0.9em;
-    margin-top: 0.3em;
+    font-size: 0.85em;
+    color: #333;
+    margin-top: 0.2em;
+    white-space: pre-line;
+}
+
+.user-card.offline {
+    filter: grayscale(90%);
+    opacity: 0.75;
 }
 .button-container {
     display: flex;
