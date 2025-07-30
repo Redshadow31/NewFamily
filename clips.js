@@ -29,10 +29,17 @@ async function getRandomClip(userId) {
         }
     });
     const data = await res.json();
+
+    console.log(`Clips reçus pour ${userId}:`, data.data); // 👈 ici
+
     const validClips = data.data.filter(clip => clip.thumbnail_url && clip.id);
     if (validClips.length === 0) return null;
-    return validClips[Math.floor(Math.random() * validClips.length)];
+
+    const chosenClip = validClips[Math.floor(Math.random() * validClips.length)];
+    console.log(`➡️ Clip choisi:`, chosenClip); // 👈 ici aussi
+    return chosenClip;
 }
+
 
 async function prepareClips() {
     for (const member of members) {
@@ -58,9 +65,12 @@ function displayNextClip() {
     const { id, user } = clipsQueue.shift();
     const iframeSrc = `https://clips.twitch.tv/embed?clip=${id}&parent=newfamily.netlify.app`;
 
+    console.log(`🎬 Affichage du clip de ${user} →`, iframeSrc); // 👈 ici
+
     document.getElementById("clip-player").src = iframeSrc;
     document.getElementById("clip-user").textContent = `👤 ${user}`;
 }
+
 
 document.getElementById("next-button").addEventListener("click", displayNextClip);
 
