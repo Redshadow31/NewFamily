@@ -162,3 +162,11 @@ h2 {
     background: #ff5722;
     transform: scale(1.05);
 }
+.user-card.vip::before {
+    content: "⭐ VIP";
+    font-weight: bold;
+    color: goldenrod;
+    font-size: 0.9em;
+    display: block;
+    margin-bottom: 0.3em;
+}
