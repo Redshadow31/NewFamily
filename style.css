@@ -15,9 +15,16 @@ header {
     transition: all 0.3s ease-in-out;
 }
 header img {
-    width: 100px;
+    width: 130px; /* ↗️ taille augmentée */
+    max-width: 100%;
     margin-bottom: 10px;
+    transition: transform 0.3s ease;
 }
+
+header img:hover {
+    transform: scale(1.08); /* Effet zoom fluide */
+}
+
 h2 {
     text-align: center;
     margin-top: 2em;
