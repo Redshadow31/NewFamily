@@ -1,5 +1,13 @@
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
-const accessToken = "4dac4j69keeckddjaqp5617uenbav6";
+let accessToken = "";
+
+// 🔄 Récupérer un token frais via la Netlify Function
+async function getToken() {
+    const res = await fetch("/.netlify/functions/getTwitchData");
+    const data = await res.json();
+    accessToken = data.access_token;
+}
+
 
 // 👇 Liste des usernames Twitch des membres
 const members = ["tsukilamoon", "sebdaries", "leprofesseurx", "moon_alonzo"];
@@ -30,9 +38,13 @@ async function getRandomClip(userId) {
 
 async function displayClips() {
     const container = document.getElementById("clips-container");
+
+    await getToken(); // ← Récupère un token valable avant toute requête
+
     for (const member of members) {
         const userId = await getUserId(member);
         if (!userId) continue;
+
         const clip = await getRandomClip(userId);
         if (clip) {
             const clipEl = document.createElement("div");
