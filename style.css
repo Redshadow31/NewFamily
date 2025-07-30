@@ -103,4 +103,20 @@ h2 {
     background: #845ec2; /* violet */
     transform: scale(1.05); /* agrandissement léger */
 }
+.button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
+.button-container.single-button {
+    justify-content: center;
+}
+
+.button-container.single-button a {
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
 
