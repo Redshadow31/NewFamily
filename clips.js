@@ -1,16 +1,16 @@
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
-let accessToken = "";
 
-// 🔄 Récupérer un token frais via la Netlify Function
+// ⚠️ Pas de token ici, il sera récupéré dynamiquement
+let accessToken = "";
+let clipsQueue = [];
+
+const members = ["Nexou31", "Clarastonewall", "Red_shadow_31", "Selena_Akemi", "Thony1384", "Jenny31200", "Vektor_live", "Livio_on", "Dylow95"]; // À personnaliser
+
 async function getToken() {
-    const res = await fetch("/.netlify/functions/getTwitchData");
+    const res = await fetch('/.netlify/functions/getTwitchData');
     const data = await res.json();
     accessToken = data.access_token;
 }
-
-
-// 👇 Liste des usernames Twitch des membres
-const members = ["Nexou31", "Clarastonewall", "Red_shadow_31", "Selena_Akemi", "Thony1384", "Jenny31200", "Vektor_live", "Livio_on", "Dylow95"];
 
 async function getUserId(username) {
     const res = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
@@ -35,6 +35,43 @@ async function getRandomClip(userId) {
     if (clips.length === 0) return null;
     return clips[Math.floor(Math.random() * clips.length)];
 }
+
+async function prepareClips() {
+    for (const member of members) {
+        const userId = await getUserId(member);
+        if (!userId) continue;
+        const clip = await getRandomClip(userId);
+        if (clip) {
+            clipsQueue.push({
+                id: clip.id,
+                user: member
+            });
+        }
+    }
+}
+
+function displayNextClip() {
+    if (clipsQueue.length === 0) {
+        document.getElementById("clip-player").src = "";
+        document.getElementById("clip-user").textContent = "Plus aucun clip à afficher 😢";
+        return;
+    }
+
+    const { id, user } = clipsQueue.shift();
+    const iframeSrc = `https://clips.twitch.tv/embed?clip=${id}&parent=newfamily.netlify.app`;
+
+    document.getElementById("clip-player").src = iframeSrc;
+    document.getElementById("clip-user").textContent = `👤 ${user}`;
+}
+
+document.getElementById("next-button").addEventListener("click", displayNextClip);
+
+(async () => {
+    await getToken();
+    await prepareClips();
+    displayNextClip();
+})();
+
 
 async function displayClips() {
     const container = document.getElementById("clips-container");
