@@ -77,13 +77,12 @@ async function fetchVIPList() {
     const response = await fetch('vip.json');
     return await response.json(); // liste des pseudos
 }
-
 async function init() {
     await getToken();
 
     const allUsers = await fetchUserLists();
     const usersInfo = await fetchUsersInfo(allUsers);
-    const vipList = await fetchVIPList(); // 👈 On garde uniquement celle-ci
+    const vipList = await fetchVIPList(); // ✅ Tu l’as déjà ici, pas besoin de la redéclarer plus bas
 
     const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
     const onlineUsers = [];
@@ -97,7 +96,7 @@ async function init() {
     const offlineContainer = document.getElementById('offline-users');
     const onlineLogins = onlineUsers.map(user => user.user_login.toLowerCase());
 
-    // ✅ On trie ici sans redéclarer vipList
+    // ✅ Trie des utilisateurs : VIP d’abord
     const sortedUsers = [...allUsers].sort((a, b) => {
         const aIsVip = vipList.includes(a.toLowerCase());
         const bIsVip = vipList.includes(b.toLowerCase());
@@ -114,7 +113,6 @@ async function init() {
         if (vipList.includes(user.toLowerCase())) {
             card.classList.add('vip');
         }
-
         if (!isOnline) card.classList.add('offline');
 
         const link = `https://twitch.tv/${user}`;
@@ -149,4 +147,7 @@ async function init() {
 
     liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
 }
+
+init();
+
 
