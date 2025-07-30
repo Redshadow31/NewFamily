@@ -38,8 +38,9 @@ h2 {
 }
 
 .user-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1em;
     padding: 1em;
 }
