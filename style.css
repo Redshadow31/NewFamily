@@ -47,11 +47,6 @@ h2 {
     transition: background 0.3s, transform 0.3s;
 }
 
-.interview-button:hover {
-    background: #d45c33;
-    transform: scale(1.05);
-}
-
 .user-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
