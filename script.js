@@ -124,6 +124,9 @@ async function init() {
             offlineContainer.appendChild(card);
         }
     }
+// 🔢 Mise à jour du compteur de lives
+const liveCountElement = document.getElementById("live-count");
+liveCountElement.textContent = `${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
 }
 
 init();
