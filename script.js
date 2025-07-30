@@ -98,7 +98,17 @@ async function init() {
     const offlineContainer = document.getElementById('offline-users');
     const onlineLogins = onlineUsers.map(user => user.user_login.toLowerCase());
 
-    for (const user of allUsers) {
+    // Charger les VIP
+const vipList = await fetch('vip.json').then(r => r.json());
+
+// Trier les utilisateurs : VIP d'abord
+const sortedUsers = [...allUsers].sort((a, b) => {
+    const aIsVip = vipList.includes(a.toLowerCase());
+    const bIsVip = vipList.includes(b.toLowerCase());
+    return (aIsVip === bIsVip) ? 0 : aIsVip ? -1 : 1;
+});
+
+   for (const user of sortedUsers) {
         const isOnline = onlineLogins.includes(user.toLowerCase());
         const streamData = onlineUsers.find(u => u.user_login.toLowerCase() === user.toLowerCase());
         const userInfo = usersInfo.find(u => u.login.toLowerCase() === user.toLowerCase());
