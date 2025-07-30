@@ -73,12 +73,18 @@ async function fetchUsersInfo(allUsers) {
 
     return results;
 }
+async function fetchVIPList() {
+    const response = await fetch('vip.json');
+    return await response.json(); // liste des pseudos
+}
 
 async function init() {
     await getToken();
 
     const allUsers = await fetchUserLists();
     const usersInfo = await fetchUsersInfo(allUsers);
+    const vipList = await fetchVIPList();
+
 
     const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
     const onlineUsers = [];
@@ -99,6 +105,10 @@ async function init() {
 
         const card = document.createElement('div');
         card.classList.add('user-card');
+        if (vipList.includes(user.toLowerCase())) {
+    card.classList.add('vip');
+}
+
         if (!isOnline) card.classList.add('offline');
 
         const link = `https://twitch.tv/${user}`;
