@@ -15,7 +15,7 @@ header {
     transition: all 0.3s ease-in-out;
 }
 header img {
-    width: 150px; /* ↗️ taille augmentée */
+    width: 250px; /* ↗️ taille augmentée */
     max-width: 100%;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
