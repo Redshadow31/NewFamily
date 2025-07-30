@@ -1,5 +1,5 @@
 const clientId = 'rr75kdousbzbp8qfjy0xtppwpljuke';
-const token = '4dac4j69keeckddjaqp5617uenbav6';
+const token = 'y79txd7hy55cuteevpigkzhl7jt5hi';
 
 async function fetchUserLists() {
     const [res1, res2] = await Promise.all([
