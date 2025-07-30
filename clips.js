@@ -31,9 +31,12 @@ async function getRandomClip(userId) {
         }
     });
     const data = await res.json();
-    const clips = data.data;
-    if (clips.length === 0) return null;
-    return clips[Math.floor(Math.random() * clips.length)];
+
+    const validClips = data.data.filter(clip => clip.thumbnail_url && clip.id);
+
+    if (validClips.length === 0) return null;
+
+    return validClips[Math.floor(Math.random() * validClips.length)];
 }
 
 async function prepareClips() {
@@ -51,14 +54,19 @@ async function prepareClips() {
 }
 
 function displayNextClip() {
-    if (clipsQueue.length === 0) {
-        document.getElementById("clip-player").src = "";
-        document.getElementById("clip-user").textContent = "Plus aucun clip à afficher 😢";
-        return;
-    }
+    if (!clip || !clip.id) {
+    console.warn(`Clip invalide ou supprimé pour ${member}`);
+    displayNextClip(); // relancer pour essayer un autre clip
+    return;
+}
 
     const { id, user } = clipsQueue.shift();
-    const iframeSrc = `https://clips.twitch.tv/embed?clip=${id}&parent=newfamily.netlify.app`;
+    const iframe = document.createElement("iframe");
+iframe.src = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=newfamily.netlify.app`;
+iframe.width = "800";
+iframe.height = "450";
+iframe.frameBorder = "0";
+iframe.allowFullscreen = true;
 
     document.getElementById("clip-player").src = iframeSrc;
     document.getElementById("clip-user").textContent = `👤 ${user}`;
