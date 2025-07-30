@@ -35,6 +35,23 @@ h2 {
     text-align: center;
     margin-top: 2em;
 }
+.interview-button {
+    display: inline-block;
+    background: #ff7f50;
+    color: white;
+    padding: 0.8em 1.2em;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.3s;
+}
+
+.interview-button:hover {
+    background: #d45c33;
+    transform: scale(1.05);
+}
+
 .user-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
