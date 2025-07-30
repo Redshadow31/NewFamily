@@ -4,70 +4,25 @@
   <meta charset="UTF-8">
   <title>NewFamily Aventura 2026</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .center-button {
-      display: flex;
-      justify-content: center;
-      margin-top: 1.5rem;
-    }
-    .return-button {
-      display: inline-block;
-      background-color: #f44336;
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border-radius: 0.6rem;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .discord-button {
-      display: inline-flex;
-      align-items: center;
-      background-color: #f44336;
-      color: white;
-      font-weight: 600;
-      padding: 0.8rem 1.5rem;
-      border-radius: 0.6rem;
-      text-decoration: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      gap: 0.5rem;
-    }
-    header.banner {
-      background: linear-gradient(to right, #c850c0, #4158d0);
-      padding: 2rem;
-      color: white;
-      text-align: center;
-      border-bottom-left-radius: 2rem;
-      border-bottom-right-radius: 2rem;
-    }
-  </style>
 </head>
 <body>
-  <header class="banner">
-    <img src="assets/logo.png" alt="Logo Twitch Entraide New Family" style="height: 80px; margin-bottom: 1rem;">
-    <h1>🌴 NewFamily Aventura 2026</h1>
-    <p>Du 13 au 17 mai 2026 (ou dès le 11 pour les motivés) — direction l’Espagne pour un séjour communautaire inoubliable !</p>
+  <!-- Bandeau principal -->
+  <header style="background: linear-gradient(to right, #c0392b, #8e44ad); color: white; padding: 2rem 1rem; text-align: center; border-radius: 0 0 1rem 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+    <img src="assets/logo.png" alt="Logo Twitch Entraide New Family" style="height: 80px; margin-bottom: 1rem; object-fit: contain;">
+    <h1 style="font-size: 2.5rem; margin: 0;">🌴 NewFamily Aventura 2026</h1>
+    <p style="font-size: 1rem; margin-top: 0.5rem;">Du 13 au 17 mai 2026 (ou dès le 11 pour les motivés) — direction l’Espagne pour un séjour communautaire inoubliable !</p>
   </header>
 
-  <div class="center-button">
-    <a href="index.html" class="return-button">⬅️ Retour à l’accueil</a>
+  <!-- Bouton retour -->
+  <div style="text-align: center; margin: 2rem 0;">
+    <a href="index.html" style="background-color: #f44336; color: white; padding: 0.7rem 1.4rem; border-radius: 0.5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.2); text-decoration: none; font-weight: bold;">
+      ⬅️ Retour à l’accueil
+    </a>
   </div>
 
-  <section style="padding: 3rem 1rem; background: white; border-radius: 1rem; max-width: 900px; margin: 2rem auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;">
-    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">📋 Sondage d’intention</h2>
-    <p style="font-size: 1.1rem;">Pour nous aider à anticiper, merci de répondre au sondage dans Discord avec une réaction (1️⃣ à 6️⃣ selon votre groupe).<br>
-    Cela n’engage à rien mais nous aide beaucoup à prévoir les hébergements et transports !</p>
-
-    <div class="center-button" style="margin-top: 2rem;">
-      <a href="https://discord.gg/ton-lien" class="discord-button">
-        <img src="assets/discord-icon.png" alt="Discord" style="height: 20px;">
-        Rejoindre le Discord pour s’inscrire
-      </a>
-    </div>
-  </section>
-
-  <section style="padding: 2rem 1rem; background: white; border-radius: 1rem; max-width: 900px; margin: 2rem auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;">
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2); max-width: 100%; margin: 0 auto 2rem;">
+  <!-- Trailer YouTube -->
+  <section style="max-width: 900px; margin: 0 auto 3rem; padding: 1rem;">
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
       <iframe 
         src="https://www.youtube.com/embed/WVgvUKb3-XQ"
         title="Trailer NewFamily Aventura 2026"
@@ -78,5 +33,49 @@
       </iframe>
     </div>
   </section>
+
+  <!-- Présentation & infos pratiques -->
+  <section style="background: white; max-width: 900px; margin: 2rem auto; padding: 2rem; border-radius: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+    <h2 style="font-size: 2rem; color: #c0392b; text-align: center;">🔥 Une aventure humaine unique</h2>
+    <p style="font-size: 1.1rem; margin-top: 1rem;">
+      Ce sera une occasion exceptionnelle de vivre des moments inoubliables entre membres de la New Family, dans une ambiance fun, bienveillante et conviviale. Du barbecue à la chasse au trésor, en passant par deux jours de folie à PortAventura, tout est pensé pour créer du lien, se détendre et rire ensemble 🌞
+    </p>
+
+    <h3 style="margin-top: 2rem; color: #8e44ad;">📅 DATES</h3>
+    <ul>
+      <li>🗓️ Du <strong>13 au 17 mai 2026</strong> (ou dès le <strong>11 mai</strong> pour les motivés)</li>
+    </ul>
+
+    <h3 style="margin-top: 1.5rem; color: #8e44ad;">🏠 HÉBERGEMENT</h3>
+    <ul>
+      <li>Grande villa avec piscine réservée au staff (et pour soirées & rencontres)</li>
+      <li>Camping à prix négocié pour les membres</li>
+      <li>Possibilité de s’organiser en petits groupes pour louer d’autres logements</li>
+    </ul>
+
+    <h3 style="margin-top: 1.5rem; color: #8e44ad;">📌 PROGRAMME</h3>
+    <ul>
+      <li><strong>Mercredi :</strong> Installation + soirée BBQ chill</li>
+      <li><strong>Jeudi :</strong> Chasse au trésor + pique-nique + soirée surprise</li>
+      <li><strong>Vendredi & samedi :</strong> 2 jours à PortAventura 🎢</li>
+      <li><strong>Dimanche :</strong> Détente, derniers moments tous ensemble</li>
+    </ul>
+
+    <h3 style="margin-top: 1.5rem; color: #8e44ad;">🙋‍♂️ POUR QUI ?</h3>
+    <p>Ouvert à <strong>tous les membres</strong>, quel que soit leur rôle. Accompagnants bienvenus !</p>
+  </section>
+
+  <!-- Sondage intention -->
+  <section style="padding: 2rem; background: white; border-radius: 1rem; max-width: 700px; margin: 3rem auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;">
+    <h2 style="font-size: 1.8rem; font-weight: bold; margin-bottom: 1rem;">📋 Sondage d’intention</h2>
+    <p style="font-size: 1rem; margin-bottom: 1rem;">
+      Pour nous aider à anticiper, merci de répondre au sondage dans Discord avec une réaction (1️⃣ à 6️⃣ selon votre groupe).<br>
+      Cela n’engage à rien mais nous aide beaucoup à prévoir les hébergements et transports !
+    </p>
+    <a href="https://discord.gg/" target="_blank" style="display: inline-block; background-color: #f44336; color: white; padding: 0.8rem 1.5rem; font-weight: bold; border-radius: 0.6rem; box-shadow: 0 4px 8px rgba(0,0,0,0.2); text-decoration: none;">
+      <img src="assets/discord-icon.png" alt="Discord" style="height: 20px; vertical-align: middle; margin-right: 0.5rem;"> Rejoindre le Discord pour s’inscrire
+    </a>
+  </section>
+
 </body>
 </html>
