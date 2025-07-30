@@ -10,7 +10,7 @@ async function getToken() {
 
 
 // 👇 Liste des usernames Twitch des membres
-const members = ["tsukilamoon", "sebdaries", "leprofesseurx", "moon_alonzo"];
+const members = ["Nexou31", "Clarastonewall", "Red_shadow_31", "Selena_Akemi", "Thony1384", "Jenny31200", "Vektor_live", "Livio_on", "Dylow95"];
 
 async function getUserId(username) {
     const res = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
