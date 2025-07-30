@@ -141,3 +141,41 @@ h2 {
 }
 .user-card
 
+.user-card {
+    background: white;
+    border-radius: 10px;
+    text-align: center;
+    padding: 1em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.user-card:hover {
+    transform: scale(1.03);
+    background-color: #f9f2ff;
+    box-shadow: 0 0 15px rgba(132, 94, 194, 0.5);
+}
+
+.user-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.username {
+    font-weight: bold;
+    color: #e74c3c;
+    margin-top: 0.5em;
+}
+
+.game {
+    font-size: 0.9em;
+    font-style: italic;
+    color: #666;
+    margin-top: 0.2em;
+}
+
+.title {
+    font-size: 0.9em;
+    color: #333;
+    margin-top: 0.3em;
+}
