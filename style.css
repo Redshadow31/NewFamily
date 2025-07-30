@@ -53,38 +53,42 @@ h2 {
     gap: 1em;
     padding: 1em;
 }
+
 .user-card {
     background: white;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
     padding: 1em;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .user-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
 }
 
 .user-card img {
     width: 100%;
     border-radius: 8px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.7em;
 }
 
 .username {
     font-weight: bold;
     font-size: 1.1em;
     color: #e74c3c;
-    margin-top: 0.5em;
-    margin-bottom: 0.3em;
+    margin: 0.5em 0 0.2em;
+    line-height: 1.2em;
 }
 
 .title {
     font-size: 0.85em;
     color: #333;
-    margin-top: 0.2em;
+    line-height: 1.3em;
     white-space: pre-line;
 }
 
