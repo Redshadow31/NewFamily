@@ -1,10 +1,8 @@
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
-
-// ⚠️ Pas de token ici, il sera récupéré dynamiquement
 let accessToken = "";
 let clipsQueue = [];
 
-const members = ["Nexou31", "Clarastonewall", "Red_shadow_31", "Selena_Akemi", "Thony1384", "Jenny31200", "Vektor_live", "Livio_on", "Dylow95"]; // À personnaliser
+const members = ["Nexou31", "Clarastonewall", "Red_shadow_31", "Selena_Akemi", "Thony1384", "Jenny31200", "Vektor_live", "Livio_on", "Dylow95"];
 
 async function getToken() {
     const res = await fetch('/.netlify/functions/getTwitchData');
@@ -31,11 +29,8 @@ async function getRandomClip(userId) {
         }
     });
     const data = await res.json();
-
     const validClips = data.data.filter(clip => clip.thumbnail_url && clip.id);
-
     if (validClips.length === 0) return null;
-
     return validClips[Math.floor(Math.random() * validClips.length)];
 }
 
@@ -54,19 +49,14 @@ async function prepareClips() {
 }
 
 function displayNextClip() {
-    if (!clip || !clip.id) {
-    console.warn(`Clip invalide ou supprimé pour ${member}`);
-    displayNextClip(); // relancer pour essayer un autre clip
-    return;
-}
+    if (clipsQueue.length === 0) {
+        document.getElementById("clip-player").src = "";
+        document.getElementById("clip-user").textContent = "Aucun autre clip disponible.";
+        return;
+    }
 
     const { id, user } = clipsQueue.shift();
-    const iframe = document.createElement("iframe");
-iframe.src = `https://clips.twitch.tv/embed?clip=${clip.id}&parent=newfamily.netlify.app`;
-iframe.width = "800";
-iframe.height = "450";
-iframe.frameBorder = "0";
-iframe.allowFullscreen = true;
+    const iframeSrc = `https://clips.twitch.tv/embed?clip=${id}&parent=newfamily.netlify.app`;
 
     document.getElementById("clip-player").src = iframeSrc;
     document.getElementById("clip-user").textContent = `👤 ${user}`;
@@ -79,33 +69,3 @@ document.getElementById("next-button").addEventListener("click", displayNextClip
     await prepareClips();
     displayNextClip();
 })();
-
-
-async function displayClips() {
-    const container = document.getElementById("clips-container");
-
-    await getToken(); // ← Récupère un token valable avant toute requête
-
-    for (const member of members) {
-        const userId = await getUserId(member);
-        if (!userId) continue;
-
-        const clip = await getRandomClip(userId);
-        if (clip) {
-            const clipEl = document.createElement("div");
-            clipEl.className = "user-card";
-            clipEl.innerHTML = `
-                <iframe
-                    src="https://clips.twitch.tv/embed?clip=${clip.id}&parent=newfamily.netlify.app"
-                    width="320" height="180"
-                    frameborder="0"
-                    allowfullscreen>
-                </iframe>
-                <div class="username">${member}</div>
-            `;
-            container.appendChild(clipEl);
-        }
-    }
-}
-
-displayClips();
