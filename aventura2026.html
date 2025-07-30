@@ -2,128 +2,81 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NewFamily Aventura 2026</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
+    .center-button {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
     }
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 1.5rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    h1, h2 {
-      text-align: center;
-      color: #d33;
-    }
-    h3 {
-      margin-top: 2rem;
-      color: #333;
-    }
-    p, li {
-      line-height: 1.6;
-      color: #444;
-    }
-    ul {
-      padding-left: 1.5rem;
-    }
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 1rem;
-      margin: 2rem 0;
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .button {
+    .return-button {
       display: inline-block;
-      padding: 0.8rem 1.5rem;
-      background-color: #e53935;
+      background-color: #f44336;
       color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.6rem;
       font-weight: 600;
       text-decoration: none;
-      border-radius: 0.6rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      text-align: center;
-      margin: 2rem auto;
     }
-    .section {
-      margin-bottom: 2rem;
+    .discord-button {
+      display: inline-flex;
+      align-items: center;
+      background-color: #f44336;
+      color: white;
+      font-weight: 600;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.6rem;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      gap: 0.5rem;
+    }
+    header.banner {
+      background: linear-gradient(to right, #c850c0, #4158d0);
+      padding: 2rem;
+      color: white;
+      text-align: center;
+      border-bottom-left-radius: 2rem;
+      border-bottom-right-radius: 2rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <header class="banner">
+    <img src="assets/logo.png" alt="Logo Twitch Entraide New Family" style="height: 80px; margin-bottom: 1rem;">
     <h1>🌴 NewFamily Aventura 2026</h1>
-    <p style="text-align:center;">Du 13 au 17 mai 2026 (ou dès le 11 pour les motivés) — direction l’Espagne pour un séjour communautaire inoubliable !</p>
+    <p>Du 13 au 17 mai 2026 (ou dès le 11 pour les motivés) — direction l’Espagne pour un séjour communautaire inoubliable !</p>
+  </header>
 
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/WVgvUKb3-XQ" title="Trailer NewFamily Aventura 2026" frameborder="0" allowfullscreen></iframe>
-    </div>
-
-    <div class="section">
-      <h2>📅 Dates de l'événement</h2>
-      <ul>
-        <li>➡️ Du <strong>13 au 17 mai 2026</strong> (pont de l’Ascension)</li>
-        <li>📌 Option : arrivée dès le <strong>11 mai</strong> pour les plus motivés</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>🏠 Hébergement</h2>
-      <p>
-        Le staff logera dans une grande villa privée avec piscine, terrasse et jardin — lieu principal des soirées et rassemblements.<br>
-        Les membres seront logés à tarif négocié dans un camping proche, avec possibilité de créer des groupes pour des villas partagées.
-      </p>
-    </div>
-
-    <div class="section">
-      <h2>🙋‍♀️ Qui peut participer ?</h2>
-      <p>Tous les membres New Family, quel que soit leur rôle ! Accompagnants bienvenus 👫</p>
-    </div>
-
-    <div class="section">
-      <h2>🎉 Au programme</h2>
-      <ul>
-        <li>Mercredi 13 mai : installation + soirée BBQ chill à la villa 🌙</li>
-        <li>Jeudi 14 mai : chasse au trésor secrète 🧩 + pique-nique + soirée détente 🔥</li>
-        <li>Vendredi 15 & samedi 16 mai : PortAventura 🎢 (2 jours complets avec sandwichs maison !)</li>
-        <li>Dimanche 17 mai : matinée libre + rangement + au revoir 💖</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>💸 Goodies & dons</h2>
-      <p>
-        Un système de donations est mis en place pour financer des goodies exclusifs (badges, bracelets, etc.) — <strong>pas pour le voyage</strong>.<br>
-        Annonces et visuels à venir dans le salon dédié Discord.
-      </p>
-    </div>
-
-    <div class="section">
-      <h2>📋 Sondage d’intention</h2>
-      <p>
-        Pour nous aider à anticiper, merci de répondre au sondage dans Discord avec une réaction (1️⃣ à 6️⃣ selon votre groupe).<br>
-        Cela n’engage à rien mais nous aide beaucoup à prévoir les hébergements et transports !
-      </p>
-    </div>
-
-    <a href="https://discord.gg/tonsalon" class="button">🎟️ Rejoindre le Discord pour s’inscrire</a>
+  <div class="center-button">
+    <a href="index.html" class="return-button">⬅️ Retour à l’accueil</a>
   </div>
+
+  <section style="padding: 3rem 1rem; background: white; border-radius: 1rem; max-width: 900px; margin: 2rem auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;">
+    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">📋 Sondage d’intention</h2>
+    <p style="font-size: 1.1rem;">Pour nous aider à anticiper, merci de répondre au sondage dans Discord avec une réaction (1️⃣ à 6️⃣ selon votre groupe).<br>
+    Cela n’engage à rien mais nous aide beaucoup à prévoir les hébergements et transports !</p>
+
+    <div class="center-button" style="margin-top: 2rem;">
+      <a href="https://discord.gg/ton-lien" class="discord-button">
+        <img src="assets/discord-icon.png" alt="Discord" style="height: 20px;">
+        Rejoindre le Discord pour s’inscrire
+      </a>
+    </div>
+  </section>
+
+  <section style="padding: 2rem 1rem; background: white; border-radius: 1rem; max-width: 900px; margin: 2rem auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;">
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2); max-width: 100%; margin: 0 auto 2rem;">
+      <iframe 
+        src="https://www.youtube.com/embed/WVgvUKb3-XQ"
+        title="Trailer NewFamily Aventura 2026"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+      </iframe>
+    </div>
+  </section>
 </body>
 </html>
