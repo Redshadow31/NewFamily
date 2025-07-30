@@ -135,4 +135,9 @@ h2 {
     max-width: 350px;
     text-align: center;
 }
+.user-card a {
+    text-decoration: none;
+    color: inherit;
+}
+.user-card
 
