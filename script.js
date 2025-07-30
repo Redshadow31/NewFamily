@@ -124,9 +124,15 @@ async function init() {
             offlineContainer.appendChild(card);
         }
     }
-// 🔢 Mise à jour du compteur de lives
+// 🔢 Mise à jour du compteur de lives avec emoji dynamique
 const liveCountElement = document.getElementById("live-count");
-liveCountElement.textContent = `${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
+
+const emoji =
+    onlineUsers.length === 0 ? "😴" :
+    onlineUsers.length > 20 ? "🔥" :
+    "✨";
+
+liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
 }
 
 init();
