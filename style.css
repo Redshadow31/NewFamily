@@ -17,7 +17,7 @@ header {
 header img {
     width: 250px;
     max-width: 100%;
-    margin-bottom: 10px; /* réduit de 20px à 10px */
+    margin-bottom: 5px; /* réduit de 20px à 10px */
     transition: transform 0.3s ease;
 }
 
