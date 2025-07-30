@@ -179,3 +179,19 @@ h2 {
     color: #333;
     margin-top: 0.3em;
 }
+.title {
+    font-size: 0.9em;
+    color: #444;
+    margin-top: 0.5em;
+    line-height: 1.4em;
+    text-align: center;
+}
+
+.title em {
+    font-style: italic;
+    color: #666;
+}
+
+.title strong {
+    color: #000;
+}
