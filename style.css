@@ -77,5 +77,9 @@ h2 {
 }
 
 .about-button:hover, .event-button:hover {
-    background: #c0392b;
+    background: #845ec2; /* violet */
+    transform: scale(1.05); /* agrandissement léger */
+    transition: background 0.3s, transform 0.3s;
 }
+transition: background 0.3s, transform 0.3s;
+
