@@ -1,5 +1,5 @@
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
-const accessToken = "TON_ACCESS_TOKEN";
+const accessToken = "4dac4j69keeckddjaqp5617uenbav6";
 
 // 👇 Liste des usernames Twitch des membres
 const members = ["tsukilamoon", "sebdaries", "leprofesseurx", "moon_alonzo"];
