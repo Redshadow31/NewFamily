@@ -78,6 +78,8 @@ async function fetchUsersInfo(allUsers) {
 
 
 async function init() {
+    await getToken();
+    
     const allUsers = await fetchUserLists();
     const usersInfo = await fetchUsersInfo(allUsers);
 
