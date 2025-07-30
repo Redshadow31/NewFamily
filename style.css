@@ -1,11 +1,11 @@
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
 }
+
 header {
-    background: linear-gradient(135deg, #ff5f6d, #845ec2); /* dégradé rose-violet */
+    background: linear-gradient(135deg, #ff5f6d, #845ec2);
     color: white;
     text-align: center;
     padding: 2em 1em;
@@ -14,37 +14,27 @@ header {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease-in-out;
 }
+
 header img {
     width: 250px;
     max-width: 100%;
-    margin-bottom: 5px; /* réduit de 20px à 10px */
+    margin-bottom: 5px;
     transition: transform 0.3s ease;
 }
 
-
 header img:hover {
-    transform: scale(1.08); /* Effet zoom fluide */
+    transform: scale(1.08);
 }
+
 header h1 {
-    font-size: 2.8em; /* 🔠 Agrandit le titre */
-    margin-top: 0.3em;  /* 📏 Rapproche du logo */
-    margin-bottom: 0.4em; /* Évite trop d'espace avant les boutons */
+    font-size: 2.8em;
+    margin-top: 0.3em;
+    margin-bottom: 0.4em;
 }
 
 h2 {
     text-align: center;
     margin-top: 2em;
-}
-.interview-button {
-    display: inline-block;
-    background: #ff7f50;
-    color: white;
-    padding: 0.8em 1.2em;
-    border-radius: 10px;
-    font-weight: bold;
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: background 0.3s, transform 0.3s;
 }
 
 .user-grid {
@@ -60,7 +50,7 @@ h2 {
     text-align: center;
     padding: 1em;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -68,13 +58,24 @@ h2 {
 
 .user-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+    background-color: #f9f2ff;
+    box-shadow: 0 10px 18px rgba(132, 94, 194, 0.5);
+}
+
+.user-card.offline {
+    filter: grayscale(90%);
+    opacity: 0.75;
 }
 
 .user-card img {
     width: 100%;
     border-radius: 8px;
     margin-bottom: 0.7em;
+}
+
+.user-card a {
+    text-decoration: none;
+    color: inherit;
 }
 
 .username {
@@ -86,16 +87,22 @@ h2 {
 }
 
 .title {
-    font-size: 0.85em;
-    color: #333;
-    line-height: 1.3em;
-    white-space: pre-line;
+    font-size: 0.9em;
+    color: #444;
+    margin-top: 0.5em;
+    line-height: 1.4em;
+    text-align: center;
 }
 
-.user-card.offline {
-    filter: grayscale(90%);
-    opacity: 0.75;
+.title em {
+    font-style: italic;
+    color: #666;
 }
+
+.title strong {
+    color: #000;
+}
+
 .button-container {
     display: flex;
     justify-content: center;
@@ -103,7 +110,8 @@ h2 {
     margin-top: 1.5em;
 }
 
-.about-button, .event-button {
+.about-button,
+.event-button {
     display: inline-block;
     background: #e74c3c;
     color: white;
@@ -111,14 +119,16 @@ h2 {
     border-radius: 10px;
     font-weight: bold;
     text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: background 0.3s, transform 0.3s; /* 👉 Ici */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.3s;
 }
 
-.about-button:hover, .event-button:hover {
-    background: #845ec2; /* violet */
-    transform: scale(1.05); /* agrandissement léger */
+.about-button:hover,
+.event-button:hover {
+    background: #845ec2;
+    transform: scale(1.05);
 }
+
 .button-wrapper {
     display: flex;
     flex-direction: column;
@@ -135,63 +145,20 @@ h2 {
     max-width: 350px;
     text-align: center;
 }
-.user-card a {
-    text-decoration: none;
-    color: inherit;
-}
-.user-card
 
-.user-card {
-    background: white;
+.interview-button {
+    display: inline-block;
+    background: #ff7f50;
+    color: white;
+    padding: 0.8em 1.2em;
     border-radius: 10px;
-    text-align: center;
-    padding: 1em;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s, background-color 0.3s;
-}
-
-.user-card:hover {
-    transform: scale(1.03);
-    background-color: #f9f2ff;
-    box-shadow: 0 0 15px rgba(132, 94, 194, 0.5);
-}
-
-.user-card a {
-    text-decoration: none;
-    color: inherit;
-}
-
-.username {
     font-weight: bold;
-    color: #e74c3c;
-    margin-top: 0.5em;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.3s;
 }
 
-.game {
-    font-size: 0.9em;
-    font-style: italic;
-    color: #666;
-    margin-top: 0.2em;
-}
-
-.title {
-    font-size: 0.9em;
-    color: #333;
-    margin-top: 0.3em;
-}
-.title {
-    font-size: 0.9em;
-    color: #444;
-    margin-top: 0.5em;
-    line-height: 1.4em;
-    text-align: center;
-}
-
-.title em {
-    font-style: italic;
-    color: #666;
-}
-
-.title strong {
-    color: #000;
+.interview-button:hover {
+    background: #ff5722;
+    transform: scale(1.05);
 }
