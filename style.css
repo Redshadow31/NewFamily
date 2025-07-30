@@ -170,3 +170,12 @@ h2 {
     display: block;
     margin-bottom: 0.3em;
 }
+a[href="vip.html"] {
+    background: #f1c40f; /* Jaune doré */
+    color: black;
+}
+a[href="vip.html"]:hover {
+    background: #d4ac0d;
+    transform: scale(1.05);
+}
+
