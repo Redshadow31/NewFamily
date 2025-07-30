@@ -14,14 +14,27 @@ async function fetchUserLists() {
 async function fetchStreams(logins) {
     const query = logins.map(user => `user_login=${user}`).join('&');
     const url = `https://api.twitch.tv/helix/streams?${query}`;
-    const response = await fetch(url, {
-        headers: {
-            'Client-ID': clientId,
-            'Authorization': 'Bearer ' + token
+    
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'Client-ID': clientId,
+                'Authorization': 'Bearer ' + token
+            }
+        });
+
+        if (!response.ok) {
+            console.warn(`⚠️ fetchStreams a échoué avec le code ${response.status}`);
+            return { data: [] }; // Renvoie une liste vide en cas d’erreur
         }
-    });
-    return response.json();
+
+        return await response.json();
+    } catch (error) {
+        console.error('❌ Erreur dans fetchStreams :', error);
+        return { data: [] };
+    }
 }
+
 
 async function fetchUsersInfo(allUsers) {
     const results = [];
