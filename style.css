@@ -15,14 +15,20 @@ header {
     transition: all 0.3s ease-in-out;
 }
 header img {
-    width: 250px; /* ↗️ taille augmentée */
+    width: 250px;
     max-width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* réduit de 20px à 10px */
     transition: transform 0.3s ease;
 }
 
+
 header img:hover {
     transform: scale(1.08); /* Effet zoom fluide */
+}
+header h1 {
+    font-size: 2.8em; /* 🔠 Agrandit le titre */
+    margin-top: 0.3em;  /* 📏 Rapproche du logo */
+    margin-bottom: 0.4em; /* Évite trop d'espace avant les boutons */
 }
 
 h2 {
