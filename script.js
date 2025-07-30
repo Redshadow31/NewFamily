@@ -25,21 +25,37 @@ async function fetchStreams(logins) {
 
 async function fetchUsersInfo(allUsers) {
     const results = [];
+    const erreurs = [];
+
     for (let i = 0; i < allUsers.length; i += 100) {
         const chunk = allUsers.slice(i, i + 100);
         const query = chunk.map(user => `login=${user}`).join('&');
         const url = `https://api.twitch.tv/helix/users?${query}`;
-        const response = await fetch(url, {
-            headers: {
-                'Client-ID': clientId,
-                'Authorization': 'Bearer ' + token
-            }
-        });
-        const data = await response.json();
-        results.push(...data.data);
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (!response.ok) throw new Error(`Erreur pour : ${chunk.join(', ')}`);
+            const data = await response.json();
+            results.push(...data.data);
+        } catch (error) {
+            console.warn('❌ Utilisateurs ignorés :', chunk, '-', error.message);
+            erreurs.push(...chunk); // Ajoute tous les utilisateurs de ce bloc aux erreurs
+        }
     }
+
+    if (erreurs.length > 0) {
+        console.log('⚠️ Logins invalides détectés :', erreurs);
+    }
+
     return results;
 }
+
 
 async function init() {
     const allUsers = await fetchUserLists();
