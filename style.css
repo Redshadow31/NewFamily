@@ -44,6 +44,11 @@ h2 {
     gap: 1em;
     padding: 1em;
 }
+.user-card {
+    width: 180px; /* Nouvelle largeur, avant c'était dynamique */
+    padding: 1em;
+    margin: 0.5em;
+}
 
 .user-card {
     background: white;
@@ -70,9 +75,11 @@ h2 {
 
 .user-card img {
     width: 100%;
-    border-radius: 8px;
-    margin-bottom: 0.7em;
+    height: auto;
+    max-height: 120px; /* pour éviter les images trop grandes */
+    object-fit: cover;
 }
+
 
 .user-card a {
     text-decoration: none;
