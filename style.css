@@ -50,3 +50,25 @@ h2 {
     font-size: 0.9em;
     margin-top: 0.3em;
 }
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1.5em;
+}
+
+.about-button, .event-button {
+    display: inline-block;
+    background: #e74c3c;
+    color: white;
+    padding: 0.8em 1.2em;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.about-button:hover, .event-button:hover {
+    background: #c0392b;
+}
