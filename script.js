@@ -7,7 +7,6 @@ async function getToken() {
     token = data.access_token;
 }
 
-
 async function fetchUserLists() {
     const [res1, res2] = await Promise.all([
         fetch('users1.json'),
@@ -21,7 +20,7 @@ async function fetchUserLists() {
 async function fetchStreams(logins) {
     const query = logins.map(user => `user_login=${user}`).join('&');
     const url = `https://api.twitch.tv/helix/streams?${query}`;
-    
+
     try {
         const response = await fetch(url, {
             headers: {
@@ -32,7 +31,7 @@ async function fetchStreams(logins) {
 
         if (!response.ok) {
             console.warn(`⚠️ fetchStreams a échoué avec le code ${response.status}`);
-            return { data: [] }; // Renvoie une liste vide en cas d’erreur
+            return { data: [] };
         }
 
         return await response.json();
@@ -41,7 +40,6 @@ async function fetchStreams(logins) {
         return { data: [] };
     }
 }
-
 
 async function fetchUsersInfo(allUsers) {
     const results = [];
@@ -65,7 +63,7 @@ async function fetchUsersInfo(allUsers) {
             results.push(...data.data);
         } catch (error) {
             console.warn('❌ Utilisateurs ignorés :', chunk, '-', error.message);
-            erreurs.push(...chunk); // Ajoute tous les utilisateurs de ce bloc aux erreurs
+            erreurs.push(...chunk);
         }
     }
 
@@ -76,10 +74,9 @@ async function fetchUsersInfo(allUsers) {
     return results;
 }
 
-
 async function init() {
     await getToken();
-    
+
     const allUsers = await fetchUserLists();
     const usersInfo = await fetchUsersInfo(allUsers);
 
@@ -106,6 +103,7 @@ async function init() {
 
         const link = `https://twitch.tv/${user}`;
         const title = isOnline ? streamData.title : 'Hors ligne';
+        const game = isOnline ? streamData.game_name : '';
         const img = isOnline
             ? streamData.thumbnail_url.replace('{width}', '320').replace('{height}', '180')
             : (userInfo?.profile_image_url || 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png');
@@ -113,8 +111,9 @@ async function init() {
         card.innerHTML = `
             <a href="${link}" target="_blank">
                 <img src="${img}" alt="Preview">
-                <div class="username" style="color: red; font-weight: bold;">${user}</div>
-                <div class="title" style="color: black;">${title}</div>
+                <div class="username">${user}</div>
+                ${isOnline ? `<div class="game">${game}</div>` : ''}
+                <div class="title">${title}</div>
             </a>
         `;
 
@@ -124,15 +123,14 @@ async function init() {
             offlineContainer.appendChild(card);
         }
     }
-// 🔢 Mise à jour du compteur de lives avec emoji dynamique
-const liveCountElement = document.getElementById("live-count");
 
-const emoji =
-    onlineUsers.length === 0 ? "😴" :
-    onlineUsers.length > 20 ? "🔥" :
-    "✨";
+    const liveCountElement = document.getElementById("live-count");
+    const emoji =
+        onlineUsers.length === 0 ? "😴" :
+        onlineUsers.length > 20 ? "🔥" : "✨";
 
-liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
+    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
 }
 
 init();
+
