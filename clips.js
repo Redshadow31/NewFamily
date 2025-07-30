@@ -1,4 +1,4 @@
-const clientId = "TON_CLIENT_ID";
+const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 const accessToken = "TON_ACCESS_TOKEN";
 
 // 👇 Liste des usernames Twitch des membres
