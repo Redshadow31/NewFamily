@@ -72,14 +72,12 @@ h2 {
     border-radius: 10px;
     font-weight: bold;
     text-decoration: none;
-    transition: background 0.3s;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.3s; /* 👉 Ici */
 }
 
 .about-button:hover, .event-button:hover {
     background: #845ec2; /* violet */
     transform: scale(1.05); /* agrandissement léger */
-    transition: background 0.3s, transform 0.3s;
 }
-transition: background 0.3s, transform 0.3s;
 
