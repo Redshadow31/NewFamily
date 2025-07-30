@@ -83,8 +83,7 @@ async function init() {
 
     const allUsers = await fetchUserLists();
     const usersInfo = await fetchUsersInfo(allUsers);
-    const vipList = await fetchVIPList();
-
+    const vipList = await fetchVIPList(); // 👈 On garde uniquement celle-ci
 
     const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
     const onlineUsers = [];
@@ -98,17 +97,14 @@ async function init() {
     const offlineContainer = document.getElementById('offline-users');
     const onlineLogins = onlineUsers.map(user => user.user_login.toLowerCase());
 
-    // Charger les VIP
-const vipList = await fetch('vip.json').then(r => r.json());
+    // ✅ On trie ici sans redéclarer vipList
+    const sortedUsers = [...allUsers].sort((a, b) => {
+        const aIsVip = vipList.includes(a.toLowerCase());
+        const bIsVip = vipList.includes(b.toLowerCase());
+        return (aIsVip === bIsVip) ? 0 : aIsVip ? -1 : 1;
+    });
 
-// Trier les utilisateurs : VIP d'abord
-const sortedUsers = [...allUsers].sort((a, b) => {
-    const aIsVip = vipList.includes(a.toLowerCase());
-    const bIsVip = vipList.includes(b.toLowerCase());
-    return (aIsVip === bIsVip) ? 0 : aIsVip ? -1 : 1;
-});
-
-   for (const user of sortedUsers) {
+    for (const user of sortedUsers) {
         const isOnline = onlineLogins.includes(user.toLowerCase());
         const streamData = onlineUsers.find(u => u.user_login.toLowerCase() === user.toLowerCase());
         const userInfo = usersInfo.find(u => u.login.toLowerCase() === user.toLowerCase());
@@ -116,8 +112,8 @@ const sortedUsers = [...allUsers].sort((a, b) => {
         const card = document.createElement('div');
         card.classList.add('user-card');
         if (vipList.includes(user.toLowerCase())) {
-    card.classList.add('vip');
-}
+            card.classList.add('vip');
+        }
 
         if (!isOnline) card.classList.add('offline');
 
@@ -153,6 +149,4 @@ const sortedUsers = [...allUsers].sort((a, b) => {
 
     liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? 's' : ''} de la New Family ${onlineUsers.length > 1 ? 'sont' : 'est'} actuellement en live`;
 }
-
-init();
 
