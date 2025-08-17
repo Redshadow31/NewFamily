@@ -1,3 +1,4 @@
+console.log("✅ clip.js chargé");
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
