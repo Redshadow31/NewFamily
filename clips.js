@@ -76,18 +76,19 @@ async function prepareClips() {
       clipsQueue.push({
         id: clip.id,
         user: member,
+        thumbnail: clip.thumbnail_url,
       });
     }
   }
 }
 
 // === Affiche une miniature (remplace l'iframe) ===
-function displayClip(id, user) {
+function displayClip(id, user, thumbnail) {
   const clipPlayer = document.getElementById("clip-player");
   if (!clipPlayer) return;
 
   clipPlayer.innerHTML = `
-    <img src="https://clips.twitch.tv/embed?clip=${id}&parent=${PARENT_DOMAIN}&preview=true" 
+    <img src="${thumbnail}" 
          alt="Preview du clip"
          loading="lazy"
          onclick="loadTwitchClip(this, '${id}')"
@@ -124,17 +125,17 @@ function displayNextClip() {
     return;
   }
 
-  const { id, user } = clipsQueue.shift();
-  clipHistory.push({ id, user }); // Historique
-  displayClip(id, user);
+  const { id, user, thumbnail } = clipsQueue.shift();
+  clipHistory.push({ id, user, thumbnail }); // Historique
+  displayClip(id, user, thumbnail);
 }
 
 // === Affichage du clip précédent ===
 function displayPreviousClip() {
   if (clipHistory.length < 2) return;
   clipHistory.pop(); // Retire l’actuel
-  const { id, user } = clipHistory[clipHistory.length - 1];
-  displayClip(id, user);
+  const { id, user, thumbnail } = clipHistory[clipHistory.length - 1];
+  displayClip(id, user, thumbnail);
 }
 
 // === Événements DOM ===
