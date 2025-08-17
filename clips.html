@@ -35,7 +35,7 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        margin: 0 0.5em; /* espace horizontal entre les boutons */
+        margin: 0 0.5em;
       }
 
       #next-button:hover,
@@ -59,10 +59,10 @@
     </header>
 
     <section id="clip-frame">
-      <iframe id="clip-player" src="" allowfullscreen></iframe>
+      <!-- ✅ Changement ici : on remplace l'iframe par une div -->
+      <div id="clip-player"></div>
       <div id="clip-user"></div>
 
-      <!-- Deux boutons alignés, même emoji -->
       <div class="button-container">
         <button id="prev-button">🎞️ Clip précédent</button>
         <button id="next-button">🎞️ Clip suivant</button>
