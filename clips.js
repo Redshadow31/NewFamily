@@ -1,4 +1,5 @@
 console.log("✅ clip.js chargé");
+
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
@@ -86,7 +87,7 @@ function displayClip(id, user) {
   if (!clipPlayer) return;
 
   clipPlayer.innerHTML = `
-    <img src="https://clips-media-assets2.twitch.tv/${id}-preview-480x272.jpg" 
+    <img src="https://clips.twitch.tv/embed?clip=${id}&parent=${PARENT_DOMAIN}&preview=true" 
          alt="Preview du clip"
          loading="lazy"
          onclick="loadTwitchClip(this, '${id}')"

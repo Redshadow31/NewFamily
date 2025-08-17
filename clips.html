@@ -5,27 +5,39 @@
     <title>Clips à la une</title>
     <link rel="stylesheet" href="style.css" />
     <style>
-      #clip-frame {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+      #clip-player {
+        position: relative;
+        width: 720px;
+        max-width: 90%;
         margin: 2em auto;
+        border-radius: 10px;
+        overflow: hidden;
       }
 
-      iframe {
-        width: 720px;
-        height: 405px;
-        max-width: 90%;
-        border: none;
+      #clip-player img {
+        display: block;
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        color: white;
+        text-shadow: 1px 1px 5px black;
+        pointer-events: none;
       }
 
       #clip-user {
         font-size: 1.2em;
         margin: 0.5em 0;
         font-weight: bold;
+        text-align: center;
       }
 
-      /* Style identique pour les deux boutons */
       #next-button,
       #prev-button {
         padding: 0.7em 1.5em;
@@ -49,6 +61,7 @@
       }
     </style>
   </head>
+
   <body>
     <header>
       <img src="assets/logo.webp" alt="Logo" />
@@ -59,7 +72,6 @@
     </header>
 
     <section id="clip-frame">
-      <!-- ✅ Changement ici : on remplace l'iframe par une div -->
       <div id="clip-player"></div>
       <div id="clip-user"></div>
 
