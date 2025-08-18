@@ -3,7 +3,8 @@ console.log("✅ clip.js chargé");
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
-let currentClipIndex = 0;
+let clipHistory = [];
+let currentIndex = -1;
 
 const PARENT_DOMAIN = "newfamily.netlify.app";
 
@@ -76,6 +77,7 @@ async function prepareClips() {
       clipsQueue.push({
         id: clip.id,
         user: member,
+        thumbnail: clip.thumbnail_url,
       });
     }
   }
@@ -90,7 +92,7 @@ function displayClip(index) {
   if (!clipPlayer) return;
 
   clipPlayer.innerHTML = `
-    <img src="https://clips-media-assets2.twitch.tv/${clip.id}-preview-480x272.jpg" 
+    <img src="${clip.thumbnail}" 
          alt="Preview du clip"
          loading="lazy"
          onclick="loadTwitchClip(this, '${clip.id}')"
@@ -118,32 +120,35 @@ function loadTwitchClip(element, clipId) {
   `;
 }
 
-// === Navigation Suivant
+// === Affichage du clip suivant ===
 function displayNextClip() {
-  if (currentClipIndex < clipsQueue.length - 1) {
-    currentClipIndex++;
-    displayClip(currentClipIndex);
+  if (currentIndex < clipsQueue.length - 1) {
+    currentIndex++;
+    displayClip(currentIndex);
+  } else {
+    document.getElementById("clip-user").textContent =
+      "🚫 Aucun autre clip disponible.";
   }
 }
 
-// === Navigation Précédent
+// === Affichage du clip précédent ===
 function displayPreviousClip() {
-  if (currentClipIndex > 0) {
-    currentClipIndex--;
-    displayClip(currentClipIndex);
+  if (currentIndex > 0) {
+    currentIndex--;
+    displayClip(currentIndex);
   }
 }
 
-// === Init DOM
+// === Événements DOM ===
 document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = document.getElementById("next-button");
-  const prevBtn = document.getElementById("prev-button");
-
   if (nextBtn) nextBtn.addEventListener("click", displayNextClip);
+
+  const prevBtn = document.getElementById("prev-button");
   if (prevBtn) prevBtn.addEventListener("click", displayPreviousClip);
 });
 
-// === Init
+// === Init ===
 (async () => {
   await getToken();
   if (!accessToken) {
@@ -152,5 +157,5 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
   await prepareClips();
-  displayClip(currentClipIndex);
+  displayNextClip();
 })();
