@@ -2,8 +2,8 @@ console.log("✅ clip.js chargé");
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
-let clipsQueue = [];
-let clipHistory = [];
+let clipsQueue = []; // Tous les clips préchargés
+let currentIndex = -1; // Position actuelle dans le tableau
 
 const PARENT_DOMAIN = "newfamily.netlify.app";
 
@@ -76,27 +76,30 @@ async function prepareClips() {
       clipsQueue.push({
         id: clip.id,
         user: member,
-        thumbnail: clip.thumbnail_url,
       });
     }
   }
 }
 
-// === Affiche une miniature (remplace l'iframe) ===
-function displayClip(id, user, thumbnail) {
+// === Affiche une miniature ou iframe ===
+function displayClip(index) {
+  const clip = clipsQueue[index];
+  if (!clip) return;
+
   const clipPlayer = document.getElementById("clip-player");
   if (!clipPlayer) return;
 
   clipPlayer.innerHTML = `
-    <img src="${thumbnail}" 
+    <img src="https://clips-media-assets2.twitch.tv/${clip.id}-preview-480x272.jpg" 
          alt="Preview du clip"
          loading="lazy"
-         onclick="loadTwitchClip(this, '${id}')"
+         onclick="loadTwitchClip(this, '${clip.id}')"
          style="width: 100%; border-radius: 10px; cursor: pointer;">
     <div class="play-button">▶</div>
   `;
 
-  document.getElementById("clip-user").textContent = `👤 ${user}`;
+  document.getElementById("clip-user").textContent = `👤 ${clip.user}`;
+  currentIndex = index;
 }
 
 // === Charge l'iframe Twitch dynamiquement ===
@@ -118,24 +121,21 @@ function loadTwitchClip(element, clipId) {
 
 // === Affichage du prochain clip ===
 function displayNextClip() {
-  if (clipsQueue.length === 0) {
-    document.getElementById("clip-player").innerHTML = "";
+  if (currentIndex + 1 < clipsQueue.length) {
+    displayClip(currentIndex + 1);
+  } else {
     document.getElementById("clip-user").textContent =
       "Aucun autre clip disponible.";
-    return;
   }
-
-  const { id, user, thumbnail } = clipsQueue.shift();
-  clipHistory.push({ id, user, thumbnail }); // Historique
-  displayClip(id, user, thumbnail);
 }
 
 // === Affichage du clip précédent ===
 function displayPreviousClip() {
-  if (clipHistory.length < 2) return;
-  clipHistory.pop(); // Retire l’actuel
-  const { id, user, thumbnail } = clipHistory[clipHistory.length - 1];
-  displayClip(id, user, thumbnail);
+  if (currentIndex > 0) {
+    displayClip(currentIndex - 1);
+  } else {
+    document.getElementById("clip-user").textContent = "Pas de clip précédent.";
+  }
 }
 
 // === Événements DOM ===
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (prevBtn) prevBtn.addEventListener("click", displayPreviousClip);
 });
 
-// === Init ===
+// === Initialisation ===
 (async () => {
   await getToken();
   if (!accessToken) {
@@ -156,5 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
   await prepareClips();
-  displayNextClip();
+  if (clipsQueue.length > 0) {
+    displayClip(0);
+  } else {
+    document.getElementById("clip-user").textContent = "Aucun clip disponible.";
+  }
 })();
