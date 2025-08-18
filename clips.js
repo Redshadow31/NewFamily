@@ -3,7 +3,7 @@ console.log("✅ clip.js chargé");
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
-let currentClipIndex = -1;
+let currentClipIndex = 0;
 
 const PARENT_DOMAIN = "newfamily.netlify.app";
 
@@ -81,21 +81,24 @@ async function prepareClips() {
   }
 }
 
-// === Affiche une miniature (remplace l'iframe) ===
-function displayClip(id, user) {
+// === Affiche une miniature (par défaut ou navigation)
+function displayClip(index) {
+  const clip = clipsQueue[index];
+  if (!clip) return;
+
   const clipPlayer = document.getElementById("clip-player");
   if (!clipPlayer) return;
 
   clipPlayer.innerHTML = `
-    <img src="https://clips-media-assets2.twitch.tv/${id}-preview-480x272.jpg" 
+    <img src="https://clips-media-assets2.twitch.tv/${clip.id}-preview-480x272.jpg" 
          alt="Preview du clip"
          loading="lazy"
-         onclick="loadTwitchClip(this, '${id}')"
+         onclick="loadTwitchClip(this, '${clip.id}')"
          style="width: 100%; border-radius: 10px; cursor: pointer;">
     <div class="play-button">▶</div>
   `;
 
-  document.getElementById("clip-user").textContent = `👤 ${user}`;
+  document.getElementById("clip-user").textContent = `👤 ${clip.user}`;
 }
 
 // === Charge l'iframe Twitch dynamiquement ===
@@ -115,40 +118,32 @@ function loadTwitchClip(element, clipId) {
   `;
 }
 
-// === Affichage du clip à l'index courant ===
-function displayCurrentClip() {
-  if (currentClipIndex >= 0 && currentClipIndex < clipsQueue.length) {
-    const { id, user } = clipsQueue[currentClipIndex];
-    displayClip(id, user);
-  }
-}
-
-// === Affichage du prochain clip ===
+// === Navigation Suivant
 function displayNextClip() {
   if (currentClipIndex < clipsQueue.length - 1) {
     currentClipIndex++;
-    displayCurrentClip();
+    displayClip(currentClipIndex);
   }
 }
 
-// === Affichage du clip précédent ===
+// === Navigation Précédent
 function displayPreviousClip() {
   if (currentClipIndex > 0) {
     currentClipIndex--;
-    displayCurrentClip();
+    displayClip(currentClipIndex);
   }
 }
 
-// === Événements DOM ===
+// === Init DOM
 document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = document.getElementById("next-button");
-  if (nextBtn) nextBtn.addEventListener("click", displayNextClip);
-
   const prevBtn = document.getElementById("prev-button");
+
+  if (nextBtn) nextBtn.addEventListener("click", displayNextClip);
   if (prevBtn) prevBtn.addEventListener("click", displayPreviousClip);
 });
 
-// === Init ===
+// === Init
 (async () => {
   await getToken();
   if (!accessToken) {
@@ -157,11 +152,5 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
   await prepareClips();
-
-  if (clipsQueue.length === 0) {
-    document.getElementById("clip-user").textContent = "Aucun clip trouvé.";
-  } else {
-    currentClipIndex = 0;
-    displayCurrentClip();
-  }
+  displayClip(currentClipIndex);
 })();
