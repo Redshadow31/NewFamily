@@ -3,7 +3,7 @@ console.log("✅ clip.js chargé");
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
-let clipHistory = [];
+let currentClipIndex = -1;
 
 const PARENT_DOMAIN = "newfamily.netlify.app";
 
@@ -76,19 +76,18 @@ async function prepareClips() {
       clipsQueue.push({
         id: clip.id,
         user: member,
-        thumbnail: clip.thumbnail_url,
       });
     }
   }
 }
 
 // === Affiche une miniature (remplace l'iframe) ===
-function displayClip(id, user, thumbnail) {
+function displayClip(id, user) {
   const clipPlayer = document.getElementById("clip-player");
   if (!clipPlayer) return;
 
   clipPlayer.innerHTML = `
-    <img src="${thumbnail}" 
+    <img src="https://clips-media-assets2.twitch.tv/${id}-preview-480x272.jpg" 
          alt="Preview du clip"
          loading="lazy"
          onclick="loadTwitchClip(this, '${id}')"
@@ -116,26 +115,28 @@ function loadTwitchClip(element, clipId) {
   `;
 }
 
+// === Affichage du clip à l'index courant ===
+function displayCurrentClip() {
+  if (currentClipIndex >= 0 && currentClipIndex < clipsQueue.length) {
+    const { id, user } = clipsQueue[currentClipIndex];
+    displayClip(id, user);
+  }
+}
+
 // === Affichage du prochain clip ===
 function displayNextClip() {
-  if (clipsQueue.length === 0) {
-    document.getElementById("clip-player").innerHTML = "";
-    document.getElementById("clip-user").textContent =
-      "Aucun autre clip disponible.";
-    return;
+  if (currentClipIndex < clipsQueue.length - 1) {
+    currentClipIndex++;
+    displayCurrentClip();
   }
-
-  const { id, user, thumbnail } = clipsQueue.shift();
-  clipHistory.push({ id, user, thumbnail }); // Historique
-  displayClip(id, user, thumbnail);
 }
 
 // === Affichage du clip précédent ===
 function displayPreviousClip() {
-  if (clipHistory.length < 2) return;
-  clipHistory.pop(); // Retire l’actuel
-  const { id, user, thumbnail } = clipHistory[clipHistory.length - 1];
-  displayClip(id, user, thumbnail);
+  if (currentClipIndex > 0) {
+    currentClipIndex--;
+    displayCurrentClip();
+  }
 }
 
 // === Événements DOM ===
@@ -156,5 +157,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
   await prepareClips();
-  displayNextClip();
+
+  if (clipsQueue.length === 0) {
+    document.getElementById("clip-user").textContent = "Aucun clip trouvé.";
+  } else {
+    currentClipIndex = 0;
+    displayCurrentClip();
+  }
 })();
