@@ -16,9 +16,8 @@ header {
 }
 
 header img {
-  width: 250px;
-  height: 140px; /* ✅ Fix CLS logo */
-  max-width: 100%;
+  max-width: 90%;
+  height: auto;
   margin-bottom: 5px;
   transition: transform 0.3s ease;
 }
