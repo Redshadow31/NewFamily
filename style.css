@@ -4,59 +4,42 @@ body {
   background-color: #f2f2f2;
 }
 
-header {
-  background: url("Design sans titre (17).png") no-repeat center center / cover;
-  color: white;
-  padding: 2em 1em;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease-in-out;
+header{
+  background:url("Design sans titre (17).png") no-repeat center/cover;
+  color:#fff;
+  padding:2.5em 1.5em;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
-/* === Nouveau wrapper flex === */
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* tu peux mettre space-between si tu veux que ça prenne toute la largeur */
-  gap: 2em;
-  max-width: 1200px;
-  margin: 0 auto;
+/* layout gauche/droite */
+.header-content{
+  display:flex;
+  align-items:center;
+  gap:2rem;
+  max-width:1200px;
+  margin:0 auto;
 }
 
-.header-logo img {
-  width: 220px; /* ajuste la taille du logo */
-  height: auto;
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-}
-.header-logo img:hover {
-  transform: scale(1.08);
+/* logo */
+.header-logo img{
+  width:220px; /* ajuste si besoin */
+  height:auto;
+  display:block;
 }
 
-.header-text {
-  max-width: 650px;
-}
-.header-text h1 {
-  font-size: 2.4em;
-  margin: 0 0 0.5em;
-}
-.header-text p {
-  font-size: 1.1em;
-  margin: 0;
+/* textes */
+.header-text{ max-width:650px; }
+.header-text h1{ font-size:2.4em; margin:0 0 .5em; }
+.header-text p{ font-size:1.1em; margin:0; }
+
+/* mobile: repasse en colonne */
+@media (max-width: 768px){
+  .header-content{ flex-direction:column; text-align:center; }
+  .header-logo img{ width:180px; }
 }
 
-/* responsive mobile */
-@media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    text-align: center;
-  }
-  .header-logo img {
-    width: 180px;
-    margin-bottom: 1em;
-  }
-}
 header h1 {
   font-size: 2.8em;
   margin-top: 0.3em;
