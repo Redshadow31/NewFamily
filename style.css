@@ -7,7 +7,6 @@ body {
 header {
   background: url("Design sans titre (17).png") no-repeat center center / cover;
   color: white;
-  text-align: center;
   padding: 2em 1em;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
@@ -15,10 +14,11 @@ header {
   transition: all 0.3s ease-in-out;
 }
 
+/* === Nouveau wrapper flex === */
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: center; /* ou space-between si tu veux étirer */
+  justify-content: center; /* tu peux mettre space-between si tu veux que ça prenne toute la largeur */
   gap: 2em;
   max-width: 1200px;
   margin: 0 auto;
@@ -28,11 +28,12 @@ header {
   width: 220px; /* ajuste la taille du logo */
   height: auto;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
 }
-
-header img:hover {
+.header-logo img:hover {
   transform: scale(1.08);
 }
+
 .header-text {
   max-width: 650px;
 }
@@ -44,6 +45,8 @@ header img:hover {
   font-size: 1.1em;
   margin: 0;
 }
+
+/* responsive mobile */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
