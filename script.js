@@ -4,7 +4,6 @@
    - Toggle clair/sombre (auto + bouton injecté)
    - Badges LIVE (.is-live + data-live)
    - Badges rôles (fondateur / adjoint / mentor / junior)
-   - Gestion affichage login/logout
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -14,7 +13,7 @@ let token = "";
    🎛️ Thème clair/sombre
 ----------------------------------*/
 function applyThemeFromStorage() {
-  const saved = localStorage.getItem("theme");
+  const saved = localStorage.getItem("theme"); // "dark" | "light" | null
   const root = document.documentElement;
   if (saved === "dark") root.classList.add("theme-dark");
   else if (saved === "light") root.classList.remove("theme-dark");
@@ -66,26 +65,7 @@ function setupThemeToggle() {
 }
 
 /* -------------------------------
-   🔑 Auth & affichage login/logout
-----------------------------------*/
-function getCookie(name){
-  const v = document.cookie.split('; ').find(r => r.startsWith(name+'='));
-  return v ? decodeURIComponent(v.split('=')[1]) : null;
-}
-
-function initAuthUI(){
-  const hasSession = !!getCookie('nf_session');
-  const loginBtn = document.getElementById('loginBtn');
-  const connectedBtns = document.getElementById('connectedBtns');
-
-  if(loginBtn && connectedBtns){
-    loginBtn.style.display = hasSession ? 'none' : '';
-    connectedBtns.style.display = hasSession ? '' : 'none';
-  }
-}
-
-/* -------------------------------
-   🔗 API Twitch
+   🔑 Auth & appels Twitch
 ----------------------------------*/
 async function getToken() {
   const response = await fetch("/.netlify/functions/getTwitchData");
@@ -159,7 +139,7 @@ async function fetchVIPList() {
 }
 
 /* -------------------------------
-   🏷️ Badges
+   🏷️ Détermination du badge rôle
 ----------------------------------*/
 function getRoleBadge(user) {
   const u = user.toLowerCase();
@@ -179,7 +159,7 @@ function getRoleBadge(user) {
 }
 
 /* -------------------------------
-   🖼️ Cartes
+   🖼️ Rendu des cartes
 ----------------------------------*/
 function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
   const card = document.createElement("div");
@@ -204,20 +184,21 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
     : (userInfo?.profile_image_url ||
        "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
-  card.innerHTML = `
-    <div class="media-wrap">
-      <img src="${img}" alt="Preview de ${escapeHtml(user)}">
-      ${getRoleBadge(user)}                           
-      ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}  
+ card.innerHTML = `
+  <div class="media-wrap">
+    <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+    ${getRoleBadge(user)}                           
+    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}  
+  </div>
+  <div class="card-body">
+    <div class="username">${escapeHtml(user)}</div>
+    <p class="title">${title}</p>
+    <div class="card-footer">
+      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
     </div>
-    <div class="card-body">
-      <div class="username">${escapeHtml(user)}</div>
-      <p class="title">${title}</p>
-      <div class="card-footer">
-        <a href="${link}" target="_blank" rel="noopener">Regarder</a>
-      </div>
-    </div>
-  `;
+  </div>
+`;
+
   return card;
 }
 
@@ -231,11 +212,10 @@ function escapeHtml(str) {
 }
 
 /* -------------------------------
-   🚀 Init
+   🚀 Init principale
 ----------------------------------*/
 async function init() {
   setupThemeToggle();
-  initAuthUI();
 
   await getToken();
   if (!token) {
