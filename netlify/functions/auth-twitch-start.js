@@ -4,6 +4,7 @@ exports.handler = async () => {
   redirect.searchParams.set("redirect_uri", `${process.env.REDIRECT_BASE_URL}/.netlify/functions/auth-twitch-callback`);
   redirect.searchParams.set("response_type", "code");
   redirect.searchParams.set("scope", "user:read:email"); // ajoute d’autres scopes si besoin
+new URL("https://id.twitch.tv/oauth2/authorize")
 
   return {
     statusCode: 302,
