@@ -454,3 +454,13 @@ a[href="vip.html"] {
   letter-spacing: .2px;
   white-space: nowrap;
 }
+/* Thèmes de badge */
+.badge--founder  { background: linear-gradient(135deg, #b8336a, #6a0572); }
+.badge--adjoint  { background: linear-gradient(135deg, #845ec2, #2c73d2); }
+.badge--mentor   { background: linear-gradient(135deg, #008e9b, #0081cf); }
+.badge--junior   { background: linear-gradient(135deg, #4caf50, #2e7d32); }
+
+/* Exemples génériques pour ailleurs */
+.badge--vip      { background: linear-gradient(135deg, #f1c40f, #f39c12); color:#000; }
+.badge--event    { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.badge--info     { background: linear-gradient(135deg, #3498db, #2c3e50); }
