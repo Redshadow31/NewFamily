@@ -190,18 +190,31 @@ function enhanceVipGrid(vips) {
 // --------- Filtrage par mois (si tu fournis month dans vip.json + select présent) ---------
 function attachMonthFilter(allVips) {
   const sel = document.getElementById("vip-month-select");
-  if (!sel) {
-    // Pas de select → on affiche tout
-    enhanceVipGrid(allVips);
-    return;
-  }
+
+  // 👉 fonction de tri : d’abord ceux qui ont des badges, puis par display_name
+  const sortByBadges = (list) =>
+    list.slice().sort((a, b) => {
+      const aBadges = a.badges && a.badges.length ? 1 : 0;
+      const bBadges = b.badges && b.badges.length ? 1 : 0;
+      if (bBadges !== aBadges) return bBadges - aBadges; // VIP avec badge en premier
+      return (a.display_name || a.login).localeCompare(b.display_name || b.login);
+    });
+
   const renderFor = (value) => {
-    if (!value) return enhanceVipGrid(allVips);
-    const filtered = allVips.filter((v) => (v.month || "") === value);
-    enhanceVipGrid(filtered.length ? filtered : allVips);
+    let list = allVips;
+    if (value) {
+      list = allVips.filter((v) => (v.month || "") === value);
+      if (!list.length) list = allVips;
+    }
+    enhanceVipGrid(sortByBadges(list));
   };
-  sel.addEventListener("change", () => renderFor(sel.value));
-  renderFor(sel.value);
+
+  if (sel) {
+    sel.addEventListener("change", () => renderFor(sel.value));
+    renderFor(sel.value);
+  } else {
+    renderFor("");
+  }
 }
 
 // ================== Flux principal ==================
