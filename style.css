@@ -311,3 +311,20 @@ h2{
   margin-bottom: 2rem;
   color: var(--muted);
 }
+#theme-toggle {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 42px; height: 42px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s ease, transform .2s ease;
+}
+#theme-toggle:hover {
+  transform: scale(1.08);
+}
