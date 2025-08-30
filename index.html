@@ -40,7 +40,6 @@
       .auth-avatar{
         width:28px; height:28px; border-radius:50%; object-fit:cover;
       }
-      /* on réutilise tes classes de boutons pour l’harmonie */
       .btn-mini{ padding:.4rem .7rem; border-radius:.5rem; font-weight:600; }
     </style>
   </head>
@@ -91,6 +90,13 @@
       <a href="evenements.html" class="event-button">📅 Événements</a>
       <a href="clips.html" class="event-button">📽️ Clips à découvrir</a>
       <a href="interviews.html" class="event-button">🎤 Interviews</a>
+
+      <!-- 🔑 Ajout du bouton login/logout visibles directement -->
+      <a id="loginBtn" href="/login.html" class="event-button">🔑 Se connecter</a>
+      <span id="connectedBtns" style="display:none">
+        <a href="/membres/" class="event-button">🔒 Espace membres</a>
+        <a href="/.netlify/functions/logout" class="event-button">🚪 Se déconnecter</a>
+      </span>
     </div>
 
     <!-- Section NewFamily Aventura 2026 -->
@@ -154,7 +160,7 @@
       </a>
     </section>
 
-    <!-- 🔽 Section des lives (déplacée ici à la fin) -->
+    <!-- 🔽 Section des lives -->
     <section id="online">
       <h2>Actuellement en direct 🎥</h2>
       <p id="live-count" style="text-align: center; font-weight: bold; font-size: 1.2em"></p>
@@ -166,37 +172,37 @@
       <div id="offline-users" class="user-grid"></div>
     </section>
 
-    <!-- ======= SCRIPT AUTH (lecture du cookie & affichage UI) ======= -->
+    <!-- ======= SCRIPT AUTH ======= -->
     <script>
-      // lit un cookie simple (sans décoder JWT côté client)
       function getCookie(name){
         const v = document.cookie.split('; ').find(r => r.startsWith(name+'='));
         return v ? decodeURIComponent(v.split('=')[1]) : null;
       }
-
-      // Petit plus : si tu veux afficher le pseudo/avatar dans le header,
-      // on stocke (facultatif) un mini profil en LocalStorage depuis la callback Function.
-      // Si ce n'est pas fait côté serveur, on n'affiche que "Connecté".
       function loadLocalProfile(){
         try { return JSON.parse(localStorage.getItem('nf_profile') || 'null'); }
         catch(e){ return null; }
       }
-
       (function initAuthUI(){
         const hasSession = !!getCookie('nf_session');
+        // barre en haut
         const out = document.getElementById('auth-logged-out');
         const inn = document.getElementById('auth-logged-in');
-        out.style.display = hasSession ? 'none' : 'flex';
-        inn.style.display = hasSession ? 'flex' : 'none';
-
+        if(out && inn){
+          out.style.display = hasSession ? 'none' : 'flex';
+          inn.style.display = hasSession ? 'flex' : 'none';
+        }
+        // gros boutons du centre
+        const loginBtn = document.getElementById('loginBtn');
+        const connectedBtns = document.getElementById('connectedBtns');
+        if(loginBtn && connectedBtns){
+          loginBtn.style.display = hasSession ? 'none' : '';
+          connectedBtns.style.display = hasSession ? '' : 'none';
+        }
+        // avatar/nom si dispo
         if(hasSession){
-          const p = loadLocalProfile(); // {display_name, avatar}
-          if(p && p.display_name){
-            document.getElementById('authName').textContent = p.display_name;
-          }
-          if(p && p.avatar){
-            document.getElementById('authAvatar').src = p.avatar;
-          }
+          const p = loadLocalProfile();
+          if(p && p.display_name) document.getElementById('authName').textContent = p.display_name;
+          if(p && p.avatar) document.getElementById('authAvatar').src = p.avatar;
         }
       })();
     </script>
