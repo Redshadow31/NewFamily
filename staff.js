@@ -51,7 +51,7 @@ const STAFF = [
         desc: "Pokémon, Yu-Gi-Oh, rétro. Expérience et écoute." },
       { login: "gilbert_hime", name: "gilbert_hime",
         desc: "DBD, Fortnite, gacha. Énergie et présence sur le terrain." },
-      { login: "saikosama", name: "Saikosama",
+      { login: "saikossama", name: "Saikosama",
         desc: "DBD, Fortnite, ARK. Esprit d’équipe et vigilance." },
     ]
   },
