@@ -351,6 +351,9 @@ a[href="vip.html"] {
 /* Animation spotlight */
 .vip-spotlight { transition: opacity .45s ease; }
 .vip-spotlight.is-fading { opacity: 0; }
+.vip-spotlight-bio{ margin:.5rem 0 1rem; color:#444; line-height:1.6; white-space:pre-wrap; }
+.vip-quote{ margin-top:.4rem; color:#555; font-style:italic; line-height:1.5; }
+
 
 /* Bloc bio dans le spotlight */
 .vip-spotlight-bio{
