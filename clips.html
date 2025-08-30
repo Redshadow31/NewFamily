@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <title>Clips à la une</title>
     <link rel="stylesheet" href="style.css" />
+
+    <!-- ⚡ Optimisations de chargement Twitch -->
+    <link rel="preconnect" href="https://clips.twitch.tv">
+    <link rel="preconnect" href="https://player.twitch.tv">
+    <link rel="preconnect" href="https://gql.twitch.tv">
+
     <style>
       #clip-player {
         position: relative;
@@ -60,23 +66,25 @@
         text-align: center;
       }
     </style>
+
+    <!-- ⚡ Charger clips.js sans bloquer le rendu -->
+    <script src="clips.js" defer></script>
   </head>
 
   <body>
-   <header>
-  <div class="header-content">
-    <div class="header-logo">
-      <img src="assets/logo.webp" alt="Logo New Family">
-    </div>
-    <div class="header-text">
-      <h1>🎬 Clip à la une</h1>
-      <div class="button-container">
-        <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+    <header>
+      <div class="header-content">
+        <div class="header-logo">
+          <img src="assets/logo.webp" alt="Logo New Family">
+        </div>
+        <div class="header-text">
+          <h1>🎬 Clip à la une</h1>
+          <div class="button-container">
+            <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</header>
-
+    </header>
 
     <section id="clip-frame">
       <div id="clip-player"></div>
@@ -87,7 +95,5 @@
         <button id="next-button">🎞️ Clip suivant</button>
       </div>
     </section>
-
-    <script src="clips.js"></script>
   </body>
 </html>
