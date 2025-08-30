@@ -136,7 +136,7 @@ async function init() {
       : userInfo?.profile_image_url ||
         "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
 
- card.innerHTML = `
+card.innerHTML = `
   <img src="${img}" alt="Preview">
   <div class="card-body">
     ${vipList.includes(user.toLowerCase()) ? `<div class="badge">⭐ VIP</div>` : ""}
@@ -144,7 +144,7 @@ async function init() {
     <p class="title">${title}</p>
     <div class="card-footer">
       <span>${isOnline ? `${game} • ${streamData.viewer_count} viewers` : "Hors ligne"}</span>
-      <a href="${link}" target="_blank">Regarder</a>
+      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
     </div>
   </div>
 `;
