@@ -11,16 +11,16 @@ const PARENT_DOMAIN = window.location.hostname;
 
 // Pseudos ciblés
 const members = [
-  "Nexou31",
-  "Clarastonewall",
-  "Red_shadow_31",
-  "Selena_Akemi",
-  "Thony1384",
-  "Jenny31200",
-  "Vektor_live",
-  "Livio_on",
-  "Dylow95",
-];
+  "nexou31",
+  "clarastonewall",
+  "red_shadow_31",
+  "selena_Akemi",
+  "thony1384",
+  "jenny31200",
+  "vektor_live",
+  "livio_on",
+  "dylow95",
+].map(m => m.toLowerCase());;
 
 // ---------- API helpers ----------
 async function getToken() {
@@ -245,3 +245,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   await prepareClipsFast();
 })();
+const data = await res.json();
+console.log("users response", data);
