@@ -34,7 +34,7 @@ async function showVIPs() {
             <a href="https://twitch.tv/${user.login}" target="_blank">
                 <img src="${user.profile_image_url}" alt="${user.display_name}">
                 <div class="username">${user.display_name}</div>
-                <div class="title">⭐ Membre VIP du mois</div>
+                <div class="title">⭐ Membre VIP Élites</div>
             </a>
         `;
         container.appendChild(card);
