@@ -143,7 +143,6 @@ card.innerHTML = `
     <div class="username">${user}</div>
     <p class="title">${title}</p>
     <div class="card-footer">
-      <span>${isOnline ? `${game} • ${streamData.viewer_count} viewers` : "Hors ligne"}</span>
       <a href="${link}" target="_blank" rel="noopener">Regarder</a>
     </div>
   </div>
