@@ -4,10 +4,18 @@
 
 const CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
 
-// --------- Fetch helpers ---------
+// ---------- Utils ----------
+const escapeHtml = (s) =>
+  String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+// ---------- Fetch helpers ----------
 async function fetchVIPList() {
-  // vip.json peut être: ["login1","login2", ...]
-  // ou [{login:"...", badges:["Mentor"], month:"2025-08", spotlight:true, ...}, ...]
+  // vip.json peut être: ["login1", ...] ou [{login, badges, quote, spotlight, image, banner, title, month}, ...]
   const res = await fetch("vip.json", { cache: "no-store" });
   if (!res.ok) throw new Error(`vip.json: ${res.status}`);
   const data = await res.json();
@@ -24,13 +32,11 @@ async function fetchToken() {
 }
 
 async function fetchUsersInfo(logins) {
-  // Twitch accepte ~100 logins d’un coup; on gère le chunking par sécurité.
+  // Chunking par sécurité (limite ≈ 100 logins/req)
   const token = await fetchToken();
-  const chunks = [];
   const size = 90;
-  for (let i = 0; i < logins.length; i += size) {
-    chunks.push(logins.slice(i, i + size));
-  }
+  const chunks = [];
+  for (let i = 0; i < logins.length; i += size) chunks.push(logins.slice(i, i + size));
 
   const results = [];
   for (const chunk of chunks) {
@@ -49,26 +55,25 @@ async function fetchUsersInfo(logins) {
   return results;
 }
 
-// --------- Normalisation des données ---------
+// ---------- Normalisation ----------
 function normalizeVipEntries(rawList) {
-  // Retourne: { logins: [...], metaMap: {login: {badges, quote, spotlight, image, title, month}} }
+  // -> { logins: [...], metaMap: { login: {badges, quote, spotlight, image, banner, title, month} } }
   const metaMap = {};
   const logins = rawList.map((item) => {
     if (typeof item === "string") {
       const login = item.toLowerCase();
-      metaMap[login] = {}; // pas de méta
+      metaMap[login] = {};
       return login;
     }
-    // Objet enrichi
     const login = String(item.login || item.name || "").toLowerCase();
     metaMap[login] = {
       badges: item.badges || [],
       quote: item.quote || "",
-      spotlight: Boolean(item.spotlight),
+      spotlight: !!item.spotlight,
       image: item.image || item.avatar || "",
       banner: item.banner || item.cover || "",
       title: item.title || "Membre VIP Élites",
-      month: item.month || "", // format "YYYY-MM" si tu veux filtrer
+      month: item.month || "",
     };
     return login;
   });
@@ -76,7 +81,6 @@ function normalizeVipEntries(rawList) {
 }
 
 function mergeUsersWithMeta(usersInfo, metaMap) {
-  // usersInfo = données Twitch: login, display_name, profile_image_url, offline_image_url, description, etc.
   return usersInfo.map((u) => {
     const login = (u.login || "").toLowerCase();
     const meta = metaMap[login] || {};
@@ -84,7 +88,6 @@ function mergeUsersWithMeta(usersInfo, metaMap) {
       login,
       display_name: u.display_name || u.login,
       avatar: u.profile_image_url || "",
-      // offline_image_url (bannière de chaîne) peut être vide; on garde meta.banner si fourni
       banner: meta.banner || u.offline_image_url || "",
       image: meta.image || u.profile_image_url || "",
       badges: meta.badges || [],
@@ -92,15 +95,13 @@ function mergeUsersWithMeta(usersInfo, metaMap) {
       spotlight: !!meta.spotlight,
       title: meta.title || "Membre VIP Élites",
       month: meta.month || "",
-      description: u.description || "",
+      description: u.description || "", // <- bio Twitch
     };
   });
 }
 
-// ================== UI Utils (tes fonctions intégrées & adaptées) ==================
-
+// ================== UI helpers ==================
 function monthOptions(containerId) {
-  // Génère 6 derniers mois (AAA-MM) si le select existe
   const sel = document.getElementById(containerId);
   if (!sel) return;
   const now = new Date();
@@ -115,29 +116,30 @@ function monthOptions(containerId) {
     sel.appendChild(opt);
   }
   sel.value = sel.options[0]?.value || "";
-  // Le filtrage est branché dans initShowVIPs() plus bas
 }
 
 function buildBadges(badges) {
   if (!badges || !badges.length) return "";
   return `<div class="vip-badges">
-    ${badges.map((b) => `<span class="vip-badge">${b}</span>`).join("")}
+    ${badges.map((b) => `<span class="vip-badge">${escapeHtml(b)}</span>`).join("")}
   </div>`;
 }
 
 function buildCTA(login) {
   const twitch = `https://twitch.tv/${login}`;
-  const discord = `https://discord.com/channels/@me`; // remplace par ton salon si tu veux
+  const discord = `https://discord.com/channels/@me`; // remplace par le lien de ton salon si besoin
   return `<div class="cta-row">
     <a href="${twitch}" target="_blank" rel="noopener">Voir la chaîne</a>
     <a href="${discord}" target="_blank" rel="noopener">Féliciter sur Discord 🎉</a>
   </div>`;
 }
 
+// ---------- Spotlight (avec bio) ----------
 function renderSpotlight(vip) {
   const host = document.getElementById("vip-spotlight");
   if (!host || !vip) return;
-  const quote = vip.quote || "Membre VIP Élites — merci pour ton énergie et ton entraide !";
+  const quote = vip.quote ? `<div class="vip-spotlight-quote">“${escapeHtml(vip.quote)}”</div>` : "";
+  const bio = vip.description ? `<div class="vip-spotlight-bio">${escapeHtml(vip.description)}</div>` : "";
   host.innerHTML = `
     <article class="vip-spotlight-card">
       <div class="vip-spotlight-media">
@@ -146,7 +148,8 @@ function renderSpotlight(vip) {
       </div>
       <div class="vip-spotlight-body">
         <div class="vip-spotlight-name">${vip.display_name || vip.login}</div>
-        <div class="vip-spotlight-quote">“${quote}”</div>
+        ${quote}
+        ${bio}
         <div class="vip-spotlight-actions">
           <a class="vip-btn" href="https://twitch.tv/${vip.login}" target="_blank" rel="noopener">Regarder sur Twitch</a>
           <a class="vip-btn" href="index.html">Découvrir la New Family</a>
@@ -156,11 +159,9 @@ function renderSpotlight(vip) {
   `;
 }
 
+// ---------- Grille ----------
 function enhanceVipGrid(vips) {
-  // Spotlight: priorise un VIP marqué spotlight=true, sinon le 1er
-  const spotlight = vips.find((v) => v.spotlight) || vips[0];
-  renderSpotlight(spotlight);
-
+  // affiche la grille (spotlight géré ailleurs pour la rotation)
   const grid = document.getElementById("vip-users");
   if (!grid) return;
 
@@ -170,6 +171,7 @@ function enhanceVipGrid(vips) {
       const img = v.image || v.avatar || v.banner || "assets/placeholder.webp";
       const title = v.title || "Membre VIP Élites";
       const name = v.display_name || login;
+      const quote = v.quote ? `<div class="vip-quote">“${escapeHtml(v.quote)}”</div>` : "";
       return `
         <article class="user-card">
           ${buildBadges(v.badges)}
@@ -179,6 +181,7 @@ function enhanceVipGrid(vips) {
           <div class="card-body">
             <div class="username"><a href="https://twitch.tv/${login}" target="_blank" rel="noopener">${name}</a></div>
             <div class="title">⭐ ${title}</div>
+            ${quote}
             ${buildCTA(login)}
           </div>
         </article>
@@ -187,16 +190,59 @@ function enhanceVipGrid(vips) {
     .join("");
 }
 
-// --------- Filtrage par mois (si tu fournis month dans vip.json + select présent) ---------
+// ---------- Rotation automatique du spotlight ----------
+let _spotlightTimer = null;
+let _spotlightIndex = 0;
+
+function buildSpotlightList(vips) {
+  // priorité: spotlight=true, puis présence de badges, puis alpha
+  return vips.slice().sort((a, b) => {
+    const aS = a.spotlight ? 1 : 0, bS = b.spotlight ? 1 : 0;
+    if (bS !== aS) return bS - aS;
+    const aB = a.badges && a.badges.length ? 1 : 0;
+    const bB = b.badges && b.badges.length ? 1 : 0;
+    if (bB !== aB) return bB - aB;
+    return (a.display_name || a.login).localeCompare(b.display_name || b.login);
+  });
+}
+
+function startSpotlightRotation(vips, intervalMs = 15000) {
+  const host = document.getElementById("vip-spotlight");
+  if (!host || !vips.length) return;
+
+  const list = buildSpotlightList(vips);
+  _spotlightIndex = 0;
+
+  const showNext = () => {
+    host.classList.add("is-fading");
+    setTimeout(() => {
+      renderSpotlight(list[_spotlightIndex]);
+      host.classList.remove("is-fading");
+      _spotlightIndex = (_spotlightIndex + 1) % list.length;
+    }, 420); // doit correspondre au CSS .vip-spotlight { transition }
+  };
+
+  clearInterval(_spotlightTimer);
+  showNext(); // premier affichage immédiat
+  _spotlightTimer = setInterval(showNext, intervalMs);
+
+  // pause au survol (optionnel mais sympa)
+  host.addEventListener("mouseenter", () => clearInterval(_spotlightTimer));
+  host.addEventListener("mouseleave", () => {
+    clearInterval(_spotlightTimer);
+    _spotlightTimer = setInterval(showNext, intervalMs);
+  });
+}
+
+// ---------- Filtrage mois + tri badges pour la grille ----------
 function attachMonthFilter(allVips) {
   const sel = document.getElementById("vip-month-select");
 
-  // 👉 fonction de tri : d’abord ceux qui ont des badges, puis par display_name
   const sortByBadges = (list) =>
     list.slice().sort((a, b) => {
       const aBadges = a.badges && a.badges.length ? 1 : 0;
       const bBadges = b.badges && b.badges.length ? 1 : 0;
-      if (bBadges !== aBadges) return bBadges - aBadges; // VIP avec badge en premier
+      if (bBadges !== aBadges) return bBadges - aBadges;
       return (a.display_name || a.login).localeCompare(b.display_name || b.login);
     });
 
@@ -206,6 +252,9 @@ function attachMonthFilter(allVips) {
       list = allVips.filter((v) => (v.month || "") === value);
       if (!list.length) list = allVips;
     }
+    // lance/relance la rotation du spotlight sur l’ensemble filtré
+    startSpotlightRotation(list);
+    // affiche la grille (badges en premier)
     enhanceVipGrid(sortByBadges(list));
   };
 
@@ -220,26 +269,18 @@ function attachMonthFilter(allVips) {
 // ================== Flux principal ==================
 async function showVIPs() {
   try {
-    // 1) Récupère la liste (logins ou objets)
     const rawList = await fetchVIPList();
     const { logins, metaMap } = normalizeVipEntries(rawList);
-
     if (!logins.length) {
       const grid = document.getElementById("vip-users");
       if (grid) grid.innerHTML = "<p>Aucun VIP à afficher.</p>";
       return;
     }
 
-    // 2) Infos Twitch
     const usersInfo = await fetchUsersInfo(logins);
-
-    // 3) Fusion
     const vips = mergeUsersWithMeta(usersInfo, metaMap);
 
-    // 4) UI – options de mois (si le select existe)
     monthOptions("vip-month-select");
-
-    // 5) Rendu (avec filtre si présent)
     attachMonthFilter(vips);
   } catch (e) {
     console.error(e);
@@ -249,28 +290,3 @@ async function showVIPs() {
 }
 
 document.addEventListener("DOMContentLoaded", showVIPs);
-const escapeHtml = s => String(s)
-  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-  .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-
-// ...dans enhanceVipGrid(vips), remplace le template par :
-grid.innerHTML = vips.map(v => {
-  const login = (v.login || "").toLowerCase();
-  const img = v.image || v.avatar || v.banner || "assets/placeholder.webp";
-  const title = v.title || "Membre VIP Élites";
-  const name = v.display_name || login;
-  return `
-    <article class="user-card">
-      ${buildBadges(v.badges)}
-      <div class="media-wrap">
-        <img src="${img}" alt="${name}">
-      </div>
-      <div class="card-body">
-        <div class="username"><a href="https://twitch.tv/${login}" target="_blank" rel="noopener">${name}</a></div>
-        <div class="title">⭐ ${title}</div>
-        ${v.quote ? `<div class="vip-quote">“${escapeHtml(v.quote)}”</div>` : ``}
-        ${buildCTA(login)}
-      </div>
-    </article>
-  `;
-}).join("");
