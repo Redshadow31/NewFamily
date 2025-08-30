@@ -1,26 +1,41 @@
+/* ========= BASE ========= */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f4e9f9;
+  background-color: var(--page-bg, #f4e9f9); /* clair par défaut */
+  color: var(--text, #111);
 }
-/* === (à ajouter juste après le bloc body { ... }) : variables par défaut (mode clair) === */
+
+/* === Variables (mode clair par défaut) === */
 :root{
-  --surface:#fff;
+  --page-bg:#f4e9f9;                     /* fond global clair */
+  --text:#111;                           /* texte par défaut */
+  --surface:#fff;                        /* cartes / encarts clairs */
   --border:#eee;
   --shadow:0 6px 20px rgba(0,0,0,.08);
 }
-/* === DARK MODE (active si <html> ou <body> a la classe .dark ou data-theme="dark") === */
+
+/* === DARK MODE (ajoute .dark ou data-theme="dark" sur <html> ou <body>) === */
 html.dark, body.dark,
 html[data-theme="dark"], body[data-theme="dark"]{
   --bg:#3B1D5A;          /* violet foncé (fond global) */
-  --surface:#26143F;     /* “blanc” → violet sombre assorti pour les vignettes/cartes */
-  --surface-2:#2E1750;   /* variante un poil plus claire si besoin */
+  --page-bg:#3B1D5A;     /* propagée au body/main */
+  --surface:#26143F;     /* “blanc” → violet sombre assorti pour cartes */
+  --surface-2:#2E1750;   /* variante */
   --text:#FFFFFF;        /* texte principal */
   --muted:rgba(255,255,255,.85);
   --border:rgba(255,255,255,.12);
   --chip:#6B36B8;        /* boutons/puces si nécessaire */
-  background-color:var(--bg);
-  color:var(--text);
+}
+
+/* Forcer le fond global partout en sombre (utile si des conteneurs surchargent la couleur) */
+html.dark, html.dark body,
+html.dark main, html.dark .page, html.dark #app,
+body.dark, body.dark main, body.dark .page, body.dark #app,
+html[data-theme="dark"], html[data-theme="dark"] body,
+html[data-theme="dark"] main, html[data-theme="dark"] .page, html[data-theme="dark"] #app{
+  background-color: var(--page-bg) !important;
+  color: var(--text);
 }
 
 /* Texte global (titres, paragraphes) */
@@ -41,15 +56,13 @@ html[data-theme="dark"], body[data-theme="dark"]{
   background:var(--surface);
   border-top:1px solid var(--border);
 }
-
 .dark .username, .dark .title, .dark .card-footer,
 [data-theme="dark"] .username, [data-theme="dark"] .title, [data-theme="dark"] .card-footer{
   color:var(--text);
 }
-
 .dark .card-footer a,
 [data-theme="dark"] .card-footer a{
-  background:#372052;      /* puce lisible sur fond sombre */
+  background:#372052;
   color:#fff;
   border:1px solid var(--border);
 }
@@ -64,7 +77,7 @@ html[data-theme="dark"], body[data-theme="dark"]{
   box-shadow:0 6px 16px rgba(0,0,0,.45);
 }
 
-/* --- Barres/encarts (VIP, spotlight) --- */
+/* --- Barres/encarts + VIGNETTE DU VOYAGE (spotlight) --- */
 .dark .vip-toolbar-inner,
 .dark .vip-spotlight-card,
 [data-theme="dark"] .vip-toolbar-inner,
@@ -103,6 +116,7 @@ html[data-theme="dark"], body[data-theme="dark"]{
   box-shadow:0 12px 32px rgba(0,0,0,.5);
 }
 
+/* ========= HEADER ========= */
 header{
   background:url("Design sans titre (17).png") no-repeat center/cover;
   color:#fff;
@@ -123,22 +137,21 @@ header{
 
 /* logo */
 .header-logo img{
-  width:220px;           /* garde ta taille */
+  width:220px;
   height:auto;
   display:block;
   transition: transform .25s ease, filter .25s ease;
-  /* ombre par défaut */
   filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
 }
 .header-logo img:hover{
-  transform: scale(1.06);     /* léger zoom au survol */
+  transform: scale(1.06);
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
 }
 header > img {
   width: 180px;
   height: auto;
   display: block;
-  margin: 0 auto; /* centre le logo si pas de texte */
+  margin: 0 auto;
   transition: transform .25s ease, filter .25s ease;
   filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
 }
@@ -146,31 +159,29 @@ header > img:hover {
   transform: scale(1.06);
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
 }
-/* textes */
+
 /* textes */
 .header-text {
   max-width: 650px;
-  text-align: center;   /* centre le titre et le paragraphe */
+  text-align: center;
   margin: 0 auto;
 }
-
 .header-text h1 {
-  font-size: 2.6em;      /* un peu plus grand pour VIP */
+  font-size: 2.6em;
   margin: 0.3em 0;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.4); /* ombre plus nette */
+  text-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
-
 .header-text p {
   font-size: 1.2em;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.35); /* ombre subtile */
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
-
 .header-button-wrapper {
   text-align: center;
-  margin-top: -1.2rem;   /* remonte légèrement sous la bannière */
-  margin-bottom: 2rem;   /* espace avec le contenu */
+  margin-top: -1.2rem;
+  margin-bottom: 2rem;
 }
+
 /* mobile: repasse en colonne */
 @media (max-width: 768px){
   .header-content{ flex-direction:column; text-align:center; }
@@ -183,18 +194,15 @@ header h1 {
   margin-bottom: 0.4em;
 }
 
-h2 {
-  text-align: center;
-  margin-top: 2em;
-}
+h2 { text-align: center; margin-top: 2em; }
 
+/* ========= GRILLE UTILISATEURS ========= */
 .user-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
   gap:18px;
   padding:1em;
 }
-
 
 .user-card{
   background:#fff;
@@ -217,8 +225,6 @@ h2 {
   object-fit:cover;
   display:block;
 }
-
-
 .user-card img {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -262,6 +268,7 @@ h2 {
 }
 .card-footer a:hover{ background:#e5e7eb; }
 
+/* ========= BOUTONS / BADGES ========= */
 .button-container {
   display: flex;
   justify-content: center;
@@ -294,7 +301,6 @@ h2 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.3s, transform 0.3s;
 }
-
 .about-button:hover,
 .event-button:hover {
   background: #845ec2;
@@ -307,11 +313,7 @@ h2 {
   align-items: center;
   gap: 1em;
 }
-
-.button-container.single-button {
-  justify-content: center;
-}
-
+.button-container.single-button { justify-content: center; }
 .button-container.single-button a {
   width: 100%;
   max-width: 350px;
@@ -329,17 +331,12 @@ h2 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.3s, transform 0.3s;
 }
-
 .interview-button:hover {
   background: #ff5722;
   transform: scale(1.05);
 }
 
-
-a[href="vip.html"] {
-  background: #f1c40f;
-  color: black;
-}
+a[href="vip.html"] { background: #f1c40f; color: black; }
 
 /* === STYLES POUR MINIATURE TWITCH CLIQUABLE === */
 .twitch-clip {
@@ -351,7 +348,6 @@ a[href="vip.html"] {
   cursor: pointer;
   background-color: #000;
 }
-
 .twitch-clip img {
   width: 100%;
   height: 100%;
@@ -359,7 +355,6 @@ a[href="vip.html"] {
   border-radius: 10px;
   display: block;
 }
-
 .twitch-clip .play-button {
   position: absolute;
   top: 50%;
@@ -370,10 +365,9 @@ a[href="vip.html"] {
   text-shadow: 0 0 10px black;
   pointer-events: none;
 }
+
 /* ===== VIP toolbar ===== */
-.vip-toolbar{
-  max-width:1200px; margin:0 auto 1rem; padding:0 .75rem;
-}
+.vip-toolbar{ max-width:1200px; margin:0 auto 1rem; padding:0 .75rem; }
 .vip-toolbar-inner{
   background:#fff; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.08);
   padding:.9rem 1rem; display:flex; gap:1rem; align-items:center; justify-content:space-between;
@@ -381,10 +375,8 @@ a[href="vip.html"] {
 .vip-month label{ font-weight:700; margin-right:.5rem; }
 .vip-month select{ padding:.4rem .6rem; border-radius:10px; border:1px solid #ddd; }
 
-/* ===== Spotlight ===== */
-.vip-spotlight{
-  max-width:1200px; margin:1rem auto 1.2rem; padding:0 .75rem;
-}
+/* ===== Spotlight (Vignette du voyage) ===== */
+.vip-spotlight{ max-width:1200px; margin:1rem auto 1.2rem; padding:0 .75rem; }
 .vip-spotlight-card{
   display:grid; grid-template-columns: 360px 1fr; gap:1.25rem;
   background:#fff; border-radius:18px; overflow:hidden;
@@ -392,12 +384,8 @@ a[href="vip.html"] {
 }
 @media (max-width:900px){ .vip-spotlight-card{ grid-template-columns:1fr; } }
 
-.vip-spotlight-media{
-  position:relative; background:#000; min-height:220px;
-}
-.vip-spotlight-media img{
-  width:100%; height:100%; object-fit:cover; display:block;
-}
+.vip-spotlight-media{ position:relative; background:#000; min-height:220px; }
+.vip-spotlight-media img{ width:100%; height:100%; object-fit:cover; display:block; }
 .vip-ribbon{
   position:absolute; top:14px; left:-8px; background:#f1c40f; color:#000; 
   font-weight:900; padding:.35rem .8rem; border-radius:0 8px 8px 0; 
@@ -405,9 +393,7 @@ a[href="vip.html"] {
 }
 .vip-spotlight-body{ padding:1rem 1.25rem; }
 .vip-spotlight-name{ font-size:1.6rem; font-weight:900; margin:.2rem 0; }
-.vip-spotlight-quote{
-  margin:.5rem 0 1rem; color:#333; line-height:1.6; font-style:italic;
-}
+.vip-spotlight-quote{ margin:.5rem 0 1rem; color:#333; line-height:1.6; font-style:italic; }
 .vip-spotlight-actions{ display:flex; gap:.5rem; flex-wrap:wrap; }
 .vip-btn{
   background:#9146ff; color:#fff; padding:.6rem .9rem; border-radius:10px;
@@ -430,38 +416,29 @@ a[href="vip.html"] {
 .user-card:hover .media-wrap img{ transform: scale(1.04); }
 
 .user-card .card-body{ position:relative; }
-.user-card .cta-row{
-  display:flex; gap:.5rem; margin-top:.5rem; flex-wrap:wrap;
-}
+.user-card .cta-row{ display:flex; gap:.5rem; margin-top:.5rem; flex-wrap:wrap; }
 .user-card .cta-row a{
   background:#f3f4f6; padding:.45rem .65rem; border-radius:8px; text-decoration:none; font-weight:700; color:#333;
 }
 .user-card .cta-row a:hover{ background:#e5e7eb; }
-/* Quote sur les cartes */
-.vip-quote{
-  margin-top: .4rem;
-  color: #555;
-  font-style: italic;
-  line-height: 1.5;
-}
 
-/* (Déjà prévu si tu avais suivi plus haut) Spotlight */
-.vip-spotlight{ max-width:1200px; margin:1rem auto 1.2rem; padding:0 .75rem; }
+/* Quote sur les cartes */
+.vip-quote{ margin-top:.4rem; color:#555; font-style:italic; line-height:1.5; }
+
 /* Animation spotlight */
 .vip-spotlight { transition: opacity .45s ease; }
 .vip-spotlight.is-fading { opacity: 0; }
 .vip-spotlight-bio{ margin:.5rem 0 1rem; color:#444; line-height:1.6; white-space:pre-wrap; }
-.vip-quote{ margin-top:.4rem; color:#555; font-style:italic; line-height:1.5; }
-
 
 /* Bloc bio dans le spotlight */
 .vip-spotlight-bio{
   margin:.5rem 0 1rem;
   color:#444;
   line-height:1.6;
-  white-space:pre-wrap; /* respecte les retours à la ligne de la bio */
+  white-space:pre-wrap;
 }
-/* ===== STAFF : grille centrée + vignettes avec badge ===== */
+
+/* ===== STAFF ===== */
 .staff-wrap{
   width: min(1200px, 95%);
   margin: 2rem auto 3rem;
@@ -469,20 +446,13 @@ a[href="vip.html"] {
   flex-direction: column;
   gap: 2.2rem;
 }
-
-.staff-section h2{
-  text-align:center;
-  margin: .5rem 0 1.2rem;
-  font-weight: 900;
-}
-
+.staff-section h2{ text-align:center; margin: .5rem 0 1.2rem; font-weight: 900; }
 .staff-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
   gap: 22px;
-  justify-content: center;   /* centre les colonnes */
+  justify-content: center;
 }
-
 .staff-card{
   width: 100%;
   max-width: 260px;
@@ -494,105 +464,56 @@ a[href="vip.html"] {
   text-align: center;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.staff-card:hover{
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.18);
-}
+.staff-card:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+.staff-card .avatar-box{ position: relative; background: #1f1f23; }
+.staff-card img.avatar{ width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
 
-.staff-card .avatar-box{
-  position: relative;
-  background: #1f1f23;
-}
-.staff-card img.avatar{
-  width: 100%;
-  aspect-ratio: 1/1;         /* carré */
-  object-fit: cover;
-  display: block;
-}
-
-/* Badge sur la vignette */
-/* Badge sur la vignette */
+/* Badges sur vignettes */
 .staff-card .badge{
-  position: absolute;
-  top: 10px; left: 10px;
-  font-size: .8rem;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 999px;
-  padding: .25rem .65rem;
+  position: absolute; top: 10px; left: 10px;
+  font-size: .8rem; font-weight: 700; color: #fff;
+  border-radius: 999px; padding: .25rem .65rem;
   backdrop-filter: blur(4px);
   box-shadow: 0 4px 10px rgba(0,0,0,.25);
   letter-spacing: .2px;
 }
 
 /* Couleurs par rôle (dégradés harmonisés) */
-.badge--founder{
-  background: linear-gradient(135deg, #b8336a, #6a0572); /* rouge → violet */
-}
-.badge--adjoint{
-  background: linear-gradient(135deg, #845ec2, #2c73d2); /* violet → bleu */
-}
-.badge--mentor{
-  background: linear-gradient(135deg, #008e9b, #0081cf); /* turquoise → bleu */
-}
-.badge--junior{
-  background: linear-gradient(135deg, #4caf50, #2e7d32); /* vert clair → vert foncé */
-}
-/* ===== Badges génériques (remplace l'ancien .badge jaune) ===== */
+.badge--founder{ background: linear-gradient(135deg, #b8336a, #6a0572); }
+.badge--adjoint{ background: linear-gradient(135deg, #845ec2, #2c73d2); }
+.badge--mentor{  background: linear-gradient(135deg, #008e9b, #0081cf); }
+.badge--junior{  background: linear-gradient(135deg, #4caf50, #2e7d32); }
+
+/* Badges génériques */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: .8rem;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 999px;
-  padding: .25rem .65rem;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .8rem; font-weight: 700; color: #fff;
+  border-radius: 999px; padding: .25rem .65rem;
   backdrop-filter: blur(4px);
   box-shadow: 0 4px 10px rgba(0,0,0,.25);
-  letter-spacing: .2px;
-  white-space: nowrap;
+  letter-spacing: .2px; white-space: nowrap;
 }
 
-/* Position sur les vignettes (user cards ET staff cards) */
-.user-card .badge,
-.staff-card .badge{
-  position: absolute;
-  top: 10px;
-  left: 10px;
+/* Position sur vignettes */
+.user-card .badge, .staff-card .badge{
+  position: absolute; top: 10px; left: 10px;
 }
 
-/* Variantes par rôle (mêmes couleurs que staff) */
-.badge--founder{ background: linear-gradient(135deg, #b8336a, #6a0572); } /* 🔮 */
-.badge--adjoint{ background: linear-gradient(135deg, #845ec2, #2c73d2); } /* 🏛️ */
-.badge--mentor { background: linear-gradient(135deg, #008e9b, #0081cf); } /* 🛡️ */
-.badge--junior { background: linear-gradient(135deg, #4caf50, #2e7d32); } /* 🔧 */
-
-/* (facultatif) autres usages de badge */
+/* Autres variantes */
 .badge--vip   { background: linear-gradient(135deg, #f1c40f, #f39c12); color:#000; }
 .badge--event { background: linear-gradient(135deg, #e74c3c, #c0392b); }
 .badge--info  { background: linear-gradient(135deg, #3498db, #2c3e50); }
-/* ===== Badge VIP sur la vignette (en bas à gauche) ===== */
+
+/* Badge VIP en bas à gauche */
 .user-card .vip-chip {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .28rem .6rem;
-  border-radius: 999px;
-  font-weight: 800;
-  font-size: .82rem;
-  background: linear-gradient(135deg, #f1c40f, #f39c12); /* Doré */
-  color: #1d1400;
+  position: absolute; left: 10px; bottom: 10px;
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .28rem .6rem; border-radius: 999px; font-weight: 800; font-size: .82rem;
+  background: linear-gradient(135deg, #f1c40f, #f39c12); color: #1d1400;
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
-  backdrop-filter: blur(4px);
-  z-index: 2;
+  backdrop-filter: blur(4px); z-index: 2;
 }
 
 /* Corrige l’effet offline : ne grise que l’image, pas les badges */
 .user-card.offline { opacity: 1; filter: none; }
-.user-card.offline .media-wrap img {
-  filter: grayscale(90%) brightness(.9);
-}
+.user-card.offline .media-wrap img { filter: grayscale(90%) brightness(.9); }
