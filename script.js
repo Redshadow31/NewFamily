@@ -143,13 +143,13 @@ async function fetchVIPList() {
 ----------------------------------*/
 function getRoleBadge(user) {
   const u = user.toLowerCase();
-  if (["clara","nexou31","red_shadow_31"].includes(u)) {
+  if (["clarastonewall","nexou31","red_shadow_31"].includes(u)) {
     return '<span class="badge badge--founder">🔮 Fondateur</span>';
   }
   if (["selena_akemi","nangel89","tabs_up","jenny31200"].includes(u)) {
     return '<span class="badge badge--adjoint">🏛️ Adjoint</span>';
   }
-  if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikosama"].includes(u)) {
+  if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikossama"].includes(u)) {
     return '<span class="badge badge--mentor">🛡️ Mentor</span>';
   }
   if (["lespydyverse","mcaliena","mcfly_59140"].includes(u)) {
