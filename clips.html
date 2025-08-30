@@ -11,21 +11,32 @@
     <link rel="preconnect" href="https://gql.twitch.tv">
 
     <style>
-      #clip-player {
-        position: relative;
-        width: 720px;
-        max-width: 90%;
-        margin: 2em auto;
-        border-radius: 10px;
-        overflow: hidden;
+      /* ===== Mise en page : 2 colonnes (lecteur + profil) ===== */
+      .content-grid {
+        width: min(1200px, 95%);
+        margin: 2rem auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.25rem;
+      }
+      @media (max-width: 900px) {
+        .content-grid { grid-template-columns: 1fr; }
       }
 
+      /* ===== Lecteur ===== */
+      #clip-player {
+        position: relative;
+        width: 100%;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #1f1f23;
+        box-shadow: 0 10px 30px rgba(0,0,0,.15);
+      }
       #clip-player img {
         display: block;
         width: 100%;
-        border-radius: 10px;
+        border-radius: 14px;
       }
-
       .play-button {
         position: absolute;
         top: 50%;
@@ -36,38 +47,92 @@
         text-shadow: 1px 1px 5px black;
         pointer-events: none;
       }
-
       #clip-user {
-        font-size: 1.2em;
-        margin: 0.5em 0;
-        font-weight: bold;
+        font-size: 1.1em;
+        margin: .75em 0 0;
+        font-weight: 700;
         text-align: center;
       }
 
-      #next-button,
-      #prev-button {
-        padding: 0.7em 1.5em;
+      /* ===== Boutons nav ===== */
+      .button-row {
+        margin-top: 1em;
+        text-align: center;
+        display: flex;
+        gap: .75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .nf-btn {
+        padding: 0.7em 1.2em;
         font-size: 1em;
         background-color: #9146ff;
         color: white;
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        margin: 0 0.5em;
       }
+      .nf-btn:hover { background-color: #772ce8; }
 
-      #next-button:hover,
-      #prev-button:hover {
-        background-color: #772ce8;
+      /* ===== Carte profil ===== */
+      #profile-card {
+        border-radius: 14px;
+        background: #ffffff10;
+        backdrop-filter: blur(4px);
+        padding: 1.25rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,.12);
       }
+      #profile-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: .75rem;
+      }
+      #profile-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #2a2a2e;
+      }
+      #profile-name {
+        font-weight: 800;
+        font-size: 1.15rem;
+        margin: 0;
+      }
+      #profile-login {
+        color: #9146ff;
+        font-size: .95rem;
+        margin: 0;
+      }
+      #profile-bio {
+        margin-top: .5rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      #profile-actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: .5rem;
+        flex-wrap: wrap;
+      }
+      .link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .55rem .9rem;
+        border-radius: 10px;
+        background: #9146ff;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .link-btn:hover { background: #772ce8; }
 
-      .button-container {
-        margin-top: 1em;
-        text-align: center;
-      }
+      /* Header existant (laisse tel quel chez toi) */
+      header .header-content { max-width: 1200px; margin: 0 auto; }
     </style>
 
-    <!-- ⚡ Charger clips.js sans bloquer le rendu -->
     <script src="clips.js" defer></script>
   </head>
 
@@ -86,14 +151,30 @@
       </div>
     </header>
 
-    <section id="clip-frame">
-      <div id="clip-player"></div>
-      <div id="clip-user"></div>
+    <!-- ===== Zone principale : lecteur + profil ===== -->
+    <main class="content-grid">
+      <section id="clip-frame">
+        <div id="clip-player"></div>
+        <div id="clip-user"></div>
+        <div class="button-row">
+          <button id="prev-button" class="nf-btn">🎞️ Clip précédent</button>
+          <button id="next-button" class="nf-btn">🎞️ Clip suivant</button>
+        </div>
+      </section>
 
-      <div class="button-container">
-        <button id="prev-button">🎞️ Clip précédent</button>
-        <button id="next-button">🎞️ Clip suivant</button>
-      </div>
-    </section>
+      <aside id="profile-card" aria-live="polite">
+        <div id="profile-header">
+          <img id="profile-avatar" src="" alt="Avatar Twitch du streamer" loading="lazy" decoding="async">
+          <div>
+            <p id="profile-name">—</p>
+            <p id="profile-login">@—</p>
+          </div>
+        </div>
+        <div id="profile-bio">Chargement de la bio…</div>
+        <div id="profile-actions">
+          <a id="profile-link" class="link-btn" href="#" target="_blank" rel="noopener">Voir la chaîne Twitch</a>
+        </div>
+      </aside>
+    </main>
   </body>
 </html>
