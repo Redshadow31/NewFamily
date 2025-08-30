@@ -3,6 +3,7 @@
    - Twitch data (ton code)
    - Toggle clair/sombre (auto + bouton injecté)
    - Badges LIVE (.is-live + data-live)
+   - Badges rôles (fondateur / adjoint / mentor / junior)
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -16,13 +17,10 @@ function applyThemeFromStorage() {
   const root = document.documentElement;
   if (saved === "dark") root.classList.add("theme-dark");
   else if (saved === "light") root.classList.remove("theme-dark");
-  // sinon : on laisse suivre le prefers-color-scheme
 }
 
 function setupThemeToggle() {
   applyThemeFromStorage();
-
-  // Crée le bouton si inexistant
   let btn = document.getElementById("theme-toggle");
   if (!btn) {
     btn = document.createElement("button");
@@ -46,23 +44,18 @@ function setupThemeToggle() {
     btn.style.justifyContent = "center";
     btn.style.transition = "background .2s ease, transform .2s ease";
 
-    // essaie de le mettre dans le header s'il existe, sinon body
     const header = document.querySelector("header") || document.body;
     header.style.position = header.style.position || "relative";
     header.appendChild(btn);
   }
 
-  // État iconique
   const setIcon = () => {
     const isDark = document.documentElement.classList.contains("theme-dark");
     btn.textContent = isDark ? "☀️" : "🌙";
     btn.title = isDark ? "Passer en mode clair" : "Passer en mode sombre";
   };
-
-  // Init icône
   setIcon();
 
-  // Click handler
   btn.addEventListener("click", () => {
     document.documentElement.classList.toggle("theme-dark");
     const isDark = document.documentElement.classList.contains("theme-dark");
@@ -94,7 +87,6 @@ async function fetchStreams(logins) {
   if (!logins || !logins.length) return { data: [] };
   const query = logins.map((user) => `user_login=${encodeURIComponent(user)}`).join("&");
   const url = `https://api.twitch.tv/helix/streams?${query}`;
-
   try {
     const response = await fetch(url, {
       headers: {
@@ -102,12 +94,10 @@ async function fetchStreams(logins) {
         Authorization: "Bearer " + token,
       },
     });
-
     if (!response.ok) {
       console.warn(`⚠️ fetchStreams a échoué avec le code ${response.status}`);
       return { data: [] };
     }
-
     return await response.json();
   } catch (error) {
     console.error("❌ Erreur dans fetchStreams :", error);
@@ -117,13 +107,10 @@ async function fetchStreams(logins) {
 
 async function fetchUsersInfo(allUsers) {
   const results = [];
-  const erreurs = [];
-
   for (let i = 0; i < allUsers.length; i += 100) {
     const chunk = allUsers.slice(i, i + 100);
     const query = chunk.map((user) => `login=${encodeURIComponent(user)}`).join("&");
     const url = `https://api.twitch.tv/helix/users?${query}`;
-
     try {
       const response = await fetch(url, {
         headers: {
@@ -131,20 +118,13 @@ async function fetchUsersInfo(allUsers) {
           Authorization: "Bearer " + token,
         },
       });
-
       if (!response.ok) throw new Error(`Erreur pour : ${chunk.join(", ")}`);
       const data = await response.json();
       results.push(...data.data);
     } catch (error) {
       console.warn("❌ Utilisateurs ignorés :", chunk, "-", error.message);
-      erreurs.push(...chunk);
     }
   }
-
-  if (erreurs.length > 0) {
-    console.log("⚠️ Logins invalides détectés :", erreurs);
-  }
-
   return results;
 }
 
@@ -156,6 +136,26 @@ async function fetchVIPList() {
   } catch {
     return [];
   }
+}
+
+/* -------------------------------
+   🏷️ Détermination du badge rôle
+----------------------------------*/
+function getRoleBadge(user) {
+  const u = user.toLowerCase();
+  if (["clara","nexou31","red_shadow_31"].includes(u)) {
+    return '<span class="badge badge--founder">🔮 Fondateur</span>';
+  }
+  if (["selena_akemi","nangel89","tabs_up","jenny31200"].includes(u)) {
+    return '<span class="badge badge--adjoint">🏛️ Adjoint</span>';
+  }
+  if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikosama"].includes(u)) {
+    return '<span class="badge badge--mentor">🛡️ Mentor</span>';
+  }
+  if (["lespydyverse","mcaliena","mcfly_59140"].includes(u)) {
+    return '<span class="badge badge--junior">🔧 Junior</span>';
+  }
+  return "";
 }
 
 /* -------------------------------
@@ -187,6 +187,7 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
   card.innerHTML = `
     <div class="media-wrap">
       <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+      ${getRoleBadge(user)}
     </div>
     <div class="card-body">
       ${isVip ? `<div class="vip-badges"><span class="vip-badge">⭐ VIP</span></div>` : ""}
@@ -201,7 +202,6 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
   return card;
 }
 
-// petite utilité anti-XSS pour les textes injectés
 function escapeHtml(str) {
   return String(str)
     .replaceAll("&", "&amp;")
@@ -215,7 +215,6 @@ function escapeHtml(str) {
    🚀 Init principale
 ----------------------------------*/
 async function init() {
-  // Toggle thème dès le départ
   setupThemeToggle();
 
   await getToken();
@@ -231,7 +230,6 @@ async function init() {
 
   const usersInfo = await fetchUsersInfo(allUsers);
 
-  // 2 appels streams (<=200 logins couverts)
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
   for (const group of streamChunks) {
@@ -248,7 +246,6 @@ async function init() {
 
   const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
 
-  // VIPs d’abord
   const sortedUsers = [...allUsers].sort((a, b) => {
     const aIsVip = vipList.includes(a.toLowerCase());
     const bIsVip = vipList.includes(b.toLowerCase());
@@ -276,7 +273,6 @@ async function init() {
     else offlineContainer.appendChild(card);
   }
 
-  // Compteur live
   const liveCountElement = document.getElementById("live-count");
   if (liveCountElement) {
     const emoji =
