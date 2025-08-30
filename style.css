@@ -5,7 +5,7 @@ body {
 }
 
 header {
-   background: linear-gradient(135deg, #a4508b, #5f0a87);
+  background: url("Design sans titre (17).png") no-repeat center center / cover;
   color: white;
   text-align: center;
   padding: 2em 1em;
