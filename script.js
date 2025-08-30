@@ -287,3 +287,21 @@ async function init() {
 }
 
 init();
+<script>
+  function getCookie(name){
+    const v = document.cookie.split('; ').find(r => r.startsWith(name+'='));
+    return v ? decodeURIComponent(v.split('=')[1]) : null;
+  }
+
+  (function initAuthUI(){
+    const hasSession = !!getCookie('nf_session');
+    const loginBtn = document.getElementById('loginBtn');
+    const connectedBtns = document.getElementById('connectedBtns');
+
+    if(loginBtn && connectedBtns){
+      // ✅ par défaut le bouton login est visible
+      loginBtn.style.display = hasSession ? 'none' : '';
+      connectedBtns.style.display = hasSession ? '' : 'none';
+    }
+  })();
+</script>
