@@ -7,7 +7,7 @@ exports.handler = async (event) => {
     const code = url.searchParams.get("code");
     if (!code) return { statusCode: 400, body: "Missing code" };
 
-    // 1) échange code → token
+    // 1) Échange du code contre un token
     const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -19,28 +19,38 @@ exports.handler = async (event) => {
         code
       })
     });
-    const tokenJson = await tokenRes.json();
-    if (!tokenRes.ok) throw new Error(JSON.stringify(tokenJson));
-    const { access_token, token_type } = tokenJson;
 
-    // 2) profil utilisateur
+    const tokenJson = await tokenRes.json();
+    if (!tokenRes.ok) {
+      console.error("⚠️ Discord token error:", tokenJson);
+      throw new Error("Failed to fetch Discord token");
+    }
+
+    const { access_token } = tokenJson;
+
+    // 2) Récupération du profil Discord
     const meRes = await fetch("https://discord.com/api/users/@me", {
-      headers: { Authorization: `${token_type} ${access_token}` }
+      headers: { Authorization: `Bearer ${access_token}` }
     });
     const user = await meRes.json();
+    if (!user || !user.id) throw new Error("No user from Discord");
 
-    // 3) cookie de session
+    // 3) Créer le JWT
     const payload = {
       provider: "discord",
       sub: user.id,
-      login: user.username,
-      display_name: `${user.username}`,
-      avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+      username: user.username + (user.discriminator !== "0" ? `#${user.discriminator}` : ""),
+      avatar: user.avatar
+        ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+        : null
     };
-    const token = jwt.sign(payload, process.env.SESSION_JWT_SECRET, { expiresIn: "7d" });
+
+    const sessionToken = jwt.sign(payload, process.env.SESSION_JWT_SECRET, {
+      expiresIn: "7d"
+    });
 
     const cookie = [
-      `nf_session=${token}`,
+      `nf_session=${sessionToken}`,
       "Path=/",
       "HttpOnly",
       "SameSite=Lax",
@@ -49,9 +59,13 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 302,
-      headers: { "Set-Cookie": cookie, "Location": "/" }
+      headers: {
+        "Set-Cookie": cookie,
+        Location: "/"
+      }
     };
   } catch (e) {
+    console.error("❌ Discord auth error:", e);
     return { statusCode: 500, body: e.message };
   }
 };
