@@ -473,3 +473,27 @@ a[href="vip.html"] {
 .badge--vip   { background: linear-gradient(135deg, #f1c40f, #f39c12); color:#000; }
 .badge--event { background: linear-gradient(135deg, #e74c3c, #c0392b); }
 .badge--info  { background: linear-gradient(135deg, #3498db, #2c3e50); }
+/* ===== Badge VIP sur la vignette (en bas à gauche) ===== */
+.user-card .vip-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .28rem .6rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: .82rem;
+  background: linear-gradient(135deg, #f1c40f, #f39c12); /* Doré */
+  color: #1d1400;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+/* Corrige l’effet offline : ne grise que l’image, pas les badges */
+.user-card.offline { opacity: 1; filter: none; }
+.user-card.offline .media-wrap img {
+  filter: grayscale(90%) brightness(.9);
+}
