@@ -15,18 +15,45 @@ header {
   transition: all 0.3s ease-in-out;
 }
 
-header img {
-  width: 250px;
-  height: auto; /* ✅ Important : conserver le ratio naturel */
-  max-width: 100%;
-  margin-bottom: 5px;
-  transition: transform 0.3s ease;
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ou space-between si tu veux étirer */
+  gap: 2em;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-logo img {
+  width: 220px; /* ajuste la taille du logo */
+  height: auto;
+  flex-shrink: 0;
 }
 
 header img:hover {
   transform: scale(1.08);
 }
-
+.header-text {
+  max-width: 650px;
+}
+.header-text h1 {
+  font-size: 2.4em;
+  margin: 0 0 0.5em;
+}
+.header-text p {
+  font-size: 1.1em;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .header-logo img {
+    width: 180px;
+    margin-bottom: 1em;
+  }
+}
 header h1 {
   font-size: 2.8em;
   margin-top: 0.3em;
