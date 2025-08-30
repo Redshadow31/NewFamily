@@ -1,30 +1,258 @@
-// === Données du quizz (exemple) ===
-const QUESTIONS = [
+<script>
+// === Options ===
+const DURATION = 20; // secondes par question
+const SHUFFLE_QUESTIONS = true;
+const SHUFFLE_CHOICES   = true;
+
+// === Données brutes (avec ✅ sur la bonne réponse) ===
+const RAW_SECTIONS = [
   {
-    q: "Qui a fondé la New Family ?",
-    choices: ["ClaraStoneWall, Nexou31 et Red_Shadow_31", "Squeezie", "Amouranth", "Gotaga"],
-    correct: 0
+    cat: "A. Origines & Dates",
+    items: [
+      {
+        q: "En quelle année TENF a-t-il été créé ?",
+        choices: ["2050","2018","✅ 2024","2023"]
+      },
+      {
+        q: "Que signifie l’acronyme TENF ?",
+        choices: ["Tacos Extra Nachos Fromage","✅ Twitch Entraide New Family","Tu Énerves Nos Fondateurs","Tous Ensemble Nos Forces"]
+      },
+      {
+        q: "Combien de fondateurs ont lancé TENF ?",
+        choices: ["0 il a pop tout seul !","✅ 3","12","2"]
+      },
+      {
+        q: "Quel réseau social a fortement boosté les arrivées ?",
+        choices: ["✅ TikTok","Instagram","Minitel","Skyblog"]
+      },
+      {
+        q: "Quelle ville est mentionnée pour le voyage communautaire ?",
+        choices: ["Ibiza","✅ L’Ametlla de Mar","Barcelone","Toulouse"]
+      },
+      {
+        q: "Quel mois a lieu l’anniversaire du serveur ?",
+        choices: ["Juin","Avril","✅ Septembre","Décembre"]
+      }
+    ]
   },
   {
-    q: "Notre valeur principale ?",
-    choices: ["La compétition", "La bienveillance et l'entraide", "Le drama", "Le nombre d'abonnés"],
-    correct: 1
+    cat: "B. Fonctionnement & Règles",
+    items: [
+      {
+        q: "Que faut-il faire pour s’intégrer complètement après l’arrivée ?",
+        choices: ["Offrir un kebab à Clara","✅ Assister à une réunion d’intégration","Demander son rôle en MP","Rester actif une semaine sans rien dire"]
+      },
+      {
+        q: "Quelle est la commande pour le bonus quotidien ?",
+        choices: ["/cadeau","/points","✅ /journalier","/abracadabra"]
+      },
+      {
+        q: "Où poster la preuve d’un follow Insta/TikTok ?",
+        choices: ["Sur un pigeon voyageur","✅ Dans #preuves-réseaux","Dans #spam","En message privé au staff"]
+      },
+      {
+        q: "Combien de live gagnants par mois peut-on demander ?",
+        choices: ["7","Vers l’infini et au-delà","4","✅ 1"]
+      },
+      {
+        q: "Quelle action donne 500 pts tous les 3 niveaux ?",
+        choices: ["Réciter l’alphabet à l’envers","✅ Monter en exp","Réagir avec des emojis en boucle","Vendre son âme au bot"]
+      },
+      {
+        q: "Quel rôle est conçu pour les streamers mineurs ?",
+        choices: ["Streamer en couches","✅ Créateur Junior","Créateur Affilié","P’tit Chou"]
+      },
+      {
+        q: "Quelle règle est expliquée en douceur en réunion d’intégration ?",
+        choices: ["✅ Suivre toutes les chaînes","Ne pas spammer Clara à 3h du matin","Toujours rire aux blagues de Nexou","Toujours applaudir Clara"]
+      },
+      {
+        q: "Qui valide les récompenses boutique ?",
+        choices: ["✅ Les modérateurs ou admins","La roue de la fortune","Jeff Bezos","Le bot"]
+      }
+    ]
   },
   {
-    q: "Où se passe la rencontre 2026 ?",
-    choices: ["Disneyland", "PortAventura", "Europa-Park", "Walibi"],
-    correct: 1
+    cat: "C. Événements & Activités",
+    items: [
+      {
+        q: "Quel événement a lieu le lundi ?",
+        choices: ["✅ Ciné Clara","Soirée Sims","Lâcher de licornes","Blind Test"]
+      },
+      {
+        q: "Quel est l’événement le plus prisé par les membres ?",
+        choices: ["Mariokart IRL sur autoroute","✅ Apéro Discord","Blind Test","Réunion staff"]
+      },
+      {
+        q: "Combien de temps est recommandé pour un Live gagnant ?",
+        choices: ["✅ 2 heures","1 heure","30 secondes","24 heures"]
+      },
+      {
+        q: "Quelle activité a été ajoutée via la boutique avec Clara ?",
+        choices: ["Karaoké imposé","✅ Interview","Séance psy gratuite","Feedback visuel"]
+      },
+      {
+        q: "Quel est le but de la Boost Live Team ?",
+        choices: ["Lancer une secte de streamers","✅ S’entraider et se faire des retours","Dominer le monde","Tester de nouveaux jeux"]
+      },
+      {
+        q: "Quelle est la durée maximale d’un rôle VIP acheté en boutique ?",
+        choices: ["✅ 1 semaine","1 an","48h chrono","1 jour"]
+      },
+      {
+        q: "À quelle heure finissent généralement les apéros ?",
+        choices: ["Quand les chips sont finies","✅ À pas d’heure","Minuit","Quand le bot s’endort"]
+      },
+      {
+        q: "Quel jeu n’est pas régulier dans les jeux communautaires TENF ?",
+        choices: ["✅ Peppa Pig","Call of Duty","Fortnite","Mario Kart 8"]
+      },
+      {
+        q: "Comment sont récompensés les gagnants de quizz ou jeux ?",
+        choices: ["Une pizza offerte par Nexou","200 points","✅ 500 points","Un câlin virtuel de Red"]
+      },
+      {
+        q: "Combien de réunions d’intégration ont lieu par semaine ?",
+        choices: ["✅ 3","Uniquement quand la lune est pleine","1 par mois","7"]
+      }
+    ]
+  },
+  {
+    cat: "D. Le Staff TENF",
+    items: [
+      {
+        q: "Quel membre du staff s’endort parfois en réunion ?",
+        choices: ["✅ TheDark_Sand","Jenny31200","Bob l’Éponge","Red_Shadow_31"]
+      },
+      {
+        q: "Qui parmi les fondateurs aime tourner les dramas en mode RP ?",
+        choices: ["Batman","✅ Clara","Red","Un lama"]
+      },
+      {
+        q: "Qui coupe souvent son micro et parle via celui de Red ?",
+        choices: ["Dark Vador","✅ Nexou","Saiko","Clara"]
+      },
+      {
+        q: "Qui s’est déjà assoupi plusieurs fois en vocal général ?",
+        choices: ["Gilbert","Dora l’exploratrice","✅ Jenny31200","Saiko"]
+      },
+      {
+        q: "Qui a rejoint comme admin adjoint aux côtés de Selena ?",
+        choices: ["Mahyurah","Shrek","✅ Nangel","Yaya"]
+      },
+      {
+        q: "Parmi ces modérateurs, qui est fan de Pokémon et Yu-Gi-Oh ?",
+        choices: ["✅ TheDark_Sand","Doraemon","Livio","Sangoku"]
+      },
+      {
+        q: "Qui est connu pour être très actif sur Disney Dreamlight Valley ?",
+        choices: ["✅ LeviaCarpe","Olaf","Jenny","Livio"]
+      },
+      {
+        q: "Complète la phrase : “TENF, c’est avant tout _____.”",
+        choices: ["Un élevage de licornes","✅ Une famille","Des dramas","Apéro"]
+      }
+    ]
+  },
+  {
+    cat: "E. Croissance & Chiffres",
+    items: [
+      {
+        q: "Combien de membres actifs au dernier bilan ?",
+        choices: ["✅ 134","500","300","100"]
+      },
+      {
+        q: "Combien de membres au total environ aujourd’hui ?",
+        choices: ["✅ 377","500","250","300"]
+      },
+      {
+        q: "Combien de nouveaux membres rejoignent en moyenne chaque jour ?",
+        choices: ["4–5","✅ 2–3","0 (personne n’aime les serveurs Discord)","1"]
+      },
+      {
+        q: "En quelle année est prévu le voyage PortAventura ?",
+        choices: ["✅ 2026","2025","2077","2027"]
+      },
+      {
+        q: "Combien de jours doit durer ce voyage ?",
+        choices: ["3 jours","15 jours de camping sauvage","✅ 5–7 jours","1h chrono"]
+      }
+    ]
+  },
+  {
+    cat: "F. Divers / Anecdotes",
+    items: [
+      {
+        q: "Quel site officiel TENF affiche les lives des membres ?",
+        choices: ["✅ NewFamily.app.netlify","Doctissimo.fr","OnlyFans.fr","TENF.fr"]
+      },
+      {
+        q: "Quels rôles n’ont pas accès aux salons de promotion ?",
+        choices: ["Fantômes invisibles","Membres actifs","✅ Communauté","VIP"]
+      },
+      {
+        q: "Quelle valeur est mise en avant dans tous les textes TENF ?",
+        choices: ["✅ La bienveillance","Le fun","La performance","La dictature des chats"]
+      }
+    ]
   }
 ];
 
-const DURATION = 20; // secondes par question
+// === Utilitaires ===
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function parseChoices(rawChoices) {
+  // Renvoie {choices:[labels], correct:index}
+  let correctIndex = -1;
+  const cleaned = rawChoices.map((c, i) => {
+    const m = c.match(/^\s*✅\s*(.*)$/u);
+    if (m) { correctIndex = i; return m[1]; }
+    return c;
+  });
+  if (correctIndex === -1) {
+    console.warn("Question sans ✅ détecté !");
+    correctIndex = 0; // fallback
+  }
+  return { choices: cleaned, correct: correctIndex };
+}
+function buildQuestions(rawSections) {
+  const list = [];
+  rawSections.forEach(section => {
+    section.items.forEach(item => {
+      const { choices, correct } = parseChoices(item.choices);
+      // Mélange des choix si demandé
+      let finalChoices = choices;
+      let finalCorrect = correct;
+      if (SHUFFLE_CHOICES) {
+        const paired = choices.map((label, i) => ({ label, isCorrect: i === correct }));
+        const mixed  = shuffle(paired);
+        finalChoices = mixed.map(x => x.label);
+        finalCorrect = mixed.findIndex(x => x.isCorrect);
+      }
+      list.push({
+        q: item.q,
+        choices: finalChoices,
+        correct: finalCorrect,
+        category: section.cat
+      });
+    });
+  });
+  return SHUFFLE_QUESTIONS ? shuffle(list) : list;
+}
 
 // === Etat ===
+const QUESTIONS = buildQuestions(RAW_SECTIONS);
 let index = 0;
 let score = 0;
 let timer = DURATION;
 let interval = null;
-const answersGiven = []; // {q, selected, isCorrect, timeLeft}
+const answersGiven = []; // {q, selected, isCorrect, timeLeft, category}
 
 // === DOM ===
 const elQTitle = document.getElementById("q-title");
@@ -46,7 +274,7 @@ function renderQuestion() {
   const total = QUESTIONS.length;
   const q = QUESTIONS[index];
 
-  elQTitle.textContent = `Question ${index+1}/${total}`;
+  elQTitle.textContent = `${q.category} — Question ${index+1}/${total}`;
   elQ.textContent = q.q;
   elAns.innerHTML = "";
   btnNext.classList.add("hidden");
@@ -54,6 +282,7 @@ function renderQuestion() {
   q.choices.forEach((label, i) => {
     const b = document.createElement("button");
     b.textContent = label;
+    b.type = "button";
     b.addEventListener("click", () => pickAnswer(i));
     elAns.appendChild(b);
   });
@@ -102,6 +331,7 @@ function lockQuestion(selectedIndex) {
 
   answersGiven.push({
     q: q.q,
+    category: q.category,
     selected: selectedIndex,
     isCorrect,
     timeLeft: timer
@@ -121,19 +351,29 @@ btnNext.addEventListener("click", () => {
   }
 });
 
+// === Résultats ===
 function showResult() {
   boxQuiz.classList.add("hidden");
   boxRes.classList.remove("hidden");
   elScore.textContent = `${score}/${QUESTIONS.length}`;
 
-  // recap court
   elRecap.innerHTML = answersGiven
     .map((a, idx) => {
-      const ch = QUESTIONS[idx].choices[a.selected] ?? "—";
-      return `<p><strong>Q${idx+1}.</strong> ${QUESTIONS[idx].q}<br>
-      <span style="color:${a.isCorrect ? '#2e7d32':'#b71c1c'}">${a.isCorrect ? "✔️ Bonne réponse":"❌ Mauvaise réponse"}</span>
-      <span class="muted"> • (${a.timeLeft}s restantes)</span><br>
-      <span class="muted">Ta réponse : ${ch}</span></p>`;
+      const q = QUESTIONS[idx];
+      const chosen = (a.selected !== null && a.selected !== undefined)
+        ? q.choices[a.selected] ?? "—"
+        : "—";
+      const correctLabel = q.choices[q.correct];
+      return `<p>
+        <strong>${q.category}</strong><br>
+        <strong>Q${idx+1}.</strong> ${q.q}<br>
+        <span style="color:${a.isCorrect ? '#2e7d32':'#b71c1c'}">
+          ${a.isCorrect ? "✔️ Bonne réponse" : "❌ Mauvaise réponse"}
+        </span>
+        <span class="muted"> • (${a.timeLeft}s restantes)</span><br>
+        <span class="muted">Ta réponse : ${chosen}</span><br>
+        <span class="muted">Bonne réponse : ${correctLabel}</span>
+      </p>`;
     }).join("");
 }
 
@@ -164,3 +404,4 @@ formSend.addEventListener("submit", async (e) => {
 
 // Go
 renderQuestion();
+</script>
