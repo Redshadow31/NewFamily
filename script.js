@@ -136,9 +136,10 @@ async function init() {
       : userInfo?.profile_image_url ||
         "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
 
-  card.innerHTML = `
+ card.innerHTML = `
   <img src="${img}" alt="Preview">
   <div class="card-body">
+    ${vipList.includes(user.toLowerCase()) ? `<div class="badge">⭐ VIP</div>` : ""}
     <div class="username">${user}</div>
     <p class="title">${title}</p>
     <div class="card-footer">
