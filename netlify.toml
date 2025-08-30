@@ -1,2 +1,10 @@
 [functions]
   directory = "netlify/functions"
+
+[[edge_functions]]
+  path = "/admin.html"
+  function = "auth-guard"
+
+[[edge_functions]]
+  path = "/membres/*"
+  function = "auth-guard"
