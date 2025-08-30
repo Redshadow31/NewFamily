@@ -1,7 +1,7 @@
 /* =========================================================
    New Family — script.js
    - Twitch data (ton code)
-   - Toggle clair/sombre (auto + bouton injecté)
+   - Toggle clair/sombre (.dark sur <html>)
    - Badges LIVE (.is-live + data-live)
    - Badges rôles (fondateur / adjoint / mentor / junior)
    ========================================================= */
@@ -12,15 +12,26 @@ let token = "";
 /* -------------------------------
    🎛️ Thème clair/sombre
 ----------------------------------*/
+const THEME_CLASS = "dark";
+
 function applyThemeFromStorage() {
   const saved = localStorage.getItem("theme"); // "dark" | "light" | null
   const root = document.documentElement;
-  if (saved === "dark") root.classList.add("theme-dark");
-  else if (saved === "light") root.classList.remove("theme-dark");
+
+  if (saved === "dark") {
+    root.classList.add(THEME_CLASS);
+  } else if (saved === "light") {
+    root.classList.remove(THEME_CLASS);
+  } else {
+    // Pas de préférence stockée → on suit le système
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.classList.toggle(THEME_CLASS, !!prefersDark);
+  }
 }
 
 function setupThemeToggle() {
   applyThemeFromStorage();
+
   let btn = document.getElementById("theme-toggle");
   if (!btn) {
     btn = document.createElement("button");
@@ -45,20 +56,21 @@ function setupThemeToggle() {
     btn.style.transition = "background .2s ease, transform .2s ease";
 
     const header = document.querySelector("header") || document.body;
-    header.style.position = header.style.position || "relative";
+    if (!header.style.position) header.style.position = "relative";
     header.appendChild(btn);
   }
 
   const setIcon = () => {
-    const isDark = document.documentElement.classList.contains("theme-dark");
+    const isDark = document.documentElement.classList.contains(THEME_CLASS);
     btn.textContent = isDark ? "☀️" : "🌙";
     btn.title = isDark ? "Passer en mode clair" : "Passer en mode sombre";
   };
   setIcon();
 
   btn.addEventListener("click", () => {
-    document.documentElement.classList.toggle("theme-dark");
-    const isDark = document.documentElement.classList.contains("theme-dark");
+    const root = document.documentElement;
+    root.classList.toggle(THEME_CLASS);
+    const isDark = root.classList.contains(THEME_CLASS);
     localStorage.setItem("theme", isDark ? "dark" : "light");
     setIcon();
   });
@@ -184,11 +196,11 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
     : (userInfo?.profile_image_url ||
        "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
- card.innerHTML = `
+  card.innerHTML = `
   <div class="media-wrap">
     <img src="${img}" alt="Preview de ${escapeHtml(user)}">
-    ${getRoleBadge(user)}                           
-    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}  
+    ${getRoleBadge(user)}
+    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
   </div>
   <div class="card-body">
     <div class="username">${escapeHtml(user)}</div>
