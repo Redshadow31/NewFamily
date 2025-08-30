@@ -19,6 +19,7 @@ const members = [
   "jenny31200",
   "vektor_live",
   "livio_on",
+  "thedark_sand", 
   "dylow95",
 ];
 
