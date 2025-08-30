@@ -16,6 +16,7 @@
 
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Twitch Entraide - New Family</title>
     <link rel="stylesheet" href="style.css" />
 
@@ -24,34 +25,66 @@
     <link rel="preconnect" href="https://static-cdn.jtvnw.net" />
     <link rel="preconnect" href="https://clips-media-assets2.twitch.tv" />
     <link rel="preconnect" href="https://www.youtube.com" />
+    <style>
+      /* --- styles discrets pour la barre d'auth --- */
+      .authbar{
+        max-width: 1100px; margin: .5rem auto 0; padding: .5rem 1rem;
+        display:flex; align-items:center; justify-content:flex-end; gap:.5rem;
+      }
+      .authbar .spacer{ flex:1 }
+      .auth-pill{ display:inline-flex; gap:.5rem; flex-wrap:wrap }
+      .auth-pill a{ text-decoration:none }
+      .auth-user{
+        display:flex; align-items:center; gap:.5rem; font-weight:600;
+      }
+      .auth-avatar{
+        width:28px; height:28px; border-radius:50%; object-fit:cover;
+      }
+      /* on réutilise tes classes de boutons pour l’harmonie */
+      .btn-mini{ padding:.4rem .7rem; border-radius:.5rem; font-weight:600; }
+    </style>
   </head>
 
   <body>
-   <header>
-  <div class="header-content">
-    <div class="header-logo">
-      <img src="/assets/logo.webp" alt="Logo New Family">
-    </div>
-    <div class="header-text">
-      <h1> Bienvenue sur le site <br>
-  de la New Family !
-</h1>
-      <p>Retrouvez ici tous les lives de notre communauté bienveillante, passionnée et unie autour du partage !</p>
-    </div>
-  </div>
-</header>
+    <!-- ======= BARRE AUTH (connexion/compte) ======= -->
+    <div class="authbar" id="authbar" aria-label="Connexion">
+      <div class="spacer"></div>
 
+      <!-- affiché si NON connecté -->
+      <div id="auth-logged-out" class="auth-pill" style="display:none">
+        <a class="event-button btn-mini" href="/.netlify/functions/auth-twitch-start" aria-label="Se connecter avec Twitch">Se connecter avec Twitch</a>
+        <a class="event-button btn-mini" href="/.netlify/functions/auth-discord-start" aria-label="Se connecter avec Discord">Se connecter avec Discord</a>
+      </div>
+
+      <!-- affiché si connecté -->
+      <div id="auth-logged-in" class="auth-pill" style="display:none">
+        <a class="event-button btn-mini" id="memberSpaceLink" href="/membres/" aria-label="Espace membres">🔒 Espace membres</a>
+        <div class="auth-user">
+          <img id="authAvatar" class="auth-avatar" alt="Avatar utilisateur" src="/assets/logo.webp" />
+          <span id="authName">Connecté</span>
+        </div>
+        <a class="event-button btn-mini" href="/.netlify/functions/logout" aria-label="Se déconnecter">Se déconnecter</a>
+      </div>
+    </div>
+    <!-- ======= /BARRE AUTH ======= -->
+
+    <header>
+      <div class="header-content">
+        <div class="header-logo">
+          <img src="/assets/logo.webp" alt="Logo New Family">
+        </div>
+        <div class="header-text">
+          <h1> Bienvenue sur le site <br> de la New Family !</h1>
+          <p>Retrouvez ici tous les lives de notre communauté bienveillante, passionnée et unie autour du partage !</p>
+        </div>
+      </div>
+    </header>
 
     <!-- Boutons du haut -->
-   <div class="button-container">
-  <a href="a-propos.html" class="about-button">
-    🎭 En savoir plus sur la New Family
-  </a>
-  <a href="staff.html" class="about-button">
-    👥 Découvrir le Staff
-  </a>
-</div>
-
+    <div class="button-container">
+      <a href="a-propos.html" class="about-button">🎭 En savoir plus sur la New Family</a>
+      <a href="staff.html" class="about-button">👥 Découvrir le Staff</a>
+    </div>
 
     <div class="button-container">
       <a href="vip.html" class="event-button">⭐ VIP du mois</a>
@@ -124,10 +157,7 @@
     <!-- 🔽 Section des lives (déplacée ici à la fin) -->
     <section id="online">
       <h2>Actuellement en direct 🎥</h2>
-      <p
-        id="live-count"
-        style="text-align: center; font-weight: bold; font-size: 1.2em"
-      ></p>
+      <p id="live-count" style="text-align: center; font-weight: bold; font-size: 1.2em"></p>
       <div id="live-users" class="user-grid"></div>
     </section>
 
@@ -135,6 +165,42 @@
       <h2>À découvrir bientôt 👀</h2>
       <div id="offline-users" class="user-grid"></div>
     </section>
+
+    <!-- ======= SCRIPT AUTH (lecture du cookie & affichage UI) ======= -->
+    <script>
+      // lit un cookie simple (sans décoder JWT côté client)
+      function getCookie(name){
+        const v = document.cookie.split('; ').find(r => r.startsWith(name+'='));
+        return v ? decodeURIComponent(v.split('=')[1]) : null;
+      }
+
+      // Petit plus : si tu veux afficher le pseudo/avatar dans le header,
+      // on stocke (facultatif) un mini profil en LocalStorage depuis la callback Function.
+      // Si ce n'est pas fait côté serveur, on n'affiche que "Connecté".
+      function loadLocalProfile(){
+        try { return JSON.parse(localStorage.getItem('nf_profile') || 'null'); }
+        catch(e){ return null; }
+      }
+
+      (function initAuthUI(){
+        const hasSession = !!getCookie('nf_session');
+        const out = document.getElementById('auth-logged-out');
+        const inn = document.getElementById('auth-logged-in');
+        out.style.display = hasSession ? 'none' : 'flex';
+        inn.style.display = hasSession ? 'flex' : 'none';
+
+        if(hasSession){
+          const p = loadLocalProfile(); // {display_name, avatar}
+          if(p && p.display_name){
+            document.getElementById('authName').textContent = p.display_name;
+          }
+          if(p && p.avatar){
+            document.getElementById('authAvatar').src = p.avatar;
+          }
+        }
+      })();
+    </script>
+    <!-- ======= /SCRIPT AUTH ======= -->
 
     <script src="script.js"></script>
     <script src="clip.js"></script>
