@@ -362,3 +362,83 @@ a[href="vip.html"] {
   line-height:1.6;
   white-space:pre-wrap; /* respecte les retours à la ligne de la bio */
 }
+/* ===== STAFF : grille centrée + vignettes avec badge ===== */
+.staff-wrap{
+  width: min(1200px, 95%);
+  margin: 2rem auto 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.staff-section h2{
+  text-align:center;
+  margin: .5rem 0 1.2rem;
+  font-weight: 900;
+}
+
+.staff-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  justify-items: center;            /* centre chaque carte */
+}
+
+.staff-card{
+  width: 100%;
+  max-width: 260px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: clip;
+  text-align: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.staff-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.18);
+}
+
+.staff-card .avatar-box{
+  position: relative;
+  background: #1f1f23;
+}
+.staff-card img.avatar{
+  width: 100%;
+  aspect-ratio: 1/1;         /* carré */
+  object-fit: cover;
+  display: block;
+}
+
+/* Badge sur la vignette */
+.staff-card .badge{
+  position: absolute;
+  top: 10px; left: 10px;
+  font-size: .85rem;
+  font-weight: 800;
+  color: #fff;
+  background: #e11900;
+  border-radius: 999px;
+  padding: .25rem .6rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+}
+.badge--founder{ background: #d35400; }   /* 👑 */
+.badge--adjoint{ background: #6c5ce7; }   /* ⚙️ */
+.badge--mentor{  background: #27ae60; }   /* 🎓 */
+.badge--junior{  background: #2980b9; }   /* 🌱 */
+
+.staff-card .body{
+  padding: 12px 14px 14px;
+}
+.staff-card .name{
+  margin: 0 0 4px;
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+.staff-card .desc{
+  margin: 0;
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.45;
+}
