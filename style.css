@@ -67,7 +67,11 @@ header > img:hover {
   text-shadow: 0 2px 8px rgba(0,0,0,0.35); /* ombre subtile */
 }
 
-
+.header-button-wrapper {
+  text-align: center;
+  margin-top: -1.2rem;   /* remonte légèrement sous la bannière */
+  margin-bottom: 2rem;   /* espace avec le contenu */
+}
 /* mobile: repasse en colonne */
 @media (max-width: 768px){
   .header-content{ flex-direction:column; text-align:center; }
