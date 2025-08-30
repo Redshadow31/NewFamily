@@ -11,7 +11,7 @@ const STAFF = [
   // 👑 Fondateurs
   { role: "founder", emoji: "👑", title: "Admin Fondateurs",
     members: [
-      { login: "clara",          name: "Clara",
+      { login: "clarastonewall",          name: "Clara",
         desc: "Gardienne des plannings, streameuse Sims & simulation. L’organisation au service de la convivialité." },
       { login: "nexou31",        name: "Nexou31",
         desc: "Streamer Nintendo, formateur et gestionnaire des réseaux. Toujours à l’écoute des membres." },
