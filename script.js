@@ -184,20 +184,20 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
     : (userInfo?.profile_image_url ||
        "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
-  card.innerHTML = `
-    <div class="media-wrap">
-      <img src="${img}" alt="Preview de ${escapeHtml(user)}">
-      ${getRoleBadge(user)}
+ card.innerHTML = `
+  <div class="media-wrap">
+    <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+    ${getRoleBadge(user)}                           
+    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}  
+  </div>
+  <div class="card-body">
+    <div class="username">${escapeHtml(user)}</div>
+    <p class="title">${title}</p>
+    <div class="card-footer">
+      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
     </div>
-    <div class="card-body">
-      ${isVip ? `<div class="vip-badges"><span class="vip-badge">⭐ VIP</span></div>` : ""}
-      <div class="username">${escapeHtml(user)}</div>
-      <p class="title">${title}</p>
-      <div class="card-footer">
-        <a href="${link}" target="_blank" rel="noopener">Regarder</a>
-      </div>
-    </div>
-  `;
+  </div>
+`;
 
   return card;
 }
