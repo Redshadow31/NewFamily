@@ -37,7 +37,11 @@ header{
 }
 
 /* textes */
-.header-text{ max-width:650px; }
+.header-text {
+  max-width: 650px;
+  text-align: center;  /* ✅ centre le texte sur lui-même */
+  margin: 0 auto;      /* optionnel : recentre le bloc dans l’espace dispo */
+}
 .header-text h1{
   font-size: 2.4em;      /* garde ta taille actuelle */
   margin: 0 0 .5em;
