@@ -20,7 +20,7 @@ const members = [
   "vektor_live",
   "livio_on",
   "dylow95",
-].map(m => m.toLowerCase());;
+];
 
 // ---------- API helpers ----------
 async function getToken() {
