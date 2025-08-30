@@ -1,4 +1,4 @@
-console.log("⚡ clip.js optimisé chargé");
+console.log("⚡ clip.js optimisé + profil chargé");
 
 // ---------- Config ----------
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -6,10 +6,10 @@ let accessToken = "";
 let clipsQueue = [];
 let currentIndex = -1;
 
-// parent dynamique (ok en prod + previews Netlify)
+// parent dynamique
 const PARENT_DOMAIN = window.location.hostname;
 
-// Mets ici uniquement des pseudos valides
+// Pseudos ciblés
 const members = [
   "Nexou31",
   "Clarastonewall",
@@ -34,7 +34,8 @@ async function getToken() {
   }
 }
 
-async function getUserId(username) {
+// Renvoie l'objet utilisateur (pas juste l'ID)
+async function getUser(username) {
   const res = await fetch(
     `https://api.twitch.tv/helix/users?login=${encodeURIComponent(username)}`,
     {
@@ -46,7 +47,15 @@ async function getUserId(username) {
   );
   if (!res.ok) return null;
   const data = await res.json();
-  return data.data?.[0]?.id || null;
+  const u = data.data?.[0];
+  if (!u) return null;
+  return {
+    id: u.id,
+    login: u.login,
+    display_name: u.display_name || u.login,
+    avatar: u.profile_image_url || "",
+    bio: u.description || "",
+  };
 }
 
 async function getRandomClip(userId) {
@@ -75,9 +84,34 @@ function tuneThumb(url) {
   };
 }
 
+function updateProfileCard(profile) {
+  const avatar = document.getElementById("profile-avatar");
+  const name = document.getElementById("profile-name");
+  const login = document.getElementById("profile-login");
+  const bio = document.getElementById("profile-bio");
+  const link = document.getElementById("profile-link");
+
+  if (!profile) {
+    name.textContent = "—";
+    login.textContent = "@—";
+    bio.textContent = "Profil indisponible.";
+    link.href = "#";
+    avatar.src = "";
+    return;
+  }
+
+  avatar.src = profile.avatar || "";
+  avatar.alt = `Avatar de ${profile.display_name}`;
+  name.textContent = profile.display_name;
+  login.textContent = `@${profile.login}`;
+  bio.textContent = profile.bio && profile.bio.trim().length ? profile.bio : "Aucune bio renseignée.";
+  link.href = `https://twitch.tv/${profile.login}`;
+}
+
 function displayClip(index) {
   const clip = clipsQueue[index];
   if (!clip) return;
+
   const p = document.getElementById("clip-player");
   const u = document.getElementById("clip-user");
   if (!p || !u) return;
@@ -92,14 +126,17 @@ function displayClip(index) {
       loading="lazy"
       decoding="async"
       fetchpriority="${index === 0 ? "high" : "low"}"
-      style="width:100%;border-radius:10px;cursor:pointer;"
+      style="width:100%;border-radius:14px;cursor:pointer;"
       onclick="loadTwitchClip(this,'${clip.id}')"
     >
     <div class="play-button">▶</div>
   `;
-  u.textContent = `👤 ${clip.user}`;
+  u.textContent = `👤 ${clip.profile.display_name}`;
 
-  // Préfetch léger de l'embed du prochain clip
+  // MAJ carte profil
+  updateProfileCard(clip.profile);
+
+  // Préfetch du prochain embed
   const next = clipsQueue[index + 1];
   if (next) {
     const prefetch = document.createElement("link");
@@ -135,7 +172,6 @@ function displayNextClip() {
     if (u) u.textContent = "🚫 Aucun autre clip disponible.";
   }
 }
-
 function displayPreviousClip() {
   if (currentIndex > 0) {
     currentIndex--;
@@ -146,11 +182,15 @@ function displayPreviousClip() {
 // ---------- Préparation optimisée ----------
 async function prepareOne(member) {
   try {
-    const userId = await getUserId(member);
-    if (!userId) return null;
-    const clip = await getRandomClip(userId);
+    const user = await getUser(member);
+    if (!user) return null;
+    const clip = await getRandomClip(user.id);
     if (!clip) return null;
-    return { id: clip.id, user: member, thumbnail: clip.thumbnail_url };
+    return {
+      id: clip.id,
+      thumbnail: clip.thumbnail_url,
+      profile: user, // on garde TOUT le profil pour la carte
+    };
   } catch {
     return null;
   }
@@ -159,7 +199,6 @@ async function prepareOne(member) {
 async function prepareClipsFast() {
   const tasks = members.map((m) => prepareOne(m));
 
-  // Afficher dès qu'on a le 1er clip
   let firstShown = false;
   tasks.forEach(async (t) => {
     const res = await t;
@@ -172,7 +211,6 @@ async function prepareClipsFast() {
     }
   });
 
-  // Attendre la fin de tous pour compléter la file
   await Promise.allSettled(tasks);
 
   // Mélange léger pour varier l'ordre
@@ -184,6 +222,7 @@ async function prepareClipsFast() {
   if (!firstShown) {
     const u = document.getElementById("clip-user");
     if (u) u.textContent = "Aucun clip disponible pour le moment.";
+    updateProfileCard(null);
   }
 }
 
@@ -201,6 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!accessToken) {
     const u = document.getElementById("clip-user");
     if (u) u.textContent = "Erreur d’authentification Twitch.";
+    updateProfileCard(null);
     return;
   }
   await prepareClipsFast();
