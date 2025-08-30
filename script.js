@@ -136,13 +136,17 @@ async function init() {
       : userInfo?.profile_image_url ||
         "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
 
-    card.innerHTML = `
-      <a href="${link}" target="_blank">
-        <img src="${img}" alt="Preview">
-        <div class="username">${user}</div>
-        <div class="title">${title}</div>
-      </a>
-    `;
+  card.innerHTML = `
+  <img src="${img}" alt="Preview">
+  <div class="card-body">
+    <div class="username">${user}</div>
+    <p class="title">${title}</p>
+    <div class="card-footer">
+      <span>${isOnline ? `${game} • ${streamData.viewer_count} viewers` : "Hors ligne"}</span>
+      <a href="${link}" target="_blank">Regarder</a>
+    </div>
+  </div>
+`;
 
     if (isOnline) {
       liveContainer.appendChild(card);
