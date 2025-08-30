@@ -35,7 +35,18 @@ header{
   transform: scale(1.06);     /* léger zoom au survol */
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
 }
-
+header > img {
+  width: 180px;
+  height: auto;
+  display: block;
+  margin: 0 auto; /* centre le logo si pas de texte */
+  transition: transform .25s ease, filter .25s ease;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+}
+header > img:hover {
+  transform: scale(1.06);
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
+}
 /* textes */
 .header-text {
   max-width: 650px;
