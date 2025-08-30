@@ -377,11 +377,11 @@ a[href="vip.html"] {
   font-weight: 900;
 }
 
-.staff-grid{
+.staff-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 18px;
-  justify-items: center;            /* centre chaque carte */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
+  gap: 22px;
+  justify-content: center;   /* centre les colonnes */
 }
 
 .staff-card{
@@ -423,9 +423,9 @@ a[href="vip.html"] {
   padding: .25rem .6rem;
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
-.badge--founder{ background: #d35400; }   /* 👑 */
+.badge--founder{ background: #d35400; }   /* 🏛️ */
 .badge--adjoint{ background: #6c5ce7; }   /* ⚙️ */
-.badge--mentor{  background: #27ae60; }   /* 🎓 */
+.badge--mentor{  background: #27ae60; }   /* 🛡️ */
 .badge--junior{  background: #2980b9; }   /* 🌱 */
 
 .staff-card .body{
