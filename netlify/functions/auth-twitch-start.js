@@ -3,7 +3,7 @@ exports.handler = async () => {
   redirect.searchParams.set("client_id", process.env.TWITCH_CLIENT_ID);
   redirect.searchParams.set("redirect_uri", `${process.env.REDIRECT_BASE_URL}/.netlify/functions/auth-twitch-callback`);
   redirect.searchParams.set("response_type", "code");
-  redirect.searchParams.set("scope", "user:read:email"); // ou plus si besoin
+  redirect.searchParams.set("scope", "user:read:email"); // ajoute d’autres scopes si besoin
 
   return {
     statusCode: 302,
