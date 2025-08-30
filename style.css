@@ -38,39 +38,36 @@ h2 {
   margin-top: 2em;
 }
 
-.user-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
-  padding: 1em;
+.user-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:18px;
+  padding:1em;
 }
 
-.user-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.08);
-  overflow: hidden;
-  transition: transform .2s ease, box-shadow .2s ease;
-  display: flex;
-  flex-direction: column;
+
+.user-card{
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 6px 20px rgba(0,0,0,.08);
+  overflow:hidden;
+  transition:transform .2s ease, box-shadow .2s ease;
+  display:flex;
+  flex-direction:column;
+}
+.user-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(0,0,0,.15);
+}
+.user-card.offline{ filter:grayscale(90%); opacity:.8; }
+
+.user-card img{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  display:block;
 }
 
-.user-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.15);
-}
-
-.user-card.offline {
-  filter: grayscale(90%);
-  opacity: 0.8;
-}
-
-.user-card img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-}
 
 .user-card img {
   width: 100%;
@@ -79,52 +76,60 @@ h2 {
   display: block;
 }
 
-.card-body {
-  background: #fff;
-  padding: 14px 16px;
-  border-top: 1px solid #eee;
+.card-body{
+  background:#fff;
+  padding:14px 16px;
+  border-top:1px solid #eee;
 }
 
-.username {
-  font-weight: 700;
-  font-size: 1.05em;
-  margin-bottom: 6px;
-  color: #222;
+.username{
+  font-weight:700;
+  font-size:1.05em;
+  margin:0 0 6px;
+  color:#222;
+}
+.title{
+  font-size:.9em;
+  color:#444;
+  line-height:1.4em;
+  margin:0 0 10px;
 }
 
-.title {
-  font-size: 0.9em;
-  color: #444;
-  line-height: 1.4em;
-  margin-bottom: 10px;
+.card-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:.85em;
+  color:#666;
 }
+.card-footer a{
+  background:#f3f4f6;
+  padding:6px 10px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  color:#333;
+}
+.card-footer a:hover{ background:#e5e7eb; }
 
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85em;
-  color: #666;
-  margin-top: 8px;
-}
-
-.card-footer a {
-  background: #f3f4f6;
-  padding: 6px 10px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  color: #333;
-}
-
-.card-footer a:hover {
-  background: #e5e7eb;
-}
 .button-container {
   display: flex;
   justify-content: center;
   gap: 1em;
   margin-top: 0.5em;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:.85em;
+  font-weight:700;
+  color:#b7791f;
+  background:#fff8db;
+  border:1px solid #ffe8a3;
+  border-radius:999px;
+  padding:6px 10px;
+  margin-bottom:8px;
 }
 
 .about-button,
@@ -180,14 +185,6 @@ h2 {
   transform: scale(1.05);
 }
 
-.user-card.vip::before {
-  content: "⭐ VIP";
-  font-weight: bold;
-  color: goldenrod;
-  font-size: 0.9em;
-  display: block;
-  margin-bottom: 0.3em;
-}
 
 a[href="vip.html"] {
   background: #f1c40f;
