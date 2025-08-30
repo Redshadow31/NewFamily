@@ -192,6 +192,7 @@ function enhanceVipGrid(vips) {
 
 // ---------- Rotation automatique du spotlight ----------
 let _spotlightTimer = null;
+let _spotlightKickoff = null; // kickoff rapide du premier switch
 let _spotlightIndex = 0;
 
 function buildSpotlightList(vips) {
@@ -206,7 +207,7 @@ function buildSpotlightList(vips) {
   });
 }
 
-function startSpotlightRotation(vips, intervalMs = 15000) {
+function startSpotlightRotation(vips, { intervalMs = 8000, firstDelayMs = 3000 } = {}) {
   const host = document.getElementById("vip-spotlight");
   if (!host || !vips.length) return;
 
@@ -222,16 +223,30 @@ function startSpotlightRotation(vips, intervalMs = 15000) {
     }, 420); // doit correspondre au CSS .vip-spotlight { transition }
   };
 
+  // Nettoyage si on relance
   clearInterval(_spotlightTimer);
-  showNext(); // premier affichage immédiat
-  _spotlightTimer = setInterval(showNext, intervalMs);
+  clearTimeout(_spotlightKickoff);
 
-  // pause au survol (optionnel mais sympa)
-  host.addEventListener("mouseenter", () => clearInterval(_spotlightTimer));
-  host.addEventListener("mouseleave", () => {
-    clearInterval(_spotlightTimer);
+  // Premier affichage immédiat
+  showNext();
+
+  // Lancement rapide de la première rotation
+  _spotlightKickoff = setTimeout(() => {
+    showNext();
     _spotlightTimer = setInterval(showNext, intervalMs);
-  });
+  }, Math.max(0, firstDelayMs));
+
+  // Pause au survol — handlers directs pour ne pas empiler
+  host.onmouseenter = () => {
+    clearInterval(_spotlightTimer);
+    clearTimeout(_spotlightKickoff);
+  };
+  host.onmouseleave = () => {
+    clearInterval(_spotlightTimer);
+    clearTimeout(_spotlightKickoff);
+    showNext();
+    _spotlightTimer = setInterval(showNext, intervalMs);
+  };
 }
 
 // ---------- Filtrage mois + tri badges pour la grille ----------
@@ -253,7 +268,7 @@ function attachMonthFilter(allVips) {
       if (!list.length) list = allVips;
     }
     // lance/relance la rotation du spotlight sur l’ensemble filtré
-    startSpotlightRotation(list);
+    startSpotlightRotation(list, { intervalMs: 7000, firstDelayMs: 2000 });
     // affiche la grille (badges en premier)
     enhanceVipGrid(sortByBadges(list));
   };
