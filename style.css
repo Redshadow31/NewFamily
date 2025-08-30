@@ -292,3 +292,22 @@ h2{
   .header-logo{ display: flex; justify-content: center; }
   .header-text p{ margin-left: auto; margin-right: auto; max-width: 34ch; }
 }
+.aventura-box {
+  padding: 2rem 1rem;
+  background: var(--surface);
+  border-radius: 1rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.aventura-box h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.aventura-box p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: var(--muted);
+}
