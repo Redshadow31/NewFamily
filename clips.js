@@ -245,5 +245,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   await prepareClipsFast();
 })();
-const data = await res.json();
-console.log("users response", data);
+
