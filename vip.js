@@ -249,3 +249,28 @@ async function showVIPs() {
 }
 
 document.addEventListener("DOMContentLoaded", showVIPs);
+const escapeHtml = s => String(s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+
+// ...dans enhanceVipGrid(vips), remplace le template par :
+grid.innerHTML = vips.map(v => {
+  const login = (v.login || "").toLowerCase();
+  const img = v.image || v.avatar || v.banner || "assets/placeholder.webp";
+  const title = v.title || "Membre VIP Élites";
+  const name = v.display_name || login;
+  return `
+    <article class="user-card">
+      ${buildBadges(v.badges)}
+      <div class="media-wrap">
+        <img src="${img}" alt="${name}">
+      </div>
+      <div class="card-body">
+        <div class="username"><a href="https://twitch.tv/${login}" target="_blank" rel="noopener">${name}</a></div>
+        <div class="title">⭐ ${title}</div>
+        ${v.quote ? `<div class="vip-quote">“${escapeHtml(v.quote)}”</div>` : ``}
+        ${buildCTA(login)}
+      </div>
+    </article>
+  `;
+}).join("");
