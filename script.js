@@ -1,6 +1,79 @@
+/* =========================================================
+   New Family — script.js
+   - Twitch data (ton code)
+   - Toggle clair/sombre (auto + bouton injecté)
+   - Badges LIVE (.is-live + data-live)
+   ========================================================= */
+
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
 
+/* -------------------------------
+   🎛️ Thème clair/sombre
+----------------------------------*/
+function applyThemeFromStorage() {
+  const saved = localStorage.getItem("theme"); // "dark" | "light" | null
+  const root = document.documentElement;
+  if (saved === "dark") root.classList.add("theme-dark");
+  else if (saved === "light") root.classList.remove("theme-dark");
+  // sinon : on laisse suivre le prefers-color-scheme
+}
+
+function setupThemeToggle() {
+  applyThemeFromStorage();
+
+  // Crée le bouton si inexistant
+  let btn = document.getElementById("theme-toggle");
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "theme-toggle";
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Changer de thème");
+    btn.style.position = "absolute";
+    btn.style.top = "1rem";
+    btn.style.right = "1rem";
+    btn.style.background = "var(--surface)";
+    btn.style.color = "var(--text)";
+    btn.style.border = "1px solid var(--border)";
+    btn.style.borderRadius = "50%";
+    btn.style.width = "42px";
+    btn.style.height = "42px";
+    btn.style.fontSize = "1.1rem";
+    btn.style.cursor = "pointer";
+    btn.style.boxShadow = "var(--shadow)";
+    btn.style.display = "flex";
+    btn.style.alignItems = "center";
+    btn.style.justifyContent = "center";
+    btn.style.transition = "background .2s ease, transform .2s ease";
+
+    // essaie de le mettre dans le header s'il existe, sinon body
+    const header = document.querySelector("header") || document.body;
+    header.style.position = header.style.position || "relative";
+    header.appendChild(btn);
+  }
+
+  // État iconique
+  const setIcon = () => {
+    const isDark = document.documentElement.classList.contains("theme-dark");
+    btn.textContent = isDark ? "☀️" : "🌙";
+    btn.title = isDark ? "Passer en mode clair" : "Passer en mode sombre";
+  };
+
+  // Init icône
+  setIcon();
+
+  // Click handler
+  btn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("theme-dark");
+    const isDark = document.documentElement.classList.contains("theme-dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    setIcon();
+  });
+}
+
+/* -------------------------------
+   🔑 Auth & appels Twitch
+----------------------------------*/
 async function getToken() {
   const response = await fetch("/.netlify/functions/getTwitchData");
   const data = await response.json();
@@ -18,7 +91,8 @@ async function fetchUserLists() {
 }
 
 async function fetchStreams(logins) {
-  const query = logins.map((user) => `user_login=${user}`).join("&");
+  if (!logins || !logins.length) return { data: [] };
+  const query = logins.map((user) => `user_login=${encodeURIComponent(user)}`).join("&");
   const url = `https://api.twitch.tv/helix/streams?${query}`;
 
   try {
@@ -47,7 +121,7 @@ async function fetchUsersInfo(allUsers) {
 
   for (let i = 0; i < allUsers.length; i += 100) {
     const chunk = allUsers.slice(i, i + 100);
-    const query = chunk.map((user) => `login=${user}`).join("&");
+    const query = chunk.map((user) => `login=${encodeURIComponent(user)}`).join("&");
     const url = `https://api.twitch.tv/helix/users?${query}`;
 
     try {
@@ -75,34 +149,106 @@ async function fetchUsersInfo(allUsers) {
 }
 
 async function fetchVIPList() {
-  const response = await fetch("vip.json");
-  return await response.json();
+  try {
+    const response = await fetch("vip.json");
+    if (!response.ok) return [];
+    return await response.json();
+  } catch {
+    return [];
+  }
 }
 
-async function init() {
-  await getToken();
+/* -------------------------------
+   🖼️ Rendu des cartes
+----------------------------------*/
+function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
+  const card = document.createElement("div");
+  card.classList.add("user-card");
+  if (isVip) card.classList.add("vip");
+  if (!isOnline) card.classList.add("offline");
+  if (isOnline) {
+    card.classList.add("is-live");
+    card.setAttribute("data-live", "LIVE");
+  }
 
+  const link = `https://twitch.tv/${user}`;
+  const game = isOnline ? (streamData.game_name || "en live") : "";
+  const title = isOnline
+    ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue actuellement à <em>${escapeHtml(game)}</em>.`
+    : "Hors ligne";
+
+  const img = isOnline
+    ? (streamData.thumbnail_url || "")
+        .replace("{width}", "320")
+        .replace("{height}", "180")
+    : (userInfo?.profile_image_url ||
+       "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
+
+  card.innerHTML = `
+    <div class="media-wrap">
+      <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+    </div>
+    <div class="card-body">
+      ${isVip ? `<div class="vip-badges"><span class="vip-badge">⭐ VIP</span></div>` : ""}
+      <div class="username">${escapeHtml(user)}</div>
+      <p class="title">${title}</p>
+      <div class="card-footer">
+        <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// petite utilité anti-XSS pour les textes injectés
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* -------------------------------
+   🚀 Init principale
+----------------------------------*/
+async function init() {
+  // Toggle thème dès le départ
+  setupThemeToggle();
+
+  await getToken();
   if (!token) {
     console.error("❌ Token manquant !");
     return;
   }
 
-  const allUsers = await fetchUserLists();
-  const usersInfo = await fetchUsersInfo(allUsers);
-  const vipList = await fetchVIPList();
+  const [allUsers, vipList] = await Promise.all([
+    fetchUserLists(),
+    fetchVIPList(),
+  ]);
 
+  const usersInfo = await fetchUsersInfo(allUsers);
+
+  // 2 appels streams (<=200 logins couverts)
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
-
   for (const group of streamChunks) {
     const data = await fetchStreams(group);
-    onlineUsers.push(...data.data);
+    if (data?.data?.length) onlineUsers.push(...data.data);
   }
 
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
-  const onlineLogins = onlineUsers.map((user) => user.user_login.toLowerCase());
+  if (!liveContainer || !offlineContainer) {
+    console.warn("⚠️ Conteneurs #live-users ou #offline-users introuvables.");
+    return;
+  }
 
+  const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
+
+  // VIPs d’abord
   const sortedUsers = [...allUsers].sort((a, b) => {
     const aIsVip = vipList.includes(a.toLowerCase());
     const bIsVip = vipList.includes(b.toLowerCase());
@@ -110,60 +256,38 @@ async function init() {
   });
 
   for (const user of sortedUsers) {
-    const isOnline = onlineLogins.includes(user.toLowerCase());
-    const streamData = onlineUsers.find(
-      (u) => u.user_login.toLowerCase() === user.toLowerCase()
-    );
-    const userInfo = usersInfo.find(
-      (u) => u.login.toLowerCase() === user.toLowerCase()
-    );
+    const lower = user.toLowerCase();
+    const isOnline = onlineLogins.includes(lower);
+    const streamData = isOnline
+      ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower)
+      : null;
+    const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
+    const isVip = vipList.includes(lower);
 
-    const card = document.createElement("div");
-    card.classList.add("user-card");
-    if (vipList.includes(user.toLowerCase())) card.classList.add("vip");
-    if (!isOnline) card.classList.add("offline");
+    const card = createUserCard({
+      user,
+      isOnline,
+      streamData,
+      userInfo,
+      isVip,
+    });
 
-    const link = `https://twitch.tv/${user}`;
-    const game = isOnline ? streamData.game_name : "";
-    const title = isOnline
-      ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue actuellement à <em>${game}</em>.`
-      : "Hors ligne";
-
-    const img = isOnline
-      ? streamData.thumbnail_url
-          .replace("{width}", "320")
-          .replace("{height}", "180")
-      : userInfo?.profile_image_url ||
-        "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
-
-card.innerHTML = `
-  <img src="${img}" alt="Preview">
-  <div class="card-body">
-    ${vipList.includes(user.toLowerCase()) ? `<div class="badge">⭐ VIP</div>` : ""}
-    <div class="username">${user}</div>
-    <p class="title">${title}</p>
-    <div class="card-footer">
-      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
-    </div>
-  </div>
-`;
-
-    if (isOnline) {
-      liveContainer.appendChild(card);
-    } else {
-      offlineContainer.appendChild(card);
-    }
+    if (isOnline) liveContainer.appendChild(card);
+    else offlineContainer.appendChild(card);
   }
 
+  // Compteur live
   const liveCountElement = document.getElementById("live-count");
-  const emoji =
-    onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-
-  liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
-    onlineUsers.length > 1 ? "s" : ""
-  } de la New Family ${
-    onlineUsers.length > 1 ? "sont" : "est"
-  } actuellement en live`;
+  if (liveCountElement) {
+    const emoji =
+      onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
+    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
+      onlineUsers.length > 1 ? "s" : ""
+    } de la New Family ${
+      onlineUsers.length > 1 ? "sont" : "est"
+    } actuellement en live`;
+    liveCountElement.setAttribute("aria-live", "polite");
+  }
 }
 
 init();
