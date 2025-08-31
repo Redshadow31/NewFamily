@@ -18,19 +18,31 @@ function displayUsers() {
   });
 }
 
-function addUser() {
+async function addUser() {
   const newUser = document.getElementById('user').value.trim().toLowerCase();
-  if (newUser && !users.includes(newUser)) {
-    users.push(newUser);
-    displayUsers();
-    // Il faudra ajouter ici la sauvegarde dans un backend sécurisé (à venir)
-  }
+  if (!newUser) return;
+
+  const res = await fetch("/.netlify/functions/updateUsers", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "add", user: newUser })
+  });
+
+  users = await res.json();
+  displayUsers();
 }
 
-function removeUser(index) {
-  users.splice(index, 1);
+async function removeUser(index) {
+  const user = users[index];
+  const res = await fetch("/.netlify/functions/updateUsers", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "remove", user })
+  });
+
+  users = await res.json();
   displayUsers();
-  // Idem : ajouter sauvegarde sécurisée ensuite
 }
+
 
 fetchUsers();
