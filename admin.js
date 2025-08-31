@@ -1,4 +1,4 @@
-const jsonUrl = 'https://URL.DE.TON.JSON/users1.json'; // On changera ensuite
+const jsonUrl = 'https://URL.DE.TON.JSON/users2.json'; // On changera ensuite
 
 let users = [];
 
