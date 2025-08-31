@@ -7,12 +7,23 @@ body {
 }
 
 /* === Variables (mode clair par défaut) === */
-:root{
-  --page-bg:#f4e9f9;                     /* fond global clair */
-  --text:#111;                           /* texte par défaut */
-  --surface:#fff;                        /* cartes / encarts clairs */
-  --border:#eee;
-  --shadow:0 6px 20px rgba(0,0,0,.08);
+
+:root {
+  --page-bg: #f4e9f9;     /* fond global clair */
+  --text: #222222;        /* texte principal un peu plus foncé */
+  --muted: #555555;       /* texte secondaire (dates, meta) plus lisible */
+  --surface: #ffffff;     /* cartes / encarts */
+  --border: #ddd;
+  --shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+/* Spécifique au contenu des cartes/blog */
+.card-title, .username, .title {
+  color: var(--text) !important;
+}
+
+.card-meta, .card-text, .card-footer, .card-footer a {
+  color: var(--muted) !important;
 }
 
 /* === DARK MODE (ajoute .dark ou data-theme="dark" sur <html> ou <body>) === */
