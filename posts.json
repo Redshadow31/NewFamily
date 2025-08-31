@@ -20,5 +20,132 @@
     "tags": ["Annonce", "Site"],
     "author": "Staff",
     "slug": "lancement-site"
+  },
+
+  /* —— ANNIVERSAIRE : POST GÉNÉRAL SEMAINE —— */
+  {
+    "title": "Semaine d’anniversaire TENF 🎂 — du 1er au 7 septembre",
+    "date": "2025-09-01",
+    "summary": "Une semaine entière de fun pour fêter l’anniversaire du serveur : jeux, quiz, events spéciaux et apéros communautaires !",
+    "content": "🎉 **SEMAINE ANNIVERSAIRE** (1 → 7 septembre)\n\nLundi → Présentation des nouveautés + Quiz « Tout le monde veut prendre sa place »\nMardi → \"Qui est-ce ?\" édition TENF\nMercredi → Gartic Phone spécial serveur\nJeudi → \"Qui a tué le serveur ?\" — Among Us spécial\nVendredi → Soirée Tombola + mini-jeux & apéro\nSamedi → **Journée Tournois** dès 10h (Petit café ☕, Petit Bac, Fortnite, Loup-Garou, Forza Horizon 5, Fall Guys, Mario Kart 8)\nDimanche → Méga apéro à 16h 🥳\n\n📍 Tous les rendez-vous ont lieu sur le **Discord TENF** (vocal + salons dédiés).",
+    "image": "Planning_anniversaire.png",
+    "imageAlt": "Planning général de la semaine d’anniversaire TENF",
+    "tags": ["Événement", "Anniversaire", "Planning"],
+    "author": "Staff",
+    "slug": "semaine-anniversaire-tenf-2025-09-01"
+  },
+
+  /* —— DÉTAILS PAR JOUR : 1 → 7 SEPTEMBRE —— */
+  {
+    "title": "Lundi 21h — Présentation des nouveautés + Quiz serveur 🎙️",
+    "date": "2025-09-01",
+    "summary": "Kick-off anniversaire : on dévoile les nouveautés et on joue au quiz façon « Tout le monde veut prendre sa place » !",
+    "content": "📅 **Lundi 1er septembre**\n⏰ **21h00 (FR/BE)**\n👤 **Présenté par Red**\n📍 **Discord TENF** — vocal + salon événement\n\nAu menu :\n• Présentation des nouveautés du serveur (rôles, events, projets 💡)\n• **Quiz** spécial TENF — vitesse, culture commu, bonne humeur !\n\nVenez nombreux, on lance la semaine en beauté ✨",
+    "image": "Lundianniv.png",
+    "imageAlt": "Visuel de la soirée de lancement et quiz",
+    "tags": ["Événement", "Anniversaire", "Quiz"],
+    "author": "Red",
+    "slug": "anniv-lundi-nouveautes-quiz-2025-09-01"
+  },
+  {
+    "title": "Mardi 21h — « Qui est-ce ? » édition TENF 🕵️",
+    "date": "2025-09-02",
+    "summary": "Devine la personne mystère ! Anecdotes, indices et fous rires garantis.",
+    "content": "📅 **Mardi 2 septembre**\n⏰ **21h00 (FR/BE)**\n👤 **Présenté par Clara**\n📍 **Discord TENF** — vocal + salon jeu\n\nPrincipe : un membre mystère, des indices… À vous de **poser les bonnes questions** pour le trouver !\n\nPréparez vos détectives intérieurs 🕵️‍♀️🕵️‍♂️",
+    "image": "Planning_mardi.png",
+    "imageAlt": "Visuel du jeu Qui est-ce ? édition TENF",
+    "tags": ["Événement", "Anniversaire", "Jeu"],
+    "author": "Clara",
+    "slug": "anniv-mardi-qui-est-ce-2025-09-02"
+  },
+  {
+    "title": "Mercredi 21h — Gartic Phone spécial serveur ✏️",
+    "date": "2025-09-03",
+    "summary": "Dessins approximatifs, interprétations épiques : Gartic Phone version TENF !",
+    "content": "📅 **Mercredi 3 septembre**\n⏰ **21h00 (FR/BE)**\n👥 **Présenté par les Fondateurs**\n📍 **Discord TENF** — vocal + salon jeu\n\nThèmes, private jokes, fous rires : le **Gartic Phone** qui résume le serveur 😆",
+    "image": "Planning_mercredi.png",
+    "imageAlt": "Visuel Gartic Phone spécial TENF",
+    "tags": ["Événement", "Anniversaire", "Party Game"],
+    "author": "Fondateurs",
+    "slug": "anniv-mercredi-gartic-phone-2025-09-03"
+  },
+  {
+    "title": "Jeudi 21h — « Qui a tué le serveur ? » Among Us 🔪",
+    "date": "2025-09-04",
+    "summary": "Un Among Us spécial : complots, sabotages et débats enflammés !",
+    "content": "📅 **Jeudi 4 septembre**\n⏰ **21h00 (FR/BE)**\n👤 **Présenté par Saikossama**\n📍 **Discord TENF** — vocal + salon jeu\n\nSaurez-vous démasquer l’imposteur avant qu’il ne fasse disparaître toute la commu ? 👀",
+    "image": "Planning_jeudi.png",
+    "imageAlt": "Visuel Among Us spécial",
+    "tags": ["Événement", "Anniversaire", "Among Us"],
+    "author": "Saikossama",
+    "slug": "anniv-jeudi-among-us-2025-09-04"
+  },
+  {
+    "title": "Vendredi 21h — Soirée Tombola + mini-jeux 🎟️",
+    "date": "2025-09-05",
+    "summary": "Apéro, mini-jeux et grande tombola : la soirée qui régale tout le monde !",
+    "content": "📅 **Vendredi 5 septembre**\n⏰ **21h00 (FR/BE)**\n👥 **Présenté par les Fondateurs**\n📍 **Discord TENF** — vocal + salon événement\n\nProgramme : apéro convivial 🥂, mini-jeux pour s’échauffer, **tombola** avec surprises !",
+    "image": "Planning_vendredi.png",
+    "imageAlt": "Visuel soirée tombola et mini-jeux",
+    "tags": ["Événement", "Anniversaire", "Tombola"],
+    "author": "Fondateurs",
+    "slug": "anniv-vendredi-tombola-2025-09-05"
+  },
+  {
+    "title": "Samedi — Journée Tournois (dès 10h) 🏆",
+    "date": "2025-09-06",
+    "summary": "Une journée entière de tournois : détente, défis et bonne humeur jusqu’au soir !",
+    "content": "📅 **Samedi 6 septembre**\n🕙 **Dès 10h00 (FR/BE)** — **Journée spéciale** animée par **tout le Staff**\n📍 **Discord TENF** — vocaux + salons tournois\n\n🗓️ **Planning**\n10h00 — Petit café & accueil ☕\n10h30 — Petit Bac ✍️\n12h00 — Fortnite 🎮\n14h00 — Loup-Garou 🐺\n16h00 — Forza Horizon 5 🏎️\n18h00 — Fall Guys 🤸\n20h30 — **Finale** Mario Kart 8 🏁\n\nPassez quand vous voulez, on s’occupe de l’ambiance !",
+    "image": "Planning_anniversaire_samedi.png",
+    "imageAlt": "Visuel journée tournois anniversaire",
+    "tags": ["Événement", "Anniversaire", "Tournoi"],
+    "author": "Staff",
+    "slug": "anniv-samedi-journee-tournois-2025-09-06"
+  },
+  {
+    "title": "Dimanche 16h — Méga apéro de clôture 🍹",
+    "date": "2025-09-07",
+    "summary": "On clôture la semaine d’anniversaire tous ensemble autour d’un grand apéro communautaire.",
+    "content": "📅 **Dimanche 7 septembre**\n⏰ **16h00 (FR/BE)**\n👥 **Présenté par le Staff**\n📍 **Discord TENF** — vocal + salon détente\n\nUn dernier grand moment tous ensemble pour partager, rigoler et se dire à très vite 💖",
+    "image": "Planning_dimanche.png",
+    "imageAlt": "Visuel apéro de clôture",
+    "tags": ["Événement", "Anniversaire", "Apéro"],
+    "author": "Staff",
+    "slug": "anniv-dimanche-mega-apero-2025-09-07"
+  },
+
+  /* —— CINÉ’ CLARA DU LUNDI (hors Avatar déjà présent) —— */
+  {
+    "title": "Ciné’ Clara : Jurassic Park 🦖",
+    "date": "2025-09-15",
+    "summary": "Place aux dinos ! Soirée Jurassic Park avec Clara : frissons, anecdotes et pop-corn.",
+    "content": "📅 **Lundi 15 septembre**\n⏰ **21h00 (FR/BE)**\n👤 **Animé par Clara**\n📍 **Discord TENF** — vocal + watch party\n\nOn remonte le temps direction Isla Nublar… Préparez vos snacks et vos théories !",
+    "image": "Affiche_Jurassic_Park.png",
+    "imageAlt": "Affiche du film Jurassic Park",
+    "tags": ["Événement", "Cinéma", "Jurassic Park"],
+    "author": "Clara",
+    "slug": "cine-clara-jurassic-park-2025-09-15"
+  },
+  {
+    "title": "Ciné’ Clara : Intouchables 🤝",
+    "date": "2025-09-22",
+    "summary": "Une soirée feel-good et émouvante : Intouchables, à (re)découvrir ensemble.",
+    "content": "📅 **Lundi 22 septembre**\n⏰ **21h00 (FR/BE)**\n👤 **Animé par Clara**\n📍 **Discord TENF** — vocal + watch party\n\nOn rit, on s’émeut, on en parle ensemble avant/après la séance.",
+    "image": "Affiche_Intouchable.png",
+    "imageAlt": "Affiche du film Intouchables",
+    "tags": ["Événement", "Cinéma", "Intouchables"],
+    "author": "Clara",
+    "slug": "cine-clara-intouchables-2025-09-22"
+  },
+  {
+    "title": "Ciné’ Clara : Doctor Strange 🌀",
+    "date": "2025-09-29",
+    "summary": "On passe en dimension mystique : Doctor Strange au programme du lundi soir.",
+    "content": "📅 **Lundi 29 septembre**\n⏰ **21h00 (FR/BE)**\n👤 **Animé par Clara**\n📍 **Discord TENF** — vocal + watch party\n\nEntre portails et paradoxes, on décortique le film ensemble après la séance !",
+    "image": "Affiche_Doctor_Strange.png",
+    "imageAlt": "Affiche du film Doctor Strange",
+    "tags": ["Événement", "Cinéma", "Marvel"],
+    "author": "Clara",
+    "slug": "cine-clara-doctor-strange-2025-09-29"
   }
 ]
