@@ -260,7 +260,7 @@ h2 { text-align: center; margin-top: 2em; }
 }
 
 .user-card{
-  background:#857488;
+  background:#fff;
   border-radius:16px;
   box-shadow:0 6px 20px rgba(0,0,0,.08);
   overflow:hidden;
