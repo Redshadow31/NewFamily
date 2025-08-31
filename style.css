@@ -655,12 +655,26 @@ body { color: var(--text); margin:0; font-family: system-ui, -apple-system, Sego
 .blog-header, .blog-footer { padding: 2rem 1rem; text-align: center; }
 .blog-header h1 { margin: 0 0 .5rem; }
 .blog-toolbar { display: grid; grid-template-columns: 1fr 220px; gap: .75rem; padding: 0 1rem 1rem; max-width: 1100px; margin: 0 auto; }
-.blog-toolbar input, .blog-toolbar select {
-  padding: .65rem .8rem; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff;
+/* Barre de recherche + menu déroulant */
+.blog-toolbar input,
+.blog-toolbar select {
+  background: #f4e9f9;        /* violine clair */
+  color: #111;                /* texte noir */
+  border: 1px solid #d6bce5;  /* bordure violine douce */
+  border-radius: 10px;
+  padding: .65rem .8rem;
 }
+
+/* En mode sombre */
 @media (prefers-color-scheme: dark) {
-  .blog-toolbar input, .blog-toolbar select { background:#0b1220; border-color:#222; color: var(--text); }
+  .blog-toolbar input,
+  .blog-toolbar select {
+    background: #2E1750;      /* violet foncé */
+    color: #fff;              /* texte blanc */
+    border: 1px solid #6B36B8;
+  }
 }
+
 
 /* — Grille — */
 .blog-grid {
