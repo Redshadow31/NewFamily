@@ -4,6 +4,7 @@
    - Toggle clair/sombre (.dark sur <html>)
    - Badges LIVE (.is-live + data-live)
    - Badges rôles (fondateur / adjoint / mentor / junior)
+   - Stats dynamiques (Actifs & Lives/jour)
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -23,7 +24,6 @@ function applyThemeFromStorage() {
   } else if (saved === "light") {
     root.classList.remove(THEME_CLASS);
   } else {
-    // Pas de préférence stockée → on suit le système
     const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     root.classList.toggle(THEME_CLASS, !!prefersDark);
   }
@@ -97,7 +97,7 @@ async function fetchUserLists() {
   const users3 = await res3.json();
 
   // Fusion + déduplication
-  return [...new Set([...users1, ...users2, ...users3])];
+  return [...new Set([...users1, ...users2, ...users3].map(u => (u || "").toLowerCase()))];
 }
 
 async function fetchStreams(logins) {
@@ -159,7 +159,7 @@ async function fetchVIPList() {
    🏷️ Détermination du badge rôle
 ----------------------------------*/
 function getRoleBadge(user) {
-  const u = user.toLowerCase();
+  const u = (user || "").toLowerCase();
   if (["clarastonewall","nexou31","red_shadow_31"].includes(u)) {
     return '<span class="badge badge--founder">🔮 Fondateur</span>';
   }
@@ -229,6 +229,64 @@ function escapeHtml(str) {
 }
 
 /* -------------------------------
+   📊 Stats dynamiques (helpers)
+----------------------------------*/
+function setStatValue(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const v = Math.max(0, Math.round(value));
+  el.dataset.to = String(v);
+  el.textContent = String(v);
+}
+
+// LocalStorage des snapshots live pour moyenne quotidienne
+const SNAP_KEY = "nf_live_snapshots_v1";
+const SNAP_DAYS = 14;   // fenêtre glissante (jours)
+const SNAP_KEEP = 30;   // conservation max (jours)
+
+function recordLiveSnapshot(count) {
+  const now = Date.now();
+  const arr = loadSnapshots();
+  arr.push({ t: now, c: Number(count) || 0 });
+
+  const minKeep = now - SNAP_KEEP * 86400000;
+  const filtered = arr.filter(s => s.t >= minKeep).slice(-2000); // borne dure
+  localStorage.setItem(SNAP_KEY, JSON.stringify(filtered));
+}
+
+function loadSnapshots() {
+  try {
+    const raw = localStorage.getItem(SNAP_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+// moyenne du PIC quotidien sur les N derniers jours observés
+function computeLivesPerDayAverage() {
+  const snaps = loadSnapshots();
+  if (!snaps.length) return 0;
+
+  // regroupe par jour (UTC) et prend le max par jour
+  const byDay = new Map();
+  for (const s of snaps) {
+    const d = new Date(s.t);
+    const key = `${d.getUTCFullYear()}-${(d.getUTCMonth()+1).toString().padStart(2,"0")}-${d.getUTCDate().toString().padStart(2,"0")}`;
+    const prev = byDay.get(key) ?? 0;
+    byDay.set(key, Math.max(prev, s.c));
+  }
+
+  // ne garde que les 14 derniers jours, puis moyenne
+  const days = Array.from(byDay.keys()).sort(); // chrono
+  const lastDays = days.slice(-SNAP_DAYS);
+  if (!lastDays.length) return 0;
+
+  const sum = lastDays.reduce((acc, key) => acc + (byDay.get(key) || 0), 0);
+  return sum / lastDays.length;
+}
+
+/* -------------------------------
    🚀 Init principale
 ----------------------------------*/
 async function init() {
@@ -245,8 +303,12 @@ async function init() {
     fetchVIPList(),
   ]);
 
+  // >>> STAT "Actifs" = nb d'utilisateurs uniques dans users1/2/3
+  setStatValue("stat-actifs", allUsers.length);
+
   const usersInfo = await fetchUsersInfo(allUsers);
 
+  // streams en 2 paquets (limite query)
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
   for (const group of streamChunks) {
@@ -254,6 +316,11 @@ async function init() {
     if (data?.data?.length) onlineUsers.push(...data.data);
   }
 
+  // enregistre le snapshot pour la stat "Lives/jour" et met à jour
+  recordLiveSnapshot(onlineUsers.length);
+  setStatValue("stat-lives", computeLivesPerDayAverage());
+
+  // Remplissage des grilles
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
   if (!liveContainer || !offlineContainer) {
@@ -290,6 +357,7 @@ async function init() {
     else offlineContainer.appendChild(card);
   }
 
+  // Texte "X membres en live" (eyebrow)
   const liveCountElement = document.getElementById("live-count");
   if (liveCountElement) {
     const emoji =
@@ -301,15 +369,17 @@ async function init() {
     } actuellement en live`;
     liveCountElement.setAttribute("aria-live", "polite");
   }
-}
-/* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
-  // ---- Améliorations accueil (s'exécutent uniquement si les éléments existent) ----
+
+  // --- UI Enhancements basés sur la présence des éléments ---
   nfSetupSkeletons();       // squelettes pendant le fetch
   nfSyncLiveBar();          // synchronise la barre live
-  nfAnimateStatsOnView();   // anime les compteurs
+  nfAnimateStatsOnView();   // anime les compteurs au scroll
   nfSetupRevealOnScroll();  // effets reveal
+}
 
-/** Synchronise la barre live (.nf-livebar) avec #live-count déjà géré */
+/* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
+
+// 1) Barre live ← synchronisée avec #live-count (texte)
 function nfSyncLiveBar() {
   const liveCountEl = document.getElementById("live-count");
   const barCount = document.getElementById("nf-live-count");
@@ -323,7 +393,7 @@ function nfSyncLiveBar() {
   obs.observe(liveCountEl, { childList: true, subtree: true, characterData: true });
 }
 
-/** Compteurs animés pour la section .nf-stats */
+// 2) Animation des nombres quand la section devient visible
 function nfAnimateStatsOnView() {
   const els = document.querySelectorAll(".nf-stats .num");
   if (!els.length) return;
@@ -345,7 +415,7 @@ function nfAnimateStatsOnView() {
   els.forEach((el) => io.observe(el));
 }
 
-/** Effet reveal au scroll pour .reveal */
+// 3) Effet reveal au scroll
 function nfSetupRevealOnScroll() {
   const els = document.querySelectorAll(".reveal");
   if (!els.length) return;
@@ -357,12 +427,11 @@ function nfSetupRevealOnScroll() {
   els.forEach((el) => io.observe(el));
 }
 
-/** Squelettes pendant le chargement des lives */
+// 4) Squelettes pendant le chargement des lives
 function nfSetupSkeletons() {
   const container = document.getElementById("nf-skeletons");
   const liveGrid = document.getElementById("live-users");
   if (!container || !liveGrid) return;
-  // Crée 6 placeholders
   for (let i = 0; i < 6; i++) {
     const card = document.createElement("div"); card.className = "skel";
     card.innerHTML = `
@@ -372,14 +441,12 @@ function nfSetupSkeletons() {
       <div class="ph w40"></div>`;
     container.appendChild(card);
   }
-  // Retire quand les vrais éléments arrivent
   const obs = new MutationObserver(() => {
     if (liveGrid.children.length > 0) { container.remove(); obs.disconnect(); }
   });
   obs.observe(liveGrid, { childList: true });
-  // Time-out de sécurité
   setTimeout(() => { if (document.body.contains(container)) container.remove(); }, 10000);
 }
 
+/* ---- GO ---- */
 init();
-
