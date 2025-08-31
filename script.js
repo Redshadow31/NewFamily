@@ -1,10 +1,10 @@
 /* =========================================================
-   New Family — script.js
-   - Twitch data (ton code)
-   - Toggle clair/sombre (.dark sur <html>)
-   - Badges LIVE (.is-live + data-live)
-   - Badges rôles (fondateur / adjoint / mentor / junior)
+   New Family — script.js (READY)
+   - API Twitch + rendu cartes
+   - Thème clair/sombre
+   - Badges rôles + LIVE
    - Stats dynamiques (Actifs & Lives/jour)
+   - Polling live (maj périodique sans recharger la page)
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -96,7 +96,7 @@ async function fetchUserLists() {
   const users2 = await res2.json();
   const users3 = await res3.json();
 
-  // Fusion + déduplication
+  // Fusion + déduplication (lowercase)
   return [...new Set([...users1, ...users2, ...users3].map(u => (u || "").toLowerCase()))];
 }
 
@@ -156,7 +156,7 @@ async function fetchVIPList() {
 }
 
 /* -------------------------------
-   🏷️ Détermination du badge rôle
+   🏷️ Badges de rôle
 ----------------------------------*/
 function getRoleBadge(user) {
   const u = (user || "").toLowerCase();
@@ -215,7 +215,6 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
     </div>
   </div>
 `;
-
   return card;
 }
 
@@ -250,7 +249,7 @@ function recordLiveSnapshot(count) {
   arr.push({ t: now, c: Number(count) || 0 });
 
   const minKeep = now - SNAP_KEEP * 86400000;
-  const filtered = arr.filter(s => s.t >= minKeep).slice(-2000); // borne dure
+  const filtered = arr.filter(s => s.t >= minKeep).slice(-2000);
   localStorage.setItem(SNAP_KEY, JSON.stringify(filtered));
 }
 
@@ -278,7 +277,7 @@ function computeLivesPerDayAverage() {
   }
 
   // ne garde que les 14 derniers jours, puis moyenne
-  const days = Array.from(byDay.keys()).sort(); // chrono
+  const days = Array.from(byDay.keys()).sort();
   const lastDays = days.slice(-SNAP_DAYS);
   if (!lastDays.length) return 0;
 
@@ -316,7 +315,7 @@ async function init() {
     if (data?.data?.length) onlineUsers.push(...data.data);
   }
 
-  // enregistre le snapshot pour la stat "Lives/jour" et met à jour
+  // enregistre snapshot pour "Lives/jour" + mise à jour de la moyenne
   recordLiveSnapshot(onlineUsers.length);
   setStatValue("stat-lives", computeLivesPerDayAverage());
 
@@ -370,7 +369,11 @@ async function init() {
     liveCountElement.setAttribute("aria-live", "polite");
   }
 
-  // --- UI Enhancements basés sur la présence des éléments ---
+  // Mémorise la liste pour le polling et démarre le suivi
+  window.NF_ALL_USERS = allUsers;
+  startLivePolling(); // par défaut toutes les 5 minutes
+
+  // --- UI Enhancements ---
   nfSetupSkeletons();       // squelettes pendant le fetch
   nfSyncLiveBar();          // synchronise la barre live
   nfAnimateStatsOnView();   // anime les compteurs au scroll
@@ -446,6 +449,53 @@ function nfSetupSkeletons() {
   });
   obs.observe(liveGrid, { childList: true });
   setTimeout(() => { if (document.body.contains(container)) container.remove(); }, 10000);
+}
+
+/* -------------------------------
+   🔁 Polling live (maj périodique)
+   - Refait les appels Twitch à intervalle régulier
+   - Met à jour: snapshot, moyenne Lives/jour, barre live & eyebrow
+----------------------------------*/
+async function startLivePolling(intervalMs = 5 * 60 * 1000) {
+  if (!Array.isArray(window.NF_ALL_USERS) || !window.NF_ALL_USERS.length) return;
+
+  const poll = async () => {
+    try {
+      const chunks = [window.NF_ALL_USERS.slice(0, 100), window.NF_ALL_USERS.slice(100)];
+      const onlineUsers = [];
+      for (const group of chunks) {
+        const data = await fetchStreams(group);
+        if (data?.data?.length) onlineUsers.push(...data.data);
+      }
+
+      // 1) enregistre snapshot + met à jour la moyenne
+      recordLiveSnapshot(onlineUsers.length);
+      setStatValue("stat-lives", computeLivesPerDayAverage());
+
+      // 2) synchro barre live
+      const barCount = document.getElementById("nf-live-count");
+      if (barCount) barCount.textContent = String(onlineUsers.length);
+
+      // 3) maj eyebrow texte (si présent)
+      const liveCountElement = document.getElementById("live-count");
+      if (liveCountElement) {
+        const emoji =
+          onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
+        liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
+          onlineUsers.length > 1 ? "s" : ""
+        } de la New Family ${
+          onlineUsers.length > 1 ? "sont" : "est"
+        } actuellement en live`;
+      }
+      // NB: on ne rerend pas toutes les cartes pour rester léger.
+    } catch (e) {
+      console.warn("Polling live: erreur", e);
+    }
+  };
+
+  // premier run 10s après le chargement, puis intervalle régulier
+  setTimeout(poll, 10_000);
+  setInterval(poll, intervalMs);
 }
 
 /* ---- GO ---- */
