@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Actualités – New Family</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
+  <header class="blog-header">
     <h1>📰 Actualités de la New Family</h1>
-    <p>Retrouvez ici les nouveautés, annonces et infos de la communauté.</p>
+    <p>Les annonces et moments forts de la communauté.</p>
   </header>
 
-  <main id="blog-posts"></main>
+  <main>
+    <!-- Filtres (optionnels) -->
+    <section class="blog-toolbar">
+      <input id="search" type="search" placeholder="Rechercher un article..." />
+      <select id="tagFilter">
+        <option value="">Tous les tags</option>
+      </select>
+    </section>
 
-  <footer>
+    <!-- Grille de vignettes -->
+    <section id="blog-grid" class="blog-grid"></section>
+  </main>
+
+  <footer class="blog-footer">
     <a href="index.html">⬅ Retour à l’accueil</a>
   </footer>
 
