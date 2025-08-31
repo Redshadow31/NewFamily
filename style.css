@@ -37,9 +37,7 @@ html.theme-dark, body.theme-dark {
 /* 2) Mode CLAIR : force des textes bien lisibles
    (uniquement quand on N'EST PAS en sombre) */
 :root:not(.dark):not(.theme-dark)[data-theme="dark"="false"] {}
-body:not(.dark):not(.theme-dark):not([data-theme="dark"]) {
-  color: var(--text, #111) !important;
-}
+
 
 /* Titres & paragraphes globaux */
 body:not(.dark):not(.theme-dark):not([data-theme="dark"]) h1,
@@ -736,15 +734,29 @@ body { color: var(--text); margin:0; font-family: system-ui, -apple-system, Sego
 }
 .modal-image { width: 100%; height: auto; border-radius: 12px; margin: .5rem 0; }
 .modal-body p { margin: .5rem 0; line-height: 1.6; }
-:root{
-  --nf-red:#c0392b;
+
+/* === Palette CLAIR corrigée === */
+:root {
+  --page-bg:#f4e9f9;       /* fond général */
+  --surface:#fff;          /* cartes */
+  --text:#222;             /* texte principal */
+  --muted:#555;            /* texte secondaire lisible */
+  --border:#e0e0e0;
+  --shadow:0 6px 20px rgba(0,0,0,.08);
+
+  --nf-red:#c0392b;        /* conserve ta couleur rouge */
   --card-bg:#fff;
-  --text:#1f2937;
-  --muted:#282929;
-  --ring:rgba(192,57,43,.35);
+  --ring:rgba(192,57,43,0.35);
 }
-@media (prefers-color-scheme: dark){
-  :root{ --card-bg:#111827; --text:#e5e7eb; --muted:#9ca3af; }
+
+/* Applique aux titres/paragraphes */
+body h1, body h2, body h3, body h4, body p {
+  color: var(--text);
+}
+
+/* Sous-titres, meta, footer */
+.title, .card-footer, .card-meta {
+  color: var(--muted);
 }
 
 /* Toolbar inchangée, on garde ton style global */
