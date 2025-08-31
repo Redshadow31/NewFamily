@@ -249,5 +249,44 @@ html.dark .vip-spotlight-media, body.dark .vip-spotlight-media, html[data-theme=
 .card-actions{ margin-top:.35rem; }
 .btn-read{ background:var(--nf-red); color:#fff; border:none; padding:.62rem .9rem; border-radius:12px; font-weight:700; }
 .btn-read:hover{ filter:brightness(1.05); }
+/* === Barre de recherche & filtre tags === */
+.blog-toolbar input,
+.blog-toolbar select {
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,.08);
+  transition: all 0.2s ease;
+}
+
+/* Effet focus : contour rouge vif */
+.blog-toolbar input:focus,
+.blog-toolbar select:focus {
+  outline: none;
+  border-color: var(--nf-red);
+  box-shadow: 0 0 0 3px rgba(192,57,43,.35);
+}
+
+/* Placeholder plus visible */
+.blog-toolbar input::placeholder {
+  color: var(--muted);
+  opacity: 0.9;
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+  .blog-toolbar input,
+  .blog-toolbar select {
+    background: #1F1133;
+    border-color: #333;
+    color: var(--text);
+  }
+  .blog-toolbar input::placeholder {
+    color: #aaa;
+  }
+}
 
 /* ========= FIN ========= */
