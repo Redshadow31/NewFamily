@@ -5,6 +5,34 @@
     <title>📅 Événements - Twitch Entraide New Family</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #4b0082;
+        }
+        header {
+            background-color: #e74c3c;
+            color: white;
+            text-align: center;
+            padding: 2em 1em;
+        }
+        header h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            font-weight: bold;
+            color: #4b0082;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
         iframe {
             width: 100%;
             max-width: 1000px;
@@ -18,12 +46,11 @@
     </style>
 </head>
 <body>
+    <!-- Bouton retour -->
+    <a class="back-link" href="index.html">← Retour à l’accueil</a>
+
+    <!-- Bannière -->
     <header>
-        <div style="text-align: center; margin-top: 1em;">
-    <a href="index.html" style="text-decoration: none; font-weight: bold; background: #845ec2; color: white; padding: 0.6em 1.2em; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: background 0.3s;">
-        ⬅️ Retour à l'accueil
-    </a>
-</div>
         <h1>📅 Calendrier des événements communautaires</h1>
     </header>
 
@@ -34,8 +61,8 @@ src=fc7a6920568497256d308be53a40fc19ff2eee5a941d4a8647327c2512f7208f%40group.cal
 &src=5eb6ec5d0eca5694b432e16c350ceace58ba23714b7133aaa3b5b58faa0a5219%40group.calendar.google.com
 &src=f8b1ce5a902a16640f7628ddeacfa68ac0bdf93de26209ef4c598e876dc97eb6%40group.calendar.google.com
 &ctz=Europe%2FParis&mode=MONTH">
-</iframe>
-
+        </iframe>
     </main>
 </body>
 </html>
+
