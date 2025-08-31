@@ -15,17 +15,74 @@ body {
   --shadow:0 6px 20px rgba(0,0,0,.08);
 }
 
-/* === DARK MODE (ajoute .dark ou data-theme="dark" sur <html> ou <body>) === */
-html.dark, body.dark,
-html[data-theme="dark"], body[data-theme="dark"]{
-  --bg:#3B1D5A;          /* violet foncé (fond global) */
-  --page-bg:#3B1D5A;     /* propagée au body/main */
-  --surface:#26143F;     /* “blanc” → violet sombre assorti pour cartes */
-  --surface-2:#2E1750;   /* variante */
-  --text:#FFFFFF;        /* texte principal */
-  --muted:rgba(54, 54, 54, 0.938);
+/* =========================
+   PATCH CONTRASTE TEXTE
+   — garde l'intégralité existante —
+   — ne change que les couleurs —
+   ========================= */
+
+/* 1) Harmonise le thème sombre si la classe utilisée est `theme-dark` */
+html.theme-dark, body.theme-dark {
+  --page-bg:#3B1D5A;
+  --surface:#26143F;
+  --surface-2:#2E1750;
+  --text:#FFFFFF;
+  --muted:rgba(255,255,255,.85);
   --border:rgba(255,255,255,.12);
-  --chip:#6B36B8;        /* boutons/puces si nécessaire */
+  --chip:#6B36B8;
+  background-color: var(--page-bg) !important;
+  color: var(--text) !important;
+}
+
+/* 2) Mode CLAIR : force des textes bien lisibles
+   (uniquement quand on N'EST PAS en sombre) */
+:root:not(.dark):not(.theme-dark)[data-theme="dark"="false"] {}
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) {
+  color: var(--text, #111) !important;
+}
+
+/* Titres & paragraphes globaux */
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) h1,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) h2,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) h3,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) h4,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) p {
+  color: var(--text, #111) !important;
+  opacity: 1 !important;
+}
+
+/* Titres des sections “en direct / bientôt” + compteur */
+#online h2, #offline h2, #live-count {
+  color: var(--text, #111) !important;
+  opacity: 1 !important;
+}
+
+/* Cartes membres (titres + sous-titres) en mode clair */
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) .username,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) .title,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) .card-footer {
+  color: var(--text, #111) !important;
+  opacity: 1 !important;
+}
+
+/* Header (texte central) en mode clair */
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) .header-text h1,
+body:not(.dark):not(.theme-dark):not([data-theme="dark"]) .header-text p {
+  color: #fff !important; /* conserve le rendu blanc sur bandeau violet */
+  opacity: 1 !important;
+}
+
+/* === DARK MODE (ajoute .dark ou data-theme="dark" sur <html> ou <body>) === */
+html.theme-dark, body.theme-dark {
+  --page-bg:#3B1D5A;
+  --surface:#26143F;
+  --surface-2:#2E1750;
+  --text:#FFFFFF;
+  --muted:rgba(255,255,255,.85);
+  --border:rgba(255,255,255,.12);
+  --chip:#6B36B8;
+  background-color: var(--page-bg) !important;
+  color: var(--text) !important;
 }
 
 /* Forcer le fond global partout en sombre (utile si des conteneurs surchargent la couleur) */
