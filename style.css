@@ -517,3 +517,50 @@ a[href="vip.html"] { background: #f1c40f; color: black; }
 /* Corrige l’effet offline : ne grise que l’image, pas les badges */
 .user-card.offline { opacity: 1; filter: none; }
 .user-card.offline .media-wrap img { filter: grayscale(90%) brightness(.9); }
+/* ====== PATCH : Spotlight (vignette du voyage) en mode sombre ====== */
+html.dark .vip-spotlight-card,
+body.dark .vip-spotlight-card,
+html[data-theme="dark"] .vip-spotlight-card{
+  background: var(--surface) !important;     /* force le fond sombre */
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.4) !important;
+  color: var(--text) !important;
+}
+
+/* Corps/texte internes de la carte */
+html.dark .vip-spotlight-body,
+html.dark .vip-spotlight-name,
+html.dark .vip-spotlight-quote,
+html.dark .vip-spotlight-bio,
+body.dark .vip-spotlight-body,
+body.dark .vip-spotlight-name,
+body.dark .vip-spotlight-quote,
+body.dark .vip-spotlight-bio,
+html[data-theme="dark"] .vip-spotlight-body,
+html[data-theme="dark"] .vip-spotlight-name,
+html[data-theme="dark"] .vip-spotlight-quote,
+html[data-theme="dark"] .vip-spotlight-bio{
+  background: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+/* Bandeau actions */
+html.dark .vip-spotlight-actions .vip-btn,
+body.dark .vip-spotlight-actions .vip-btn,
+html[data-theme="dark"] .vip-spotlight-actions .vip-btn{
+  box-shadow: 0 6px 16px rgba(0,0,0,.45);
+}
+
+/* Évite que le conteneur parent impose un fond clair */
+html.dark .vip-spotlight,
+body.dark .vip-spotlight,
+html[data-theme="dark"] .vip-spotlight{
+  background: transparent !important;
+}
+
+/* (optionnel) bord arrondi du player/zone media inchangé */
+html.dark .vip-spotlight-media,
+body.dark .vip-spotlight-media,
+html[data-theme="dark"] .vip-spotlight-media{
+  background: #000; /* garde un fond neutre sous la vidéo */
+}
