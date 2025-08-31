@@ -758,3 +758,6 @@ body { color: var(--text); margin:0; font-family: system-ui, -apple-system, Sego
   border-radius:10px; font-weight:600;
 }
 .btn-read:hover{ filter:brightness(1.05); }
+<a href="blog.html" class="about-button">
+  📰 Actualités
+</a>
