@@ -910,12 +910,13 @@ body h1, body h2, body h3, body h4, body p {
 
 /* Grille plus dense */
 .users-grid{
-  max-width: 1100px;           /* garde une largeur maîtrisée */
+  max-width: 1600px;
   margin: 1rem auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* <= réduit la largeur mini d'une carte */
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
 }
+
 
 /* Carte : largeur et padding raisonnables */
 .users-grid .user-card,
@@ -925,8 +926,8 @@ body h1, body h2, body h3, body h4, body p {
   border-radius: 14px;
   box-shadow: 0 10px 20px rgba(0,0,0,.08);
   overflow: hidden;
-  max-width: 360px;   /* <= empêche les cartes de devenir énormes */
-  margin: 0 auto;     /* centre les cartes quand il reste de la place */
+
+    /* centre les cartes quand il reste de la place */
 }
 
 /* Aperçu vidéo / image : ratio fixe et hauteur limitée */
@@ -936,7 +937,7 @@ body h1, body h2, body h3, body h4, body p {
   width: 100%;
   aspect-ratio: 16 / 9;   /* force 16:9 */
   height: auto;
-  max-height: 220px;      /* <= réduit la “grandeur” visuelle */
+  max-height: 180px;      /* <= réduit la “grandeur” visuelle */
   object-fit: cover;
   display: block;
   border: 0;
