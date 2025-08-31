@@ -1,37 +1,69 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>VIP Élites - New Family</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <div class="header-content">
-        <div class="header-logo">
-          <img src="assets/logo.webp" alt="Logo New Family">
-        </div>
-        <div class="header-text">
-          <h1>VIP Élites ⭐</h1>
-          <p>
-            Ces membres se sont distingués par leur implication exceptionnelle dans
-            la communauté !
-          </p>
-        </div>
-      </div>
-    </header>
+<head>
+<meta charset="UTF-8" />
+<title>VIP Élites — Wall of Fame</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+<style>
+/* ====== Styles spécifiques VIP ====== */
+:root{
+--vip-gold:#f1c40f; --vip-deep:#4b0082; --vip-rose:#e74c3c; --vip-bg:#f7f1ff;
+}
+.vip-hero{
+position:relative; overflow:hidden; isolation:isolate;
+background:
+radial-gradient(1200px 400px at 20% -10%, rgba(255,255,255,.8), transparent),
+radial-gradient(1200px 400px at 80% 110%, rgba(255,255,255,.7), transparent),
+linear-gradient(135deg, #fff 0%, #f7f1ff 60%, #fdf6f6 100%);
+border-radius: 0 0 24px 24px; box-shadow:0 10px 24px rgba(0,0,0,.1);
+padding: 2.2rem 1rem; text-align:center; color: var(--vip-deep);
+}
+.vip-hero h1{ margin:0 0 .35rem; font-size:clamp(1.6rem,4vw,2.2rem); }
+.vip-hero p{ margin:0; opacity:.9 }
+.vip-hero .month-tag{ display:inline-block; margin-top:.6rem; padding:.35rem .7rem; border-radius:999px; font-weight:700;
+background: #fff3be; border:1px solid #ffe18b; color:#8a6d00; }
 
-    <!-- Bouton centré sous la bannière -->
-    <div class="header-button-wrapper">
-      <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
-    </div>
 
-    <!-- Spotlight -->
-    <section id="vip-spotlight" class="vip-spotlight" aria-live="polite"></section>
+/* Grille */
+.vip-grid{ max-width:1100px; margin:1.2rem auto 2rem; padding:0 1rem;
+display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; }
 
-    <!-- Grille compacte des VIP Élites -->
-    <div class="user-grid vip-compact" id="vip-users"></div>
 
-    <script src="vip.js"></script>
-  </body>
+.vip-card{ position:relative; background:#fff; border-radius:1rem; padding:1rem; text-align:center;
+box-shadow:0 10px 20px rgba(0,0,0,.08); transition: transform .18s ease, box-shadow .18s ease; overflow:hidden; }
+.vip-card:hover{ transform: translateY(-4px); box-shadow:0 14px 28px rgba(0,0,0,.12); }
+
+
+/* Halo doré lumineux au hover */
+.vip-card::before{ content:""; position:absolute; inset:-40%; border-radius:50%;
+background: radial-gradient(closest-side, rgba(241,196,15,.35), rgba(241,196,15,0));
+transform: scale(0.6); opacity:0; transition: opacity .25s ease, transform .25s ease; z-index:0; }
+.vip-card:hover::before{ opacity:1; transform: scale(1); }
+
+
+.vip-avatar{ width:96px; height:96px; border-radius:999px; object-fit:cover; border:3px solid var(--vip-gold);
+box-shadow:0 0 0 4px rgba(241,196,15,.18); display:block; margin:.2rem auto .6rem; position:relative; z-index:1; }
+.vip-name{ font-weight:800; color:var(--vip-deep); margin:.2rem 0; position:relative; z-index:1; }
+.vip-tags{ display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; margin:.3rem 0 .5rem; position:relative; z-index:1; }
+.vip-tags span{ font-size:.78rem; background:#f3e9ff; border:1px solid #ead9ff; padding:.24rem .5rem; border-radius:999px; }
+
+
+.vip-actions{ display:flex; align-items:center; justify-content:center; gap:.5rem; margin-top:.4rem; position:relative; z-index:1; }
+.vip-applaud{ display:inline-flex; align-items:center; gap:.35rem; border:none; cursor:pointer; font-weight:700;
+background:#fff; border:1px solid #ffe18b; color:#8a6d00; padding:.4rem .6rem; border-radius:999px;
+box-shadow:0 6px 14px rgba(0,0,0,.06); transition: transform .1s ease; }
+.vip-applaud:active{ transform:scale(.98) }
+.vip-applaud[aria-pressed="true"]{ background:#fff8d1; }
+.vip-count{ font-variant-numeric: tabular-nums; }
+
+
+.vip-more{ background:#f7f1ff; border:1px solid #ead9ff; color:#4b0082; padding:.4rem .6rem; border-radius:10px; cursor:pointer; }
+
+
+/* Modale */
+.vip-modal{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index:9999; padding:1rem; }
+.vip-modal[aria-hidden="false"]{ display:flex; }
+.vip-dialog{ width:min(680px, 96vw); background:#fff; border-radius:16px; padding:1rem; box-shadow:0 20px 50px rgba(0,0,0,.35); position:relative; }
+.vip-dialog .close{ position:absolute; top:.6rem; right:.6rem; background:#fff; border:1px solid #eee; border-radius:8px; padding:.3rem .5rem; cursor:pointer; }
 </html>
