@@ -190,4 +190,53 @@
       if(!els.length) return;
       const animate = el => {
         const to = +el.dataset.to || 0, dur = 900;
-        const t0 = performance.
+        const t0 = performance.now();
+        const step = (now)=>{
+          const p = Math.min(1, (now - t0)/dur);
+          el.textContent = Math.floor(p*to);
+          if(p<1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); } });
+      }, {threshold: .5});
+      els.forEach(el=>io.observe(el));
+    })();
+
+    // 3) Scroll reveal
+    (function(){
+      const els = document.querySelectorAll('.reveal');
+      if(!els.length) return;
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
+      }, {threshold: .2});
+      els.forEach(el=>io.observe(el));
+    })();
+
+    // 4) Squelettes → retirés quand #live-users reçoit des cartes
+    (function(){
+      const container = document.getElementById('nf-skeletons');
+      const liveGrid = document.getElementById('live-users');
+      if(!container || !liveGrid) return;
+      // crée 6 placeholders
+      for(let i=0;i<6;i++){
+        const card = document.createElement('div'); card.className='skel';
+        card.innerHTML = `
+          <div class="ph big"></div>
+          <div class="ph w80" style="margin:.4rem 0;"></div>
+          <div class="ph w60" style="margin:.3rem 0;"></div>
+          <div class="ph w40"></div>`;
+        container.appendChild(card);
+      }
+      // observe arrivée des vrais éléments
+      const obs = new MutationObserver(()=>{
+        if(liveGrid.children.length>0){ container.remove(); obs.disconnect(); }
+      });
+      obs.observe(liveGrid, {childList:true});
+      // sécurité: supprime après 10s si rien
+      setTimeout(()=>{ if(document.body.contains(container)) container.remove(); }, 10000);
+    })();
+  </script>
+</body>
+</html>
