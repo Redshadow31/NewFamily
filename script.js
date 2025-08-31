@@ -86,14 +86,18 @@ async function getToken() {
 }
 
 async function fetchUserLists() {
-  const [res1, res2] = await Promise.all([
+  const [res1, res2, res3] = await Promise.all([
     fetch("users1.json"),
     fetch("users2.json"),
-   fetch("users3.json"),
+    fetch("users3.json"),
   ]);
+
   const users1 = await res1.json();
   const users2 = await res2.json();
-  return [...users1, ...users2];
+  const users3 = await res3.json();
+
+  // Fusion + déduplication
+  return [...new Set([...users1, ...users2, ...users3])];
 }
 
 async function fetchStreams(logins) {
