@@ -844,5 +844,9 @@ body h1, body h2, body h3, body h4, body p {
 <a href="blog.html" class="about-button">
   📰 Actualités
 </a>
+/* Aligne le bouton "Regarder" en bas de toutes les cartes */
+.user-card { height: 100%; display: flex; flex-direction: column; }
+.user-card .card-body { display: flex; flex-direction: column; flex: 1; }
+.user-card .card-footer { margin-top: auto; }
 
 
