@@ -8,24 +8,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="assets/favicon.ico" />
   <style>
-    /* --------- AJOUTS SPÉCIFIQUES ACCUEIL --------- */
-    /* HERO animé */
-    .nf-hero{
-      position:relative; min-height:58vh; display:flex; align-items:center; justify-content:center;
-      background: url('assets/hero.webp') center/cover no-repeat, linear-gradient(120deg,#e74c3c 0%, #8e44ad 100%);
-      border-radius: 0 0 1.25rem 1.25rem; overflow:hidden;
-    }
-    .nf-hero-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55))}
-    .nf-hero-content{position:relative; color:#fff; text-align:center; padding:3rem 1rem; animation: fadeUp .8s ease both}
-    .nf-hero-content h2{font-size:clamp(1.8rem, 3.6vw, 3rem); margin:0 0 .4rem}
-    .nf-hero-content p{opacity:.95; margin:0 0 1rem}
-    .nf-hero-badges{display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; margin-bottom:1rem}
-    .nf-hero-badges span{background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); padding:.4rem .7rem; border-radius:999px; backdrop-filter: blur(2px)}
-    .nf-hero-cta{margin-top:.4rem}
-
-    @keyframes fadeUp{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
-
-    /* Barre live */
+    /* --------- Styles spécifiques accueil --------- */
     .nf-livebar{
       max-width:1100px; margin:1rem auto 0; background:#fff; color:#4b0082;
       border-radius:.8rem; padding:.7rem 1rem; display:flex; align-items:center; gap:.6rem;
@@ -34,72 +17,63 @@
     .nf-livebar .dot{width:10px; height:10px; border-radius:50%; background:#e74c3c; box-shadow:0 0 0 0 rgba(231,76,60,.6); animation:pulse 1.8s infinite}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(231,76,60,.6)}70%{box-shadow:0 0 0 10px rgba(231,76,60,0)}100%{box-shadow:0 0 0 0 rgba(231,76,60,0)}}
 
-    /* Stats */
-    .nf-stats{max-width:1100px; margin:2rem auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem}
+    .home-intro{max-width:1100px; margin:1.2rem auto 0; padding:0 1rem; text-align:center}
+    .nf-hero-badges{display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; margin:1rem 0}
+    .nf-hero-badges span{background:#f3e9ff; border:1px solid #ead9ff; padding:.4rem .7rem; border-radius:999px}
+
+    .nf-stats{max-width:1100px; margin:2rem auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; padding:0 1rem}
     .nf-stats .stat{background:#fff; border-radius:1rem; padding:1.2rem; text-align:center; box-shadow:0 10px 20px rgba(0,0,0,.08)}
     .nf-stats .num{font-weight:800; font-size:clamp(1.8rem,4vw,2.4rem); color:#c0392b}
     .nf-stats .label{margin-top:.3rem; font-size:.95rem; font-weight:600; color:#4b0082; opacity:.85}
 
-    /* Why */
-    .nf-why{max-width:1100px; margin:1rem auto 2rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
+    .nf-why{max-width:1100px; margin:1rem auto 2rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; padding:0 1rem}
     .nf-why article{background:#fff; border-radius:1rem; padding:1rem 1.2rem; box-shadow:0 10px 20px rgba(0,0,0,.08); transition: transform .25s ease, box-shadow .25s ease}
     .nf-why article:hover{transform:translateY(-4px); box-shadow:0 14px 28px rgba(0,0,0,.12)}
     .nf-why h3{margin:.2rem 0 .3rem; color:#8e44ad}
 
-    /* Skeletons pour la grille des lives */
-    #nf-skeletons{max-width:1100px; margin:1.5rem auto 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
+    #nf-skeletons{max-width:1100px; margin:1.5rem auto 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; padding:0 1rem}
     .skel{background:#fff; border-radius:1rem; padding:1rem; box-shadow:0 10px 20px rgba(0,0,0,.08)}
     .skel .ph{height:14px; border-radius:6px; background:linear-gradient(90deg,#eee,#f5f5f5,#eee); background-size:200% 100%; animation:shimmer 1.2s linear infinite}
     .skel .ph.big{height:120px; border-radius:.8rem; margin-bottom:.8rem}
-    .skel .ph.w60{width:60%} .skel .ph.w80{width:80%} .skel .ph.w40{width:40%}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-    /* Scroll reveal */
     .reveal{opacity:0; transform:translateY(12px); transition: .6s ease}
     .reveal.is-in{opacity:1; transform:none}
 
-    /* Micro-anim logo */
     .header-logo img{animation: floaty 6s ease-in-out infinite; transform-origin:center}
     @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
-    /* Boutons hover */
     .about-button, .event-button{transition: transform .15s ease, box-shadow .15s ease}
     .about-button:hover, .event-button:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.15)}
-
-    @media (max-width:640px){ .nf-livebar{border-radius:0; margin:0} }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
+  <!-- HEADER violet unique -->
   <header>
     <div class="header-content">
       <div class="header-logo">
         <img src="assets/logo.webp" alt="Logo New Family" />
       </div>
+      <div class="header-text">
+        <h1>Bienvenue sur le site de la New Family !</h1>
+        <p>La communauté francophone d’entraide entre streamers & viewers ✨</p>
+      </div>
     </div>
   </header>
 
-  <!-- HERO DYNAMIQUE -->
-  <section class="nf-hero">
-    <div class="nf-hero-overlay"></div>
-    <div class="nf-hero-content">
-      <div class="nf-eyebrow">Bienvenue sur le site de la New Family !</div>
-      <h2>La communauté qui propulse vos lives</h2>
-      <p>Bienveillance, entraide, visibilité — chaque semaine, tous ensemble.</p>
-
-      <div class="button-container" style="margin-top:1rem; text-align:center;">
-        <a href="a-propos.html" class="about-button">🎭 En savoir plus sur la New Family</a>
-        <a href="staff.html" class="about-button">👥 Découvrir le Staff</a>
-        <a href="blog.html" class="about-button">📰 Actualités</a>
-      </div>
-
-      <div class="nf-hero-badges" style="margin-top:1.2rem;">
-        <span>✨ Mentorat</span>
-        <span>🎯 Feedback</span>
-        <span>🚀 Raids</span>
-      </div>
+  <!-- Intro (boutons + badges) -->
+  <div class="home-intro">
+    <div class="button-container">
+      <a href="a-propos.html" class="about-button">🎭 En savoir plus</a>
+      <a href="staff.html" class="about-button">👥 Staff</a>
+      <a href="blog.html" class="about-button">📰 Actualités</a>
     </div>
-  </section>
+    <div class="nf-hero-badges">
+      <span>✨ Mentorat</span>
+      <span>🎯 Feedback</span>
+      <span>🚀 Raids</span>
+    </div>
+  </div>
 
   <!-- BARRE LIVE -->
   <div class="nf-livebar" role="status" aria-live="polite">
@@ -111,48 +85,27 @@
   <div class="button-container" style="text-align:center; margin-top:.6rem;">
     <a href="vip.html" class="event-button">⭐ VIP du mois</a>
     <a href="evenements.html" class="event-button">📅 Événements</a>
-    <a href="clips.html" class="event-button">📽️ Clips à découvrir</a>
+    <a href="clips.html" class="event-button">📽️ Clips</a>
     <a href="interviews.html" class="event-button">🎤 Interviews</a>
     <a href="aventura2026.html" class="event-button">🌴 Aventura 2026</a>
   </div>
 
   <!-- STATS -->
   <section class="nf-stats reveal">
-    <div class="stat">
-      <div class="num" data-to="377">0</div>
-      <div class="label">Membres</div>
-    </div>
-    <div class="stat">
-      <div class="num" data-to="190">0</div>
-      <div class="label">Actifs</div>
-    </div>
-    <div class="stat">
-      <div class="num" data-to="12">0</div>
-      <div class="label">Lives / jour</div>
-    </div>
-    <div class="stat">
-      <div class="num" data-to="28">0</div>
-      <div class="label">Événements / mois</div>
-    </div>
+    <div class="stat"><div class="num" data-to="377">0</div><div class="label">Membres</div></div>
+    <div class="stat"><div class="num" data-to="190">0</div><div class="label">Actifs</div></div>
+    <div class="stat"><div class="num" data-to="12">0</div><div class="label">Lives / jour</div></div>
+    <div class="stat"><div class="num" data-to="28">0</div><div class="label">Événements / mois</div></div>
   </section>
 
   <!-- POURQUOI NOUS -->
   <section class="nf-why reveal">
-    <article>
-      <h3>🎯 Progression</h3>
-      <p>Mentorat, feedbacks, ateliers et entraide structurée.</p>
-    </article>
-    <article>
-      <h3>🤝 Humain d’abord</h3>
-      <p>Ambiance safe, modération formée, zéro drama sur la page.</p>
-    </article>
-    <article>
-      <h3>🚀 Visibilité</h3>
-      <p>Raids, relais, mise en avant des créateurs motivés.</p>
-    </article>
+    <article><h3>🎯 Progression</h3><p>Mentorat, feedbacks, ateliers et entraide structurée.</p></article>
+    <article><h3>🤝 Humain d’abord</h3><p>Ambiance safe, modération formée, zéro drama.</p></article>
+    <article><h3>🚀 Visibilité</h3><p>Raids, relais, mise en avant des créateurs motivés.</p></article>
   </section>
 
-  <!-- SKELETONS EN ATTENTE DE LA GRILLE DES LIVES -->
+  <!-- SKELETONS -->
   <div id="nf-skeletons" aria-hidden="true"></div>
 
   <!-- SECTIONS LIVES -->
@@ -161,80 +114,13 @@
       <h2>🎥 Actuellement en direct <span id="live-count">(0)</span></h2>
       <div id="live-users" class="users-grid"></div>
     </section>
-
     <section id="offline" style="margin-top:2rem;">
       <h2>👀 À découvrir bientôt</h2>
       <div id="offline-users" class="users-grid"></div>
     </section>
   </main>
 
-  <!-- SCRIPT -->
+  <!-- Script unique -->
   <script src="script.js"></script>
-  <script>
-    // 1) Sync livebar avec compteur
-    (function(){
-      const liveCountEl = document.getElementById('live-count');
-      const barCount = document.getElementById('nf-live-count');
-      if(!liveCountEl || !barCount) return;
-      const sync = ()=> {
-        const m = (liveCountEl.textContent || '').match(/\d+/);
-        if(m){ barCount.textContent = m[0]; }
-      };
-      sync();
-      const obs = new MutationObserver(sync);
-      obs.observe(liveCountEl, {childList: true, subtree: true, characterData: true});
-    })();
-
-    // 2) Compteurs animés
-    (function(){
-      const els = document.querySelectorAll('.nf-stats .num');
-      if(!els.length) return;
-      const animate = el => {
-        const to = +el.dataset.to || 0, dur = 900;
-        const t0 = performance.now();
-        const step = (now)=>{
-          const p = Math.min(1, (now - t0)/dur);
-          el.textContent = Math.floor(p*to);
-          if(p<1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      };
-      const io = new IntersectionObserver(entries=>{
-        entries.forEach(e=>{ if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); } });
-      }, {threshold: .5});
-      els.forEach(el=>io.observe(el));
-    })();
-
-    // 3) Scroll reveal
-    (function(){
-      const els = document.querySelectorAll('.reveal');
-      if(!els.length) return;
-      const io = new IntersectionObserver(entries=>{
-        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
-      }, {threshold: .2});
-      els.forEach(el=>io.observe(el));
-    })();
-
-    // 4) Squelettes
-    (function(){
-      const container = document.getElementById('nf-skeletons');
-      const liveGrid = document.getElementById('live-users');
-      if(!container || !liveGrid) return;
-      for(let i=0;i<6;i++){
-        const card = document.createElement('div'); card.className='skel';
-        card.innerHTML = `
-          <div class="ph big"></div>
-          <div class="ph w80" style="margin:.4rem 0;"></div>
-          <div class="ph w60" style="margin:.3rem 0;"></div>
-          <div class="ph w40"></div>`;
-        container.appendChild(card);
-      }
-      const obs = new MutationObserver(()=>{
-        if(liveGrid.children.length>0){ container.remove(); obs.disconnect(); }
-      });
-      obs.observe(liveGrid, {childList:true});
-      setTimeout(()=>{ if(document.body.contains(container)) container.remove(); }, 10000);
-    })();
-  </script>
 </body>
 </html>
