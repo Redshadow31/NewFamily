@@ -849,4 +849,60 @@ body h1, body h2, body h3, body h4, body p {
 .user-card .card-body { display: flex; flex-direction: column; flex: 1; }
 .user-card .card-footer { margin-top: auto; }
 
+/* ====== NF — HERO / LIVEBAR / STATS / WHY / SKELETONS / REVEAL ====== */
+
+/* HERO animé */
+.nf-hero{
+  position:relative; min-height:58vh; display:flex; align-items:center; justify-content:center;
+  background: url('assets/hero.webp') center/cover no-repeat, linear-gradient(120deg,#e74c3c 0%, #8e44ad 100%);
+  border-radius: 0 0 1.25rem 1.25rem; overflow:hidden;
+}
+.nf-hero-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55))}
+.nf-hero-content{position:relative; color:#fff; text-align:center; padding:3rem 1rem; animation: nf-fadeUp .8s ease both}
+.nf-hero-content h2{font-size:clamp(1.8rem, 3.6vw, 3rem); margin:0 0 .4rem}
+.nf-hero-content p{opacity:.95; margin:0 0 1rem}
+.nf-hero-badges{display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; margin-bottom:1rem}
+.nf-hero-badges span{background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); padding:.4rem .7rem; border-radius:999px; backdrop-filter: blur(2px)}
+.nf-hero-cta{margin-top:.4rem}
+@keyframes nf-fadeUp{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+/* Barre live */
+.nf-livebar{
+  max-width:1100px; margin:1rem auto 0; background:#fff; color:#4b0082;
+  border-radius:.8rem; padding:.7rem 1rem; display:flex; align-items:center; gap:.6rem;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.nf-livebar .dot{width:10px; height:10px; border-radius:50%; background:#e74c3c; box-shadow:0 0 0 0 rgba(231,76,60,.6); animation:nf-pulse 1.8s infinite}
+@keyframes nf-pulse{0%{box-shadow:0 0 0 0 rgba(231,76,60,.6)}70%{box-shadow:0 0 0 10px rgba(231,76,60,0)}100%{box-shadow:0 0 0 0 rgba(231,76,60,0)}}
+
+/* Stats */
+.nf-stats{max-width:1100px; margin:2rem auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem}
+.nf-stats .stat{background:#fff; border-radius:1rem; padding:1.2rem; text-align:center; box-shadow:0 10px 20px rgba(0,0,0,.08)}
+.nf-stats .num{font-weight:800; font-size:clamp(1.8rem,4vw,2.4rem); color:#c0392b}
+.nf-stats .label{opacity:.85}
+
+/* Pourquoi nous */
+.nf-why{max-width:1100px; margin:1rem auto 2rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
+.nf-why article{background:#fff; border-radius:1rem; padding:1rem 1.2rem; box-shadow:0 10px 20px rgba(0,0,0,.08); transition: transform .25s ease, box-shadow .25s ease}
+.nf-why article:hover{transform:translateY(-4px); box-shadow:0 14px 28px rgba(0,0,0,.12)}
+.nf-why h3{margin:.2rem 0 .3rem; color:#8e44ad}
+
+/* Skeletons pour la grille des lives */
+#nf-skeletons{max-width:1100px; margin:1.5rem auto 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
+.skel{background:#fff; border-radius:1rem; padding:1rem; box-shadow:0 10px 20px rgba(0,0,0,.08)}
+.skel .ph{height:14px; border-radius:6px; background:linear-gradient(90deg,#eee,#f5f5f5,#eee); background-size:200% 100%; animation:nf-shimmer 1.2s linear infinite}
+.skel .ph.big{height:120px; border-radius:.8rem; margin-bottom:.8rem}
+.skel .ph.w60{width:60%} .skel .ph.w80{width:80%} .skel .ph.w40{width:40%}
+@keyframes nf-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Scroll reveal */
+.reveal{opacity:0; transform:translateY(12px); transition: .6s ease}
+.reveal.is-in{opacity:1; transform:none}
+
+/* Micro-anim bouton (cohérent avec tes styles) */
+.about-button, .event-button{transition: transform .15s ease, box-shadow .15s ease}
+.about-button:hover, .event-button:hover{transform:translateY(-2px); box-shadow:0 10px 22px rgba(0,0,0,.15)}
+
+/* Mobile */
+@media (max-width:640px){ .nf-livebar{border-radius:0; margin:0} }
 
