@@ -1,8 +1,6 @@
 /***** CONFIG *****/
 const ASSET_DEFAULT_PREFIX = "assets/blog/";
-// Optionnel : mets une image générique si tu veux un visuel par défaut
-// ex: "assets/blog/default.jpg". Laisse null pour ne rien forcer.
-const DEFAULT_BLOG_IMAGE = null;
+const DEFAULT_BLOG_IMAGE = null; // ex: "assets/blog/default.jpg"
 
 /***** ÉTAT *****/
 const grid = document.getElementById("blog-grid");
@@ -11,7 +9,6 @@ const tagFilter = document.getElementById("tagFilter");
 let allPosts = [];
 
 /***** HELPERS *****/
-// Si l'utilisateur met juste "monfichier.jpg", on préfixe automatiquement
 function resolveImage(img) {
   if (!img && DEFAULT_BLOG_IMAGE) img = DEFAULT_BLOG_IMAGE;
   if (!img) return null;
@@ -100,5 +97,26 @@ window.openPost = function (slug) {
       <div class="card-tags">${tags}</div>
       ${img ? `<img src="${img}" alt="${p.imageAlt || ""}" class="modal-image" loading="lazy"
                     onerror="this.remove()">` : ""}
-      <div cl
+      <div class="modal-body"><p>${(p.content || "").replace(/\n/g, "<br>")}</p></div>
+    </article>
+  `;
+  document.body.appendChild(modal);
+  modal.showModal();
+};
 
+/***** DATA LOAD *****/
+fetch("posts.json")
+  .then(r => r.json())
+  .then(posts => {
+    allPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    populateTagFilter(allPosts);
+    render(allPosts);
+  })
+  .catch(err => {
+    console.error("Erreur chargement posts:", err);
+    if (grid) grid.innerHTML = `<p>Impossible de charger les articles pour le moment.</p>`;
+  });
+
+/***** UI EVENTS *****/
+searchInput?.addEventListener("input", () => render(allPosts));
+tagFilter?.addEventListener("change", () => render(allPosts));
