@@ -11,40 +11,37 @@
         background-color: #f5f5f5;
         color: #4b0082;
       }
-      header {
-        background-color: #e74c3c;
-        color: white;
+      section {
         text-align: center;
-        padding: 2em 1em;
-      }
-      header h1 {
-        font-size: 2em;
-        margin: 0;
-      }
-      .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 1em;
-        margin-bottom: 1em;
-        font-weight: bold;
-        color: #4b0082;
-        text-decoration: none;
-      }
-      .back-link:hover {
-        text-decoration: underline;
+        padding: 2em;
+        max-width: 900px;
+        margin: auto;
+        line-height: 1.8em;
       }
     </style>
   </head>
-  <body>
-    <!-- Bouton retour -->
-    <a class="back-link" href="index.html">← Retour à l’accueil</a>
 
-    <!-- Bannière -->
+  <body>
+    <!-- Header -->
     <header>
-      <h1>🎤 Interviews de la New Family</h1>
+      <div class="header-content">
+        <div class="header-logo">
+          <img src="assets/logo.webp" alt="Logo New Family" />
+        </div>
+        <div class="header-text">
+          <h1>🎤 Interviews de la New Family</h1>
+          <p>Les témoignages exclusifs de nos membres, disponibles en points d’entraide</p>
+        </div>
+      </div>
     </header>
 
-    <section style="text-align: center; padding: 2em">
+    <!-- Bouton retour -->
+    <div class="header-button-wrapper">
+      <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+    </div>
+
+    <!-- Contenu -->
+    <section>
       <p>
         🎙️ Cette section accueillera bientôt les interviews exclusives de nos
         membres, disponibles en échange de points d'entraide sur le Discord.
