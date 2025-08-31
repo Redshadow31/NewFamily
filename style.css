@@ -963,3 +963,19 @@ body h1, body h2, body h3, body h4, body p {
   transform: scale(.9);
   transform-origin: left center;
 }
+.vip-card { position: relative; overflow: hidden; }
+.vip-card::before{
+  content:""; position:absolute; inset:-40%; border-radius:50%;
+  background: radial-gradient(closest-side, rgba(241,196,15,.35), rgba(241,196,15,0));
+  transform: scale(0.6); opacity:0; transition: opacity .25s ease, transform .25s ease; z-index:0;
+}
+.vip-card:hover::before{ opacity:1; transform: scale(1); }
+.vip-card .card-body, .vip-card .media-wrap, .vip-card .vip-badges { position: relative; z-index: 1; }
+
+/* Bouton applaudissements */
+.vip-applaud{
+  display:inline-flex; align-items:center; gap:.35rem; border:1px solid #ffe18b; background:#fff;
+  color:#8a6d00; padding:.35rem .6rem; border-radius:999px; font-weight:700; cursor:pointer;
+}
+.vip-applaud[aria-pressed="true"]{ background:#fff8d1; }
+.vip-count{ font-variant-numeric: tabular-nums; }
