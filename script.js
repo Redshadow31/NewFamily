@@ -303,6 +303,11 @@ async function init() {
   }
 }
 /* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
+  // ---- Améliorations accueil (s'exécutent uniquement si les éléments existent) ----
+  nfSetupSkeletons();       // squelettes pendant le fetch
+  nfSyncLiveBar();          // synchronise la barre live
+  nfAnimateStatsOnView();   // anime les compteurs
+  nfSetupRevealOnScroll();  // effets reveal
 
 /** Synchronise la barre live (.nf-livebar) avec #live-count déjà géré */
 function nfSyncLiveBar() {
