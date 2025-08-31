@@ -1,22 +1,11 @@
-[
-  {
-    "title": "Bienvenue sur notre nouveau site 🎉",
-    "date": "2025-08-31",
-    "summary": "Le site New Family est en ligne ! Découvrez les sections clés et comment participer.",
-    "content": "Le site de la New Family est en ligne ! Merci à tous pour vos retours et votre soutien.",
-    "image": "images/cover-site.jpg",
-    "tags": ["Annonce", "Site"],
-    "author": "Staff",
-    "slug": "lancement-site"
-  },
-  {
-    "title": "Soirée Fortnite réussie 🙌",
-    "date": "2025-08-20",
-    "summary": "Une soirée de folie avec plus de 50 personnes en vocal !",
-    "content": "Merci à tous d’avoir participé à notre soirée spéciale Fortnite...",
-    "image": "images/fortnite-night.jpg",
-    "tags": ["Événement", "Fortnite"],
-    "author": "Clara",
-    "slug": "soiree-fortnite-0820"
-  }
-]
+{
+  "title": "Soirée film : Avatar avec Clara 🎬",
+  "date": "2025-09-08",
+  "summary": "Soirée cinéma en communauté : on regarde Avatar avec Clara. Rejoignez-nous pour papoter, théories et popcorn !",
+  "content": "📅 Lundi 8 septembre 21 H — Soirée film \"Avatar\" animée par Clara.\n⏰ Heure: 21h00 (FR/BE)\n📍 Discord TENF – salon vocal + watch party\n💬 Au programme: discussion avant/après, fun facts et théories.\n\nPrenez vos snacks, on s'occupe du reste !",
+  "image": "Affiche_Avatar.png",
+  "imageAlt": "Affiche du film Avatar",
+  "tags": ["Événement", "Cinéma", "Avatar"],
+  "author": "Clara",
+  "slug": "soiree-film-avatar-2025-09-08"
+}
