@@ -302,6 +302,79 @@ async function init() {
     liveCountElement.setAttribute("aria-live", "polite");
   }
 }
+/* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
+
+/** Synchronise la barre live (.nf-livebar) avec #live-count déjà géré */
+function nfSyncLiveBar() {
+  const liveCountEl = document.getElementById("live-count");
+  const barCount = document.getElementById("nf-live-count");
+  if (!liveCountEl || !barCount) return;
+  const sync = () => {
+    const m = (liveCountEl.textContent || "").match(/\d+/);
+    if (m) barCount.textContent = m[0];
+  };
+  sync();
+  const obs = new MutationObserver(sync);
+  obs.observe(liveCountEl, { childList: true, subtree: true, characterData: true });
+}
+
+/** Compteurs animés pour la section .nf-stats */
+function nfAnimateStatsOnView() {
+  const els = document.querySelectorAll(".nf-stats .num");
+  if (!els.length) return;
+  const animate = (el) => {
+    const to = +el.dataset.to || 0, dur = 900;
+    const t0 = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      el.textContent = Math.floor(p * to);
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: .5 });
+  els.forEach((el) => io.observe(el));
+}
+
+/** Effet reveal au scroll pour .reveal */
+function nfSetupRevealOnScroll() {
+  const els = document.querySelectorAll(".reveal");
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+    });
+  }, { threshold: .2 });
+  els.forEach((el) => io.observe(el));
+}
+
+/** Squelettes pendant le chargement des lives */
+function nfSetupSkeletons() {
+  const container = document.getElementById("nf-skeletons");
+  const liveGrid = document.getElementById("live-users");
+  if (!container || !liveGrid) return;
+  // Crée 6 placeholders
+  for (let i = 0; i < 6; i++) {
+    const card = document.createElement("div"); card.className = "skel";
+    card.innerHTML = `
+      <div class="ph big"></div>
+      <div class="ph w80" style="margin:.4rem 0;"></div>
+      <div class="ph w60" style="margin:.3rem 0;"></div>
+      <div class="ph w40"></div>`;
+    container.appendChild(card);
+  }
+  // Retire quand les vrais éléments arrivent
+  const obs = new MutationObserver(() => {
+    if (liveGrid.children.length > 0) { container.remove(); obs.disconnect(); }
+  });
+  obs.observe(liveGrid, { childList: true });
+  // Time-out de sécurité
+  setTimeout(() => { if (document.body.contains(container)) container.remove(); }, 10000);
+}
 
 init();
 
