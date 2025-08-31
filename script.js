@@ -89,6 +89,7 @@ async function fetchUserLists() {
   const [res1, res2] = await Promise.all([
     fetch("users1.json"),
     fetch("users2.json"),
+   fetch("users3.json"),
   ]);
   const users1 = await res1.json();
   const users2 = await res2.json();
