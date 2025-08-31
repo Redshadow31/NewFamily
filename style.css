@@ -906,3 +906,59 @@ body h1, body h2, body h3, body h4, body p {
 /* Mobile */
 @media (max-width:640px){ .nf-livebar{border-radius:0; margin:0} }
 
+/* ====== Compactage des cartes live/offline ====== */
+
+/* Grille plus dense */
+.users-grid{
+  max-width: 1100px;           /* garde une largeur maîtrisée */
+  margin: 1rem auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* <= réduit la largeur mini d'une carte */
+  gap: 14px;
+}
+
+/* Carte : largeur et padding raisonnables */
+.users-grid .user-card,
+.users-grid > a,
+.users-grid > div{
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.08);
+  overflow: hidden;
+  max-width: 360px;   /* <= empêche les cartes de devenir énormes */
+  margin: 0 auto;     /* centre les cartes quand il reste de la place */
+}
+
+/* Aperçu vidéo / image : ratio fixe et hauteur limitée */
+.users-grid .preview,
+.users-grid img,
+.users-grid iframe{
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* force 16:9 */
+  height: auto;
+  max-height: 220px;      /* <= réduit la “grandeur” visuelle */
+  object-fit: cover;
+  display: block;
+  border: 0;
+}
+
+/* En-têtes/texte des cartes plus discrets */
+.users-grid .title{ 
+  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+  font-weight: 700; 
+  margin: .6rem .9rem .2rem; 
+  color: #4b0082;
+}
+.users-grid .subtitle, 
+.users-grid .game, 
+.users-grid .viewer-count{
+  font-size: .85rem;
+  opacity: .85;
+  margin: 0 .9rem .8rem;
+}
+
+/* Badges plus petits */
+.users-grid .badge{
+  transform: scale(.9);
+  transform-origin: left center;
+}
