@@ -23,7 +23,7 @@ html[data-theme="dark"], body[data-theme="dark"]{
   --surface:#26143F;     /* “blanc” → violet sombre assorti pour cartes */
   --surface-2:#2E1750;   /* variante */
   --text:#FFFFFF;        /* texte principal */
-  --muted:rgba(255,255,255,.85);
+  --muted:rgba(54, 54, 54, 0.938);
   --border:rgba(255,255,255,.12);
   --chip:#6B36B8;        /* boutons/puces si nécessaire */
 }
@@ -205,7 +205,7 @@ h2 { text-align: center; margin-top: 2em; }
 }
 
 .user-card{
-  background:#fff;
+  background:#857488;
   border-radius:16px;
   box-shadow:0 6px 20px rgba(0,0,0,.08);
   overflow:hidden;
@@ -246,7 +246,7 @@ h2 { text-align: center; margin-top: 2em; }
 }
 .title{
   font-size:.9em;
-  color:#444;
+  color:#1a1919;
   line-height:1.4em;
   margin:0 0 10px;
 }
@@ -256,7 +256,7 @@ h2 { text-align: center; margin-top: 2em; }
   justify-content:space-between;
   align-items:center;
   font-size:.85em;
-  color:#666;
+  color:#292929;
 }
 .card-footer a{
   background:#f3f4f6;
@@ -418,7 +418,7 @@ a[href="vip.html"] { background: #f1c40f; color: black; }
 .user-card .card-body{ position:relative; }
 .user-card .cta-row{ display:flex; gap:.5rem; margin-top:.5rem; flex-wrap:wrap; }
 .user-card .cta-row a{
-  background:#f3f4f6; padding:.45rem .65rem; border-radius:8px; text-decoration:none; font-weight:700; color:#333;
+  background:#beb0bd; padding:.45rem .65rem; border-radius:8px; text-decoration:none; font-weight:700; color:#333;
 }
 .user-card .cta-row a:hover{ background:#e5e7eb; }
 
@@ -586,7 +586,7 @@ html[data-theme="dark"] .vip-spotlight-media{
   --nf-red: #c0392b;
   --card-bg: #fff;
   --text: #1f2937;
-  --muted: #6b7280;
+  --muted: #222222;
   --ring: rgba(192,57,43,0.35);
 }
 @media (prefers-color-scheme: dark) {
@@ -683,7 +683,7 @@ body { color: var(--text); margin:0; font-family: system-ui, -apple-system, Sego
   --nf-red:#c0392b;
   --card-bg:#fff;
   --text:#1f2937;
-  --muted:#6b7280;
+  --muted:#282929;
   --ring:rgba(192,57,43,.35);
 }
 @media (prefers-color-scheme: dark){
@@ -761,4 +761,5 @@ body { color: var(--text); margin:0; font-family: system-ui, -apple-system, Sego
 <a href="blog.html" class="about-button">
   📰 Actualités
 </a>
+
 
