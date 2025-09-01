@@ -1285,3 +1285,22 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
 .vip-stats { max-width: 900px; margin: 0 auto 2rem; text-align: center; padding: 0 1rem; }
 .vip-month { opacity: .8; font-weight: 700; }
 
+/* Force toutes les cartes VIP à occuper la même hauteur
+   et pousse les actions en bas */
+.user-card.vip-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.vip-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* occupe toute la hauteur */
+}
+
+.vip-actions {
+  margin-top: auto; /* colle les boutons en bas */
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
