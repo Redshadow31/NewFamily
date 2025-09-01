@@ -1,43 +1,147 @@
 [
   {
-    "id": "evt-2025-09-05-jeux-quiz",
-    "title": "Soirée Jeux – Quiz & Gartic",
+    "id": "anniv-2025-09-01-quiz-tenf",
+    "title": "Grand Quizz TENF 🧠 – Classement",
     "category": "jeux",
+    "start": "2025-09-01T21:00:00+02:00",
+    "end": "2025-09-01T23:00:00+02:00",
+    "location": "Discord – #event-anniv",
+    "description": "Semaine anniversaire – Tout le monde veut prendre sa place !"
+  },
+  {
+    "id": "anniv-2025-09-02-qui-est-ce",
+    "title": "Qui est-ce ? – Édition TENF",
+    "category": "jeux",
+    "start": "2025-09-02T21:00:00+02:00",
+    "end": "2025-09-02T23:00:00+02:00",
+    "location": "Discord – #event-anniv",
+    "description": "Histoires (un peu) exagérées de Clara, trouvez le bon streamer 🤭"
+  },
+  {
+    "id": "anniv-2025-09-03-gartic",
+    "title": "Gartic Phone spécial serveur ✍️",
+    "category": "jeux",
+    "start": "2025-09-03T21:00:00+02:00",
+    "end": "2025-09-03T23:00:00+02:00",
+    "location": "Discord – #event-anniv",
+    "description": "Dessine-moi la New Family… et pas un mouton !"
+  },
+  {
+    "id": "anniv-2025-09-04-amongus",
+    "title": "Qui a tué le serveur ? (Among Us 😈)",
+    "category": "jeux",
+    "start": "2025-09-04T21:00:00+02:00",
+    "end": "2025-09-04T23:00:00+02:00",
+    "location": "Discord – #event-anniv",
+    "description": "Soirée imposteurs & alibis."
+  },
+  {
+    "id": "anniv-2025-09-05-tombola-apero",
+    "title": "La Tombola de la New Family 🎁 (Apéro + défis)",
+    "category": "apero",
     "start": "2025-09-05T21:00:00+02:00",
     "end": "2025-09-05T23:30:00+02:00",
-    "location": "Discord vocal #salon-jeux",
-    "description": "Soirée communautaire fun. Webcams facultatives."
+    "location": "Discord – #event-anniv",
+    "description": "Apéro, défis, tirage spécial ✨"
   },
+
+  { "id": "anniv-2025-09-06-10h-cafe-red", "title": "Café avec Red ☕", "category": "apero",
+    "start": "2025-09-06T10:00:00+02:00", "end": "2025-09-06T11:00:00+02:00",
+    "location": "Discord – #lounge", "description": "Matinale chill" },
+  { "id": "anniv-2025-09-06-11h-petit-bac", "title": "Petit Bac avec Selena", "category": "jeux",
+    "start": "2025-09-06T11:00:00+02:00", "end": "2025-09-06T12:00:00+02:00",
+    "location": "Discord – #event-anniv", "description": "" },
+  { "id": "anniv-2025-09-06-13h-fortnite", "title": "Fortnite avec Red & Yaya", "category": "jeux",
+    "start": "2025-09-06T13:00:00+02:00", "end": "2025-09-06T14:00:00+02:00",
+    "location": "Discord – #event-anniv", "description": "" },
+  { "id": "anniv-2025-09-06-15h-loupgarou", "title": "Loup Garou avec Yaya", "category": "jeux",
+    "start": "2025-09-06T15:00:00+02:00", "end": "2025-09-06T16:00:00+02:00",
+    "location": "Discord – #event-anniv", "description": "" },
+  { "id": "anniv-2025-09-06-17h-forza", "title": "Forza Horizon 5 avec Tab’s", "category": "jeux",
+    "start": "2025-09-06T17:00:00+02:00", "end": "2025-09-06T18:00:00+02:00",
+    "location": "Discord – #event-anniv", "description": "" },
+  { "id": "anniv-2025-09-06-19h-fallguys", "title": "Fall Guys avec Saiko & Gilbert", "category": "jeux",
+    "start": "2025-09-06T19:00:00+02:00", "end": "2025-09-06T20:00:00+02:00",
+    "location": "Discord – #event-anniv", "description": "" },
+  { "id": "anniv-2025-09-06-21h-mariokart", "title": "Mario Kart avec Nexou & Red", "category": "jeux",
+    "start": "2025-09-06T21:00:00+02:00", "end": "2025-09-06T22:30:00+02:00",
+    "location": "Discord – #event-anniv", "description": "" },
+
   {
-    "id": "evt-2025-09-07-integration",
-    "title": "Réunion d’intégration – Session A",
-    "category": "integration",
-    "start": "2025-09-07T20:30:00+02:00",
-    "location": "Discord vocal #integration",
-    "description": "Obligatoire pour l’intégration complète (suivi des chaînes, règles, outils)."
-  },
-  {
-    "id": "evt-2025-09-10-formation",
-    "title": "Formation Modération – Conflits & Confidentialité",
-    "category": "formations",
-    "start": "2025-09-10T21:00:00+02:00",
-    "location": "Discord #formation",
-    "description": "Module 2h avec Q/R. Pré-requis: Module Bases."
-  },
-  {
-    "id": "evt-2025-09-12-apero",
-    "title": "Apéro vocal – Chill & papotes",
+    "id": "anniv-2025-09-07-gros-apero",
+    "title": "Gros apéro d’anniversaire 🍾",
     "category": "apero",
-    "start": "2025-09-12T22:00:00+02:00",
-    "location": "Discord #apero",
-    "description": "Moment détente, libre et convivial."
+    "start": "2025-09-07T16:00:00+02:00",
+    "end": "2025-09-08T00:30:00+02:00",
+    "location": "Discord – #apero",
+    "description": "16h → minuit+ : La New Family trinque (trop) fort"
+  },
+
+  {
+    "id": "cine-2025-09-08-avatar",
+    "title": "Ciné Clara 🎬 – Avatar",
+    "category": "cine",
+    "start": "2025-09-08T21:00:00+02:00",
+    "end": "2025-09-08T23:30:00+02:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion"
   },
   {
-    "id": "evt-2025-09-14-cine-clara",
-    "title": "Ciné Clara – Projection surprise",
+    "id": "cine-2025-09-15-jurassic-park",
+    "title": "Ciné Clara 🎬 – Jurassic Park",
     "category": "cine",
-    "start": "2025-09-14T20:45:00+02:00",
-    "location": "Discord #cine-clara",
-    "description": "Choix de Clara, discussion après séance."
-  }
+    "start": "2025-09-15T21:00:00+02:00",
+    "end": "2025-09-15T23:30:00+02:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion"
+  },
+  {
+    "id": "cine-2025-09-22-intouchables",
+    "title": "Ciné Clara 🎬 – Intouchables",
+    "category": "cine",
+    "start": "2025-09-22T21:00:00+02:00",
+    "end": "2025-09-22T23:30:00+02:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion"
+  },
+  {
+    "id": "cine-2025-09-29-doctor-strange",
+    "title": "Ciné Clara 🎬 – Doctor Strange",
+    "category": "cine",
+    "start": "2025-09-29T21:00:00+02:00",
+    "end": "2025-09-29T23:30:00+02:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion"
+  },
+
+  { "id": "int-2025-09-09-mar-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-09T21:00:00+02:00", "end": "2025-09-09T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-12-ven-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-12T21:00:00+02:00", "end": "2025-09-12T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-14-dim-15h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-14T15:00:00+02:00", "end": "2025-09-14T16:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-16-mar-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-16T21:00:00+02:00", "end": "2025-09-16T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-19-ven-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-19T21:00:00+02:00", "end": "2025-09-19T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-21-dim-15h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-21T15:00:00+02:00", "end": "2025-09-21T16:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-23-mar-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-23T21:00:00+02:00", "end": "2025-09-23T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-26-ven-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-26T21:00:00+02:00", "end": "2025-09-26T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-28-dim-15h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-28T15:00:00+02:00", "end": "2025-09-28T16:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" },
+  { "id": "int-2025-09-30-mar-21h", "title": "Réunion d’intégration ✅", "category": "integration",
+    "start": "2025-09-30T21:00:00+02:00", "end": "2025-09-30T22:00:00+02:00",
+    "location": "Discord – #integration", "description": "Session d’accueil & règles" }
 ]
