@@ -1,10 +1,11 @@
 /* ===========================
-   VIP Élites — Page (mur équitable)
-   Compatible avec ton HTML :
-   - #vip-users : grille
-   - #vip-month : tag du mois
-   - #vip-count : compteur global (optionnel)
-   - .vip-toolbar [data-sort] : tri (optionnel)
+   VIP Élites — Page complète
+   - Grille (#vip-users)
+   - Carrousel (#vip-carousel)
+   - Compteur global (#vip-count)
+   - Mois courant (#vip-month)
+   - Applaudissements persistants
+   - Tri interactif
    =========================== */
 
 const CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -87,7 +88,6 @@ async function fetchUsersInfo(logins) {
 }
 
 async function fetchLiveStatus(userIds) {
-  // Map { user_id: {live, title, game_name, viewer_count} }
   if (!userIds.length) return {};
   const token = await fetchToken();
   const size = 90;
@@ -116,12 +116,11 @@ async function fetchLiveStatus(userIds) {
 
 // ---------- Normalisation ----------
 function normalizeVipEntries(rawList) {
-  // Retourne { logins: [...], metaMap: {login: {month, badges?, quote?, image?, banner?}} }
   const metaMap = {};
   const logins = rawList.map((item) => {
     if (typeof item === "string") {
       const login = item.toLowerCase();
-      metaMap[login] = {}; // pas de month par défaut => non affiché si pas fourni
+      metaMap[login] = {};
       return login;
     }
     const login = String(item.login || item.name || "").toLowerCase();
@@ -200,16 +199,73 @@ function renderWall(vips) {
 
 function updateStats(vips) {
   const el = $("#vip-count");
-  if (!el) return; // bloc optionnel
+  if (!el) return;
   const totalVip = vips.length;
   const totalApplause = vips.reduce((sum, v) => sum + getApplause(v.login), 0);
   el.innerHTML = `👏 <strong>${totalApplause}</strong> applaudissements ont déjà été donnés à nos <strong>${totalVip}</strong> VIP du mois <span class="vip-month">(${ymKey})</span> 🎉`;
 }
 
+// ---------- Carrousel ----------
+function slideHTML(v) {
+  const img = v.avatar || v.image || v.banner || "assets/placeholder.webp";
+  return `
+  <div class="vip-slide">
+    <div class="vip-media">
+      ${liveDotHTML(v.isLive)}
+      <img src="${img}" alt="${escapeHtml(v.display_name)}">
+    </div>
+    <div class="vip-body">
+      <div class="username"><a href="https://twitch.tv/${v.login}" target="_blank" rel="noopener">${escapeHtml(v.display_name)}</a></div>
+      ${v.bio ? `<p class="vip-bio">${escapeHtml(v.bio)}</p>` : ""}
+      <a class="about-button" href="https://twitch.tv/${v.login}" target="_blank" rel="noopener">Regarder</a>
+    </div>
+  </div>`;
+}
+
+function renderCarousel(vips) {
+  const root = $("#vip-carousel");
+  if (!root) return;
+  if (!vips.length) {
+    root.innerHTML = "";
+    return;
+  }
+
+  const pageSize = 3;
+  const pages = [];
+  for (let i = 0; i < vips.length; i += pageSize) {
+    const chunk = vips.slice(i, i + pageSize);
+    pages.push(`<div class="vip-page">${chunk.map(slideHTML).join("")}</div>`);
+  }
+  root.innerHTML = `
+    <div class="vip-carousel-inner">
+      <button class="vip-nav vip-prev" aria-label="Précédent">‹</button>
+      <div class="vip-track">${pages.join("")}</div>
+      <button class="vip-nav vip-next" aria-label="Suivant">›</button>
+    </div>`;
+
+  const track = root.querySelector(".vip-track");
+  let index = 0;
+  const update = () => {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  };
+  root.querySelector(".vip-prev").onclick = () => {
+    index = (index - 1 + pages.length) % pages.length;
+    update();
+  };
+  root.querySelector(".vip-next").onclick = () => {
+    index = (index + 1) % pages.length;
+    update();
+  };
+  update();
+}
+
+// ---------- Tri ----------
 function sortVips(vips, mode) {
   if (mode === "applause") {
     return [...vips].sort(
-      (a, b) => getApplause(b.login) - getApplause(a.login) || a.display_name.localeCompare(b.display_name)
+      (a, b) =>
+        getApplause(b.login) - getApplause(a.login) ||
+        a.display_name.localeCompare(b.display_name)
     );
   }
   if (mode === "live") {
@@ -219,22 +275,20 @@ function sortVips(vips, mode) {
       return a.display_name.localeCompare(b.display_name);
     });
   }
-  return shuffle(vips); // aléatoire neutre
+  return shuffle(vips);
 }
 
 // ---------- Main ----------
 async function main() {
   try {
-    // Affiche le mois dans le bandeau si #vip-month existe
     const monthEl = $("#vip-month");
     if (monthEl) monthEl.textContent = ymKey;
 
     const raw = await fetchVIPListRaw();
-    const { logins, metaMap } = normalizeVipEntries(raw);
+    const { metaMap } = normalizeVipEntries(raw);
 
-    // Filtre strict : uniquement month === "YYYY-MM"
     const thisMonthLogins = Object.entries(metaMap)
-      .filter(([login, meta]) => meta.month === ymKey)
+      .filter(([_, meta]) => meta.month === ymKey)
       .map(([login]) => login);
 
     if (!thisMonthLogins.length) {
@@ -246,9 +300,10 @@ async function main() {
       return;
     }
 
-    // Récup Twitch (users + LIVE)
     const usersInfo = await fetchUsersInfo(thisMonthLogins);
-    const vips = mergeUsersWithMeta(usersInfo, metaMap).filter((v) => v.month === ymKey);
+    const vips = mergeUsersWithMeta(usersInfo, metaMap).filter(
+      (v) => v.month === ymKey
+    );
     const liveMap = await fetchLiveStatus(vips.map((v) => v.id));
     vips.forEach((v) => {
       const l = liveMap[v.id];
@@ -258,14 +313,12 @@ async function main() {
       }
     });
 
-    // Tri initial : LIVE d’abord
     let state = sortVips(vips, "live");
 
-    // Rendu
+    renderCarousel(state);
     renderWall(state);
     updateStats(state);
 
-    // Applaudissements (délégué)
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".vip-applaud");
       if (!btn) return;
@@ -278,11 +331,11 @@ async function main() {
       updateStats(state);
     });
 
-    // Tri interactif si .vip-toolbar existe
     $$(".vip-toolbar [data-sort]").forEach((b) => {
       b.addEventListener("click", () => {
         const mode = b.getAttribute("data-sort");
         state = sortVips(vips, mode);
+        renderCarousel(state);
         renderWall(state);
         updateStats(state);
       });
@@ -297,4 +350,3 @@ async function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
-
