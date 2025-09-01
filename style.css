@@ -1304,3 +1304,23 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
   gap: .4rem;
   flex-wrap: wrap;
 }
+/* VIP : même hauteur + boutons collés en bas */
+#vip-users > .vip-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#vip-users > .vip-card .vip-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;           /* occupe la hauteur dispo */
+}
+
+#vip-users > .vip-card .vip-actions {
+  margin-top: auto;  /* pousse les boutons en bas */
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
