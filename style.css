@@ -1096,4 +1096,33 @@ a:focus-visible, button:focus-visible, .tab:focus-visible, input:focus-visible{o
 
 /* Boutons mieux alignés */
 .body .btns{display:flex !important; gap:.5rem !important; justify-content:center !important}
+/* ===== PATCH BADGES – INDEX + STAFF (à coller en bas) ===== */
+
+/* 1) INDEX (cartes .user-card) – pastille lisible or + contour */
+.user-card .badge{
+  background: linear-gradient(135deg,#fff8db,#ffe18b) !important;
+  color:#8a6d00 !important;
+  border:1px solid #f1c40f !important;
+  border-radius:999px !important;
+  padding:.28rem .6rem !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.15) !important;
+}
+
+/* 2) STAFF – n’écrase plus le .badge global, on scope tout sous .staff-card */
+.staff-card .badge{
+  position:absolute !important; top:10px !important; left:10px !important;
+  border-radius:999px !important; padding:.28rem .6rem !important;
+  font-weight:800 !important; font-size:.78rem !important; z-index:3 !important;
+  color:#fff !important; border:1px solid rgba(255,255,255,.6) !important;
+  box-shadow:0 4px 10px rgba(0,0,0,.25) !important;
+}
+
+/* Couleurs par rôle (staff) */
+.staff-card .badge--founder{ background:linear-gradient(135deg,#b8336a,#6a0572) !important; }
+.staff-card .badge--adjoint{ background:linear-gradient(135deg,#845ec2,#2c73d2) !important; }
+.staff-card .badge--mentor { background:linear-gradient(135deg,#008e9b,#0081cf) !important; }
+.staff-card .badge--junior { background:linear-gradient(135deg,#4caf50,#2e7d32) !important; }
+
+/* (optionnel) si tu veux l’ancien style or sur STAFF aussi : dé-commente la ligne ci-dessous */
+/* .staff-card .badge{ background:linear-gradient(135deg,#fff8db,#ffe18b) !important; color:#8a6d00 !important; border-color:#f1c40f !important; } */
 
