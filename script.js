@@ -149,11 +149,19 @@ async function fetchVIPList() {
   try {
     const response = await fetch("vip.json");
     if (!response.ok) return [];
-    return await response.json();
+
+    const data = await response.json();
+    // Toujours renvoyer une liste de pseudos en minuscule
+    return data.map(item =>
+      typeof item === "string"
+        ? item.toLowerCase()
+        : String(item.login || "").toLowerCase()
+    );
   } catch {
     return [];
   }
 }
+
 
 /* -------------------------------
    🏷️ Badges de rôle
