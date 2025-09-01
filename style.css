@@ -1340,3 +1340,22 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
 .vip-slide .vip-media img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 .vip-slide .vip-body{padding:.7rem .8rem 1rem}
 
+/* Uniformise la hauteur des slides du carrousel */
+.vip-slide {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Contenu de la carte en colonne */
+.vip-slide .vip-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* occupe la hauteur dispo */
+}
+
+/* Bouton "Regarder" collé en bas */
+.vip-slide .vip-body .about-button {
+  margin-top: auto;
+  text-align: center;
+}
