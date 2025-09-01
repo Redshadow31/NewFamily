@@ -979,3 +979,87 @@ body h1, body h2, body h3, body h4, body p {
 }
 .vip-applaud[aria-pressed="true"]{ background:#fff8d1; }
 .vip-count{ font-variant-numeric: tabular-nums; }
+/* === CONTENEUR LARGE (débloque la largeur) === */
+.staff-wrap{max-width:1200px;margin:0 auto;padding:0 1rem}
+
+/* === Actions (onglets + search) === */
+.staff-actions{max-width:1200px;margin:1rem auto .4rem;padding:0 1rem;
+  display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.tab{border:1px solid #ead9ff;background:#fff;border-radius:999px;padding:.42rem .7rem;font-weight:700;color:#4b0082;cursor:pointer}
+.tab.is-active{background:#e74c3c;color:#fff;border-color:transparent}
+.search input{min-width:260px;border:1px solid #ead9ff;border-radius:10px;padding:.5rem .7rem;outline:none}
+
+/* === Titres de section === */
+.staff-section{max-width:1200px;margin:1rem auto;padding:0 1rem}
+.staff-section h2{margin:.2rem 0 .8rem;color:#4b0082;text-align:center}
+
+/* === Grille responsive (2 à 4 colonnes) === */
+.staff-grid{
+  display:grid; gap:1rem;
+  grid-template-columns:repeat( auto-fit, minmax(260px, 1fr) );
+}
+
+/* === Cartes compactes et propres === */
+.staff-card{
+  position:relative;background:#fff;border-radius:16px;padding:12px;
+  box-shadow:0 10px 22px rgba(0,0,0,.08); transition:.18s transform, .18s box-shadow; overflow:hidden
+}
+.staff-card:hover{ transform:translateY(-4px); box-shadow:0 14px 28px rgba(0,0,0,.12) }
+
+/* Image en bannière (finit les ovales tronqués) */
+.avatar-box{position:relative}
+.avatar{
+  width:100%; aspect-ratio:16/9; height:auto; object-fit:cover;
+  border-radius:14px; border:3px solid #f1c40f; box-shadow:0 0 0 4px rgba(241,196,15,.14)
+}
+
+/* Badge rôle lisible, en overlay mais contrasté */
+.badge{
+  position:absolute; top:10px; left:10px;
+  background:rgba(255,255,255,.95); color:#4b0082;
+  border:2px solid #eee; border-radius:10px; padding:.22rem .5rem; font-weight:800; font-size:.78rem
+}
+.badge--founder{border-color:#f1c40f}
+.badge--adjoint{border-color:#e67e22}
+.badge--mentor{border-color:#8e44ad}
+.badge--junior{border-color:#2ecc71}
+
+/* LIVE badge (si dispo) */
+.live-dot{
+  position:absolute; right:10px; top:10px; display:inline-flex; align-items:center; gap:.3rem;
+  background:#ff4757; color:#fff; border-radius:999px; padding:.22rem .5rem; font-weight:800; font-size:.78rem
+}
+.live-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.8);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}70%{box-shadow:0 0 0 8px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
+/* Corps de carte */
+.body{padding:.6rem .3rem 0; text-align:center}
+.name{margin:.35rem 0 .15rem; color:#4b0082; font-weight:800}
+.desc{color:#333; font-size:.95rem; line-height:1.35}
+
+/* Boutons actions */
+.body .btns{display:flex;gap:.5rem;justify-content:center;margin-top:.5rem}
+.body .about-button{border-radius:12px; padding:.5rem .8rem}
+
+/* Squelettes (loading) */
+.skel{background:#fff;border-radius:16px;min-height:200px;box-shadow:0 10px 22px rgba(0,0,0,.06);padding:12px}
+.skel .ph{height:14px;border-radius:6px;background:linear-gradient(90deg,#eee,#f5f5f5,#eee);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+.skel .big{height:140px;border-radius:12px;margin:0 0 .6rem}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Reveal doux */
+.reveal{opacity:0;transform:translateY(12px);transition:.6s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* Modale */
+.staff-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:9999;padding:1rem}
+.staff-modal[aria-hidden="false"]{display:flex}
+.staff-modal .dialog{width:min(680px,94vw);background:#fff;border-radius:16px;padding:1rem;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.staff-modal .dialog header{display:flex;gap:1rem;align-items:center}
+.staff-modal .dialog img{width:84px;height:84px;border-radius:999px;border:3px solid #f1c40f;box-shadow:0 0 0 4px rgba(241,196,15,.18);object-fit:cover}
+.staff-modal .close{position:absolute;top:.6rem;right:.6rem;background:#fff;border:1px solid #eee;border-radius:8px;padding:.3rem .5rem;cursor:pointer}
+.staff-modal .links a{display:inline-block;margin:.3rem .3rem 0 0;padding:.35rem .6rem;background:#f3e9ff;border:1px solid #ead9ff;border-radius:9px;text-decoration:none;color:#4b0082}
+
+/* Accessibilité */
+a:focus-visible, button:focus-visible, .tab:focus-visible, input:focus-visible{outline:3px solid #f1c40f;outline-offset:3px}
