@@ -1,0 +1,43 @@
+[
+  {
+    "id": "evt-2025-09-05-jeux-quiz",
+    "title": "Soirée Jeux – Quiz & Gartic",
+    "category": "jeux",
+    "start": "2025-09-05T21:00:00+02:00",
+    "end": "2025-09-05T23:30:00+02:00",
+    "location": "Discord vocal #salon-jeux",
+    "description": "Soirée communautaire fun. Webcams facultatives."
+  },
+  {
+    "id": "evt-2025-09-07-integration",
+    "title": "Réunion d’intégration – Session A",
+    "category": "integration",
+    "start": "2025-09-07T20:30:00+02:00",
+    "location": "Discord vocal #integration",
+    "description": "Obligatoire pour l’intégration complète (suivi des chaînes, règles, outils)."
+  },
+  {
+    "id": "evt-2025-09-10-formation",
+    "title": "Formation Modération – Conflits & Confidentialité",
+    "category": "formations",
+    "start": "2025-09-10T21:00:00+02:00",
+    "location": "Discord #formation",
+    "description": "Module 2h avec Q/R. Pré-requis: Module Bases."
+  },
+  {
+    "id": "evt-2025-09-12-apero",
+    "title": "Apéro vocal – Chill & papotes",
+    "category": "apero",
+    "start": "2025-09-12T22:00:00+02:00",
+    "location": "Discord #apero",
+    "description": "Moment détente, libre et convivial."
+  },
+  {
+    "id": "evt-2025-09-14-cine-clara",
+    "title": "Ciné Clara – Projection surprise",
+    "category": "cine",
+    "start": "2025-09-14T20:45:00+02:00",
+    "location": "Discord #cine-clara",
+    "description": "Choix de Clara, discussion après séance."
+  }
+]
