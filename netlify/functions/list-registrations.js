@@ -6,9 +6,9 @@ export default async (req) => {
   const eventId = url.searchParams.get('eventId');
   if (!eventId) return new Response('Missing eventId', { status: 400 });
 
-  const token = process.env.NETLIFY_API_TOKEN;
-  const siteId = process.env.SITE_ID;
-  if (!token || !siteId) return new Response('Server not configured', { status: 500 });
+ const token = process.env.NETLIFY_API_TOKEN;
+const siteId = process.env.MY_SITE_ID;   // <-- nouveau nom
+if (!token || !siteId) return new Response('Server not configured', { status: 500 });
 
   // 1) Récupérer le formulaire "inscriptions"
   const formsRes = await fetch(`${BASE}/sites/${siteId}/forms?access_token=${token}`);
