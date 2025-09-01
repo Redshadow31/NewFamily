@@ -287,5 +287,30 @@ async function initStaff(){
     });
   }
 }
+function renderSection(container, { role, emoji, title, members }, avatarMap, liveSet, q=""){
+  const section = document.createElement("section");
+  section.className = "staff-section reveal";
+
+  const h2 = document.createElement("h2");
+  h2.textContent = `${emoji} ${title}`;
+  section.appendChild(h2);
+
+  // === Texte explicatif selon le rôle ===
+  const roleDesc = {
+    founder: "👑 Les fondateurs sont à l'origine de la communauté et assurent sa vision globale.",
+    adjoint: "⚙️ Les adjoints épaulent les fondateurs dans la gestion quotidienne et les projets.",
+    mentor: "🎓 Les mentors sont des modérateurs expérimentés qui guident et forment les autres.",
+    junior: "🌱 Les juniors débutent en modération et apprennent aux côtés des mentors."
+  };
+  if(roleDesc[role]){
+    const p = document.createElement("p");
+    p.className = "role-desc";
+    p.textContent = roleDesc[role];
+    section.appendChild(p);
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "staff-grid";
+  …
 
 document.addEventListener("DOMContentLoaded", initStaff);
