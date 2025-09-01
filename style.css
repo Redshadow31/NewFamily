@@ -1323,4 +1323,20 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
   gap: .4rem;
   flex-wrap: wrap;
 }
+/* ==== VIP — Carousel 3×3 ==== */
+.vip-carousel{max-width:1100px;margin:0 auto 1rem;padding:0 1rem}
+.vip-carousel-inner{position:relative}
+.vip-track{display:flex;transition:transform .35s ease}
+.vip-page{min-width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.vip-page{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.vip-page{grid-template-columns:1fr}}
+
+.vip-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;border:1px solid var(--border,#eee);background:#fff;box-shadow:0 6px 16px rgba(0,0,0,.15);font-size:22px;cursor:pointer}
+.vip-prev{left:-6px} .vip-next{right:-6px}
+
+/* Slide card (réutilise le style VIP) */
+.vip-slide{background:#fff;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,.08);overflow:hidden;transition:transform .18s, box-shadow .18s}
+.vip-slide:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.14)}
+.vip-slide .vip-media img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.vip-slide .vip-body{padding:.7rem .8rem 1rem}
 
