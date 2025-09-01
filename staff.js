@@ -14,9 +14,9 @@ const STAFF = [
     members: [
       { login: "clarastonewall", name: "Clara",
         desc: "Gardienne des plannings, streameuse Sims & simulation. L’organisation au service de la convivialité." },
-      { login: "nexou31", name: "Nexou31",
+      { login: "nexou31", name: "Nexou",
         desc: "Streamer Nintendo, formateur et gestionnaire des réseaux. Toujours à l’écoute des membres." },
-      { login: "red_shadow_31", name: "Red_Shadow_31",
+      { login: "red_shadow_31", name: "Red",
         desc: "Sims & gestion. L’ombre du serveur : code du site, coordination des modos et coulisses techniques." },
     ]
   },
@@ -24,13 +24,13 @@ const STAFF = [
   // ⚙️ Adjoints
   { role: "adjoint", emoji: "⚙️", title: "Admins Adjoints",
     members: [
-      { login: "selena_akemi", name: "Selena_akemi",
+      { login: "selena_akemi", name: "Selena",
         desc: "Spécialiste gacha. Soutien créatif : visuels & réseaux aux côtés de Nexou." },
-      { login: "nangel89", name: "Nangel89",
+      { login: "nangel89", name: "Nangel",
         desc: "Couteau-suisse du staff. Présent partout pour fluidifier et aider." },
-      { login: "tabs_up", name: "Tabs_up",
+      { login: "tabs_up", name: "Tab's",
         desc: "Multigaming (LoL, No Man’s Sky…). Porte-parole des réunions d’intégration." },
-      { login: "jenny31200", name: "Jenny31200",
+      { login: "jenny31200", name: "Jenny",
         desc: "Call of Duty & Fortnite. Secrétaire en chef : rigueur et suivi des projets." },
     ]
   },
@@ -40,19 +40,19 @@ const STAFF = [
     members: [
       { login: "mahyurah", name: "mahyurah",
         desc: "Jeux indés & farming (Palia…). Patience et bienveillance dans la modération." },
-      { login: "livio_on", name: "Livio_on",
+      { login: "livio_on", name: "Livio",
         desc: "Jeux d’horreur. Vigilance, sécurité et cohésion." },
-      { login: "rubbycrea", name: "Rubbycrea",
+      { login: "rubbycrea", name: "Rubby",
         desc: "Horreur & belles créations. Créativité et dynamisme." },
-      { login: "leviacarpe", name: "Leviacarpe",
+      { login: "leviacarpe", name: "Levia",
         desc: "Disney Dreamlight Valley. Magie, partage et douceur." },
-      { login: "yaya_romali", name: "Yaya_romali",
+      { login: "yaya_romali", name: "Yaya",
         desc: "Fortnite & Batman. Bonne humeur et énergie." },
-      { login: "thedark_sand", name: "Thedark_sand",
+      { login: "thedark_sand", name: "Dark",
         desc: "Pokémon, Yu-Gi-Oh, rétro. Expérience et écoute." },
-      { login: "gilbert_hime", name: "gilbert_hime",
+      { login: "gilbert_hime", name: "Gilbert",
         desc: "DBD, Fortnite, gacha. Énergie et présence sur le terrain." },
-      { login: "saikossama", name: "Saikosama",
+      { login: "saikossama", name: "Saiko",
         desc: "DBD, Fortnite, ARK. Esprit d’équipe et vigilance." },
     ]
   },
@@ -60,12 +60,12 @@ const STAFF = [
   // 🌱 Juniors
   { role: "junior", emoji: "🌱", title: "Modérateurs Juniors",
     members: [
-      { login: "lespydyverse", name: "lespydyverse",
+      { login: "lespydyverse", name: "le spydy",
         desc: "Jeux gacha. Enthousiasme et curiosité." },
-      { login: "mcaliena", name: "Mcaliena",
+      { login: "mcaliena", name: "Mc aliena",
         desc: "ARK & Medieval Dynasty. Sérieuse et impliquée." },
-      { login: "mcfly_59140", name: "McFly_59140",
-        desc: "Farming Simulator 25 & GTA RP. Convivialité et énergie." },
+      { login: "mcfly_59140", name: "Mc Fly",
+       desc: "Farming Simulator 25 & GTA RP. Convivialité et énergie." },
     ]
   },
 ];
@@ -150,6 +150,20 @@ function renderSection(container, { role, emoji, title, members }, avatarMap, li
   const h2 = document.createElement("h2");
   h2.textContent = `${emoji} ${title}`;
   section.appendChild(h2);
+
+  // === Texte explicatif selon le rôle (ajout) ===
+  const roleDesc = {
+    founder: "👑 Les fondateurs sont à l'origine de la communauté et assurent sa vision globale.",
+    adjoint: "⚙️ Les adjoints épaulent les fondateurs dans la gestion quotidienne et les projets.",
+    mentor: "🎓 Les mentors sont des modérateurs expérimentés qui guident et forment les autres.",
+    junior: "🌱 Les juniors débutent en modération et apprennent aux côtés des mentors."
+  };
+  if(roleDesc[role]){
+    const p = document.createElement("p");
+    p.className = "role-desc";
+    p.textContent = roleDesc[role];
+    section.appendChild(p);
+  }
 
   const grid = document.createElement("div");
   grid.className = "staff-grid";
@@ -287,30 +301,5 @@ async function initStaff(){
     });
   }
 }
-function renderSection(container, { role, emoji, title, members }, avatarMap, liveSet, q=""){
-  const section = document.createElement("section");
-  section.className = "staff-section reveal";
-
-  const h2 = document.createElement("h2");
-  h2.textContent = `${emoji} ${title}`;
-  section.appendChild(h2);
-
-  // === Texte explicatif selon le rôle ===
-  const roleDesc = {
-    founder: "👑 Les fondateurs sont à l'origine de la communauté et assurent sa vision globale.",
-    adjoint: "⚙️ Les adjoints épaulent les fondateurs dans la gestion quotidienne et les projets.",
-    mentor: "🎓 Les mentors sont des modérateurs expérimentés qui guident et forment les autres.",
-    junior: "🌱 Les juniors débutent en modération et apprennent aux côtés des mentors."
-  };
-  if(roleDesc[role]){
-    const p = document.createElement("p");
-    p.className = "role-desc";
-    p.textContent = roleDesc[role];
-    section.appendChild(p);
-  }
-
-  const grid = document.createElement("div");
-  grid.className = "staff-grid";
-  …
 
 document.addEventListener("DOMContentLoaded", initStaff);
