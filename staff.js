@@ -253,7 +253,7 @@ async function initStaff(){
     });
   }
 
-  // Modale “Plus” (ne fait rien si la modale n’existe pas dans le HTML)
+  // Modale “Plus” (si présente)
   const modal = document.getElementById("staff-modal");
   if(modal){
     document.addEventListener("click", (e)=>{
