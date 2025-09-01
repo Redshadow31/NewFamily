@@ -1,3 +1,237 @@
+// ==========================
+// STAFF PAGE – New Family
+// ==========================
+
+const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
+let token = "";
+
+// ================== DATA STAFF ==================
+// Tu gardes ton tableau STAFF existant (rôles, emoji, title, members).
+// Exemple minimal :
+// const STAFF = [
+//   { role: "founder", emoji: "👑", title: "Fondateurs", members: [
+//     { login: "clarastonewall", name: "Clara", desc: "Fondatrice & modératrice" }
+//   ] }
+// ];
+// Mets ton STAFF complet ici ⬆️
+ 
+// ================== UTILS ==================
+const escapeHtml = (s) =>
+  String(s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+function badgeClass(role){
+  if(role==="founder") return "badge--founder";
+  if(role==="adjoint") return "badge--adjoint";
+  if(role==="mentor") return "badge--mentor";
+  if(role==="junior") return "badge--junior";
+  return "";
+}
+function badgeText(role){
+  if(role==="founder") return "Fondateur";
+  if(role==="adjoint") return "Adjoint";
+  if(role==="mentor") return "Mentor";
+  if(role==="junior") return "Junior";
+  return "Staff";
+}
+
+// ================== TOKEN & FETCH ==================
+async function getToken(){
+  try {
+    const res = await fetch("/.netlify/functions/getTwitchData");
+    if(res.ok){
+      const data = await res.json();
+      token = data.access_token;
+    }
+  } catch(e){ console.error(e); }
+}
+
+async function getUsersByLogin(logins){
+  const map = {};
+  for(let i=0;i<logins.length;i+=90){
+    const chunk = logins.slice(i,i+90);
+    const query = chunk.map(l=>`login=${encodeURIComponent(l)}`).join("&");
+    const url = `https://api.twitch.tv/helix/users?${query}`;
+    const res = await fetch(url, {
+      headers: { "Client-ID": clientId, Authorization: "Bearer " + token }
+    });
+    if(res.ok){
+      const json = await res.json();
+      (json.data || []).forEach(u=>{
+        map[(u.login||"").toLowerCase()] = u.profile_image_url;
+      });
+    }
+  }
+  return map;
+}
+
+async function getLiveStatus(logins){
+  const liveSet = new Set();
+  for(let i=0;i<logins.length;i+=100){
+    const chunk = logins.slice(i,i+100);
+    const query = chunk.map(l=>`user_login=${encodeURIComponent(l)}`).join("&");
+    const url = `https://api.twitch.tv/helix/streams?${query}`;
+    const res = await fetch(url, {
+      headers: { "Client-ID": clientId, Authorization: "Bearer " + token }
+    });
+    if(res.ok){
+      const json = await res.json();
+      (json.data || []).forEach(s=>{
+        liveSet.add((s.user_login||"").toLowerCase());
+      });
+    }
+  }
+  return liveSet;
+}
+
+// ================== RENDU ==================
+function renderSection(container, { role, emoji, title, members }, avatarMap, liveSet, q=""){
+  const section = document.createElement("section");
+  section.className = "staff-section reveal";
+
+  const h2 = document.createElement("h2");
+  h2.textContent = `${emoji} ${title}`;
+  section.appendChild(h2);
+
+  const grid = document.createElement("div");
+  grid.className = "staff-grid";
+
+  members
+    .filter(m => m.name.toLowerCase().includes(q) || m.login.toLowerCase().includes(q))
+    .forEach(m => {
+      const login = m.login.toLowerCase();
+      const imgSrc = avatarMap[login] || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+      const isLive = liveSet?.has(login);
+
+      const card = document.createElement("article");
+      card.className = "staff-card";
+      card.innerHTML = `
+        <div class="avatar-box">
+          ${isLive ? `<span class="live-dot">LIVE</span>` : ""}
+          <img class="avatar" loading="lazy" decoding="async" src="${imgSrc}" alt="Avatar de ${escapeHtml(m.name)}">
+          <span class="badge ${badgeClass(role)}">${badgeText(role)}</span>
+        </div>
+        <div class="body">
+          <h3 class="name">${escapeHtml(m.name)}</h3>
+          <p class="desc">${escapeHtml(m.desc)}</p>
+          <div class="btns" style="margin-top:.4rem;display:flex;gap:.4rem;justify-content:center">
+            <a class="about-button" href="https://twitch.tv/${login}" target="_blank" rel="noopener">Twitch</a>
+            <button class="about-button" data-more="${login}" data-role="${role}">Plus</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+  section.appendChild(grid);
+  container.appendChild(section);
+}
+
+function showSkeletons(){
+  const root = document.getElementById("staff-root");
+  root.innerHTML = "";
+  const sk = document.createElement("section");
+  sk.className = "staff-section";
+  const grid = document.createElement("div");
+  grid.className = "staff-grid";
+  for (let i=0;i<8;i++){
+    const card = document.createElement("div");
+    card.className = "skel";
+    card.innerHTML = `<div class="ph big"></div><div class="ph" style="width:60%;margin:.4rem auto"></div><div class="ph" style="width:80%;margin:.3rem auto"></div>`;
+    grid.appendChild(card);
+  }
+  sk.appendChild(grid);
+  root.appendChild(sk);
+}
+
+function setupReveal(){
+  const els = document.querySelectorAll('.reveal');
+  if(!els.length) return;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.15});
+  els.forEach(el=>io.observe(el));
+}
+
+// ================== INIT ==================
+async function initStaff(){
+  showSkeletons();
+  await getToken();
+  if (!token) { console.error("❌ Token manquant"); return; }
+
+  const root = document.getElementById("staff-root");
+  const allLogins = STAFF.flatMap(g => g.members.map(m => m.login.toLowerCase()));
+  const [avatarMap, liveSet] = await Promise.all([
+    getUsersByLogin(allLogins),
+    getLiveStatus(allLogins)
+  ]);
+
+  let activeRole = "all";
+  let query = "";
+
+  function renderAll(){
+    root.innerHTML = "";
+    const groups = activeRole === "all" ? STAFF : STAFF.filter(g => g.role === activeRole);
+    groups.forEach(group => renderSection(root, group, avatarMap, liveSet, query));
+    setupReveal();
+  }
+  renderAll();
+
+  // onglets
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab").forEach(x=>x.classList.remove("is-active"));
+      t.classList.add("is-active");
+      activeRole = t.dataset.role;
+      renderAll();
+    });
+  });
+
+  // recherche
+  const input = document.getElementById("staff-search");
+  if(input){
+    input.addEventListener("input", ()=>{
+      query = input.value.trim().toLowerCase();
+      renderAll();
+    });
+  }
+
+  // modale “Plus”
+  document.addEventListener("click", (e)=>{
+    const btn = e.target.closest("[data-more]");
+    if(!btn) return;
+    const login = btn.getAttribute("data-more");
+    const role = btn.getAttribute("data-role");
+    const member = STAFF.flatMap(g=>g.members).find(m=>m.login.toLowerCase()===login);
+    if(!member) return;
+
+    const modal = document.getElementById("staff-modal");
+    document.getElementById("m-avatar").src = avatarMap[login] || "";
+    document.getElementById("m-avatar").alt = `Avatar de ${member.name}`;
+    document.getElementById("m-name").textContent = member.name;
+    document.getElementById("m-role").textContent = badgeText(role);
+    document.getElementById("m-desc").textContent = member.desc;
+    document.getElementById("m-links").innerHTML =
+      `<a href="https://twitch.tv/${login}" target="_blank" rel="noopener">Voir la chaîne</a>`;
+    modal.setAttribute("aria-hidden", "false");
+  });
+
+  // fermer modale
+  document.getElementById("staff-close")?.addEventListener("click", ()=> {
+    document.getElementById("staff-modal").setAttribute("aria-hidden", "true");
+  });
+  document.getElementById("staff-modal")?.addEventListener("click", (e)=>{
+    if(e.target.id === "staff-modal"){
+      e.currentTarget.setAttribute("aria-hidden", "true");
+    }
+  });
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape") document.getElementById("staff-modal")?.setAttribute("aria-hidden", "true");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initStaff);
 /* =========================================================
    Staff – rendu en vignettes + avatars Twitch automatiques
    Utilise la même auth Netlify/Twitch que ton site.
