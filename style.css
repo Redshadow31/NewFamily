@@ -841,9 +841,7 @@ body h1, body h2, body h3, body h4, body p {
   border-radius:10px; font-weight:600;
 }
 .btn-read:hover{ filter:brightness(1.05); }
-<a href="blog.html" class="about-button">
-  📰 Actualités
-</a>
+
 /* Aligne le bouton "Regarder" en bas de toutes les cartes */
 .user-card { height: 100%; display: flex; flex-direction: column; }
 .user-card .card-body { display: flex; flex-direction: column; flex: 1; }
@@ -1156,4 +1154,27 @@ button.about-button:hover {
   margin: 0 0 1rem;
   font-style: italic;
 }
+/* === FIX : déverrouille les clics sur les boutons dans les cartes staff === */
+.staff-card::before{
+  pointer-events: none !important; /* l’overlay décoratif ne bloque plus les clics */
+}
+
+/* (sécurité) s’assure que le contenu cliquable est au-dessus */
+.staff-card { position: relative; }
+.staff-card .body { position: relative; z-index: 1; }
+.staff-card .avatar-box { position: relative; z-index: 0; }
+
+/* Uniformise le style <a> et <button> avec la même classe */
+button.about-button {
+  background: #e74c3c;
+  color: #fff;
+  padding: 0.8em 1.2em;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+  transition: background .3s, transform .3s;
+}
+button.about-button:hover { background: #845ec2; transform: scale(1.05); }
 
