@@ -1125,4 +1125,29 @@ a:focus-visible, button:focus-visible, .tab:focus-visible, input:focus-visible{o
 
 /* (optionnel) si tu veux l’ancien style or sur STAFF aussi : dé-commente la ligne ci-dessous */
 /* .staff-card .badge{ background:linear-gradient(135deg,#fff8db,#ffe18b) !important; color:#8a6d00 !important; border-color:#f1c40f !important; } */
+/* Uniformise les boutons et les liens */
+.about-button,
+.about-button:link,
+.about-button:visited,
+.about-button:active,
+button.about-button {
+  display: inline-block;
+  background: #e74c3c;
+  color: white;
+  padding: 0.6em 1.1em;
+  border: none;                /* enlève le style bouton natif */
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.about-button:hover,
+button.about-button:hover {
+  background: #845ec2;
+  transform: scale(1.05);
+}
 
