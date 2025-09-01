@@ -1150,4 +1150,10 @@ button.about-button:hover {
   background: #845ec2;
   transform: scale(1.05);
 }
+.role-desc{
+  text-align:center;
+  color:#555;
+  margin: 0 0 1rem;
+  font-style: italic;
+}
 
