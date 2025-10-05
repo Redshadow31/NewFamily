@@ -62,9 +62,9 @@ const STAFF = [
     members: [
       { login: "lespydyverse", name: "le spydy",
         desc: "Jeux gacha. Enthousiasme et curiosité." },
-      { login: "sigurdson64", name: "Mc aliena",
+      { login: "sigurdson64", name: "Sigur",
         desc: "Call of, une tuerie mais pas dans vos mp" },
-      { login: "mmesigurdson64", name: "Mc Fly",
+      { login: "mmesigurdson64", name: "Mme Sigur",
        desc: "de Call of à la cuisine, une vrai régal" },
     ]
   },
