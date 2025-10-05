@@ -62,10 +62,10 @@ const STAFF = [
     members: [
       { login: "lespydyverse", name: "le spydy",
         desc: "Jeux gacha. Enthousiasme et curiosité." },
-      { login: "mcaliena", name: "Mc aliena",
-        desc: "ARK & Medieval Dynasty. Sérieuse et impliquée." },
-      { login: "mcfly_59140", name: "Mc Fly",
-       desc: "Farming Simulator 25 & GTA RP. Convivialité et énergie." },
+      { login: "sigurdson64", name: "Mc aliena",
+        desc: "Call of, une tuerie mais pas dans vos mp" },
+      { login: "mmesigurdson64", name: "Mc Fly",
+       desc: "de Call of à la cuisine, une vrai régal" },
     ]
   },
 ];
