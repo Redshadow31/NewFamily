@@ -610,6 +610,27 @@ function renderFeaturedLive(ev, usersInfo, onlineUsers){
 
   section.style.display = "block";
 }
+/* === TEST VIDEO TWITCH LIVE === */
+function testTwitchEmbed() {
+  const testContainer = document.createElement('div');
+  testContainer.id = 'test-twitch-player';
+  testContainer.style.width = '480px';
+  testContainer.style.height = '270px';
+  testContainer.style.margin = '2rem auto';
+  testContainer.style.borderRadius = '12px';
+  testContainer.style.overflow = 'hidden';
+  testContainer.style.boxShadow = '0 0 20px #9146ff70';
+  document.body.prepend(testContainer);
+
+  new Twitch.Player("test-twitch-player", {
+    width: "100%",
+    height: "100%",
+    channel: "nexou31", // 👈 tu peux mettre le pseudo de ton choix ici
+    autoplay: true,
+    muted: true,
+    parent: [window.location.hostname]
+  });
+}
 
 /* ---- GO ---- */
 init();
