@@ -1,16 +1,16 @@
 /* =========================================================
-   New Family — script.js (FINAL 2025)
+   New Family — script.js (FINAL 2025 - fixed)
    - Résilient aux fichiers manquants
    - Moyenne lives/jour sur 30 jours
-   - Mise en avant exceptionnelle (featured.json) avec visuel
-   ========================================================= */
+   - Mise en avant exceptionnelle (featured.json) avec lecteur Twitch temps réel
+========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
 
-/* -------------------------------
+/* -------------------------------------------------------
    THEME
-----------------------------------*/
+-------------------------------------------------------- */
 const THEME_CLASS = "dark";
 
 function applyThemeFromStorage() {
@@ -68,9 +68,9 @@ function setupThemeToggle() {
   });
 }
 
-/* -------------------------------
+/* -------------------------------------------------------
    AUTH & appels Twitch
-----------------------------------*/
+-------------------------------------------------------- */
 async function getToken() {
   const response = await fetch("/.netlify/functions/getTwitchData").catch(() => null);
   if (!response || !response.ok) {
@@ -149,16 +149,18 @@ async function fetchVIPList() {
     if (!response.ok) return [];
     const data = await response.json();
     return data.map(item =>
-      typeof item === "string" ? item.toLowerCase() : String(item.login || "").toLowerCase()
+      typeof item === "string"
+        ? item.toLowerCase()
+        : String(item.login || "").toLowerCase()
     );
   } catch {
     return [];
   }
 }
 
-/* -------------------------------
+/* -------------------------------------------------------
    🏷️ Badges de rôle
-----------------------------------*/
+-------------------------------------------------------- */
 function getRoleBadge(user) {
   const u = (user || "").toLowerCase();
   if (["clarastonewall","nexou31","red_shadow_31"].includes(u)) {
@@ -176,9 +178,9 @@ function getRoleBadge(user) {
   return "";
 }
 
-/* -------------------------------
-   🖼️ Rendu des cartes
-----------------------------------*/
+/* -------------------------------------------------------
+   🖼️ Cartes utilisateurs
+-------------------------------------------------------- */
 function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
   const card = document.createElement("div");
   card.classList.add("user-card");
@@ -201,7 +203,7 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
 
   card.innerHTML = `
     <div class="media-wrap">
-      <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+      <img src="${img}" loading="lazy" alt="Preview de ${escapeHtml(user)}">
       ${getRoleBadge(user)}
       ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
     </div>
@@ -209,7 +211,7 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
       <div class="username">${escapeHtml(user)}</div>
       <p class="title">${title}</p>
       <div class="card-footer">
-        <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+        <a href="${link}" target="_blank" rel="noopener" aria-label="Regarder ${escapeHtml(user)} sur Twitch">Regarder</a>
       </div>
     </div>
   `;
@@ -225,9 +227,9 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-/* -------------------------------
+/* -------------------------------------------------------
    📊 Stats dynamiques
-----------------------------------*/
+-------------------------------------------------------- */
 function setStatValue(id, value) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -275,9 +277,12 @@ function computeLivesPerDayAverage() {
   return sum / lastDays.length;
 }
 
-/* -------------------------------
-   🔥 Mise en avant — helpers
-----------------------------------*/
+/* -------------------------------------------------------
+   🔥 Mise en avant — lecteur temps réel
+-------------------------------------------------------- */
+// parent doit correspondre au domaine de la page (sans www)
+const TWITCH_PARENT = window.location.hostname.replace(/^www\./, "");
+
 function fmtUptime(startedAt) {
   if (!startedAt) return "";
   const diffMs = Date.now() - new Date(startedAt).getTime();
@@ -287,10 +292,32 @@ function fmtUptime(startedAt) {
   return h ? `${h}h${mm.toString().padStart(2, "0")}` : `${mm} min`;
 }
 
-async function renderFeaturedLive(ev, usersInfo) {
+function mountFeaturedPlayer(channel) {
+  const container = document.getElementById("featured-player");
+  if (!container) return;
+
+  // Afficher/Reset le conteneur
+  container.style.display = "block";
+  container.innerHTML = "";
+
+  try {
+    // Le SDK Twitch fournit la variable globale "Twitch"
+    new Twitch.Player("featured-player", {
+      width: "100%",
+      height: "100%",
+      channel,
+      muted: true,      // autoplay => muted
+      autoplay: true,
+      parent: [TWITCH_PARENT, "localhost", "127.0.0.1"]
+    });
+  } catch (e) {
+    console.error("Erreur création lecteur Twitch:", e);
+  }
+}
+
+async function renderFeaturedLive(ev, usersInfo, onlineUsers) {
   const section = document.getElementById("featured-live");
   if (!section) return;
-  section.style.display = "block";
 
   const link = document.getElementById("featured-link");
   const channelA = document.getElementById("fl-channel");
@@ -306,11 +333,11 @@ async function renderFeaturedLive(ev, usersInfo) {
   if (link) link.href = url;
   if (channelA) { channelA.href = url; channelA.textContent = ev.user; }
 
-  // stream live
+  // Essaie de récupérer le stream live du channel mis en avant
   const sRes = await fetchStreams([login]);
   const s = sRes?.data?.[0];
 
-  // avatar
+  // Avatar utilisateur si possible
   let userInfo = usersInfo?.find(u => (u.login || "").toLowerCase() === login);
   if (!userInfo) {
     try {
@@ -332,24 +359,38 @@ async function renderFeaturedLive(ev, usersInfo) {
     if (thumbImg) {
       thumbImg.src = (s.thumbnail_url || "").replace("{width}", "1280").replace("{height}", "720");
       thumbImg.alt = `Aperçu du live de ${ev.user}`;
+      thumbImg.loading = "lazy";
     }
+    // Monte le lecteur vidéo temps réel
+    mountFeaturedPlayer(login);
   } else {
+    // Offline : visuel statique & on masque le player
+    const player = document.getElementById("featured-player");
+    if (player) player.style.display = "none";
+
     if (titleEl) titleEl.textContent = `${ev.user} — mise en avant exceptionnelle`;
     if (gameEl) gameEl.textContent = "New Family";
     if (viewersEl) viewersEl.textContent = `👀 —`;
     if (uptimeEl) uptimeEl.textContent = `⏱️ —`;
-    if (thumbImg) thumbImg.src = "assets/featured_placeholder.jpg";
+    if (thumbImg) {
+      thumbImg.src = "assets/featured_placeholder.jpg";
+      thumbImg.alt = "Mise en avant New Family";
+      thumbImg.loading = "lazy";
+    }
   }
 
   if (userInfo && avatarImg) {
     avatarImg.src = userInfo.profile_image_url;
     avatarImg.alt = `Avatar de ${ev.user}`;
+    avatarImg.loading = "lazy";
   }
+
+  section.style.display = "block";
 }
 
-/* -------------------------------
+/* -------------------------------------------------------
    🚀 Init principale
-----------------------------------*/
+-------------------------------------------------------- */
 async function init() {
   setupThemeToggle();
   nfSetupSkeletons();
@@ -369,11 +410,13 @@ async function init() {
 
   // Streams (2 chunks)
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
-  const onlineUsers = [];
-  for (const group of streamChunks) {
-    const data = await fetchStreams(group);
-    if (data?.data?.length) onlineUsers.push(...data.data);
-  }
+  const onlineUsers = await Promise.all(
+    streamChunks.map(chunk => fetchStreams(chunk))
+  ).then(resList => {
+    const arr = [];
+    for (const r of resList) if (r?.data?.length) arr.push(...r.data);
+    return arr;
+  });
 
   // Stats dynamiques
   recordLiveSnapshot(onlineUsers.length);
@@ -434,32 +477,36 @@ async function init() {
   window.NF_ALL_USERS = allUsers;
   startLivePolling();
 
-// 🎯 Mise en avant exceptionnelle (featured.json) — anticache + fenêtre de tolérance
-try {
-  const fRes = await fetch(`featured.json?ts=${Date.now()}`);
-  if (fRes.ok) {
-    const list = await fRes.json();
-    const now = Date.now();
+  // 🎯 Mise en avant exceptionnelle (featured.json) — anticache + fenêtre de tolérance
+  try {
+    const fRes = await fetch(`featured.json?ts=${Date.now()}`);
+    if (fRes.ok) {
+      const list = await fRes.json();
+      const now = Date.now();
 
-    // actif si dans [-5 min ; +2h10] par rapport à 'date'
-    const isActive = (iso) => {
-      const start = new Date(iso).getTime();
-      return now >= (start - 5*60*1000) && now <= (start + 130*60*1000);
-    };
+      // actif si dans [-5 min ; +2h10] par rapport à 'date'
+      const isActive = (iso) => {
+        const start = new Date(iso).getTime();
+        return now >= (start - 5 * 60 * 1000) && now <= (start + 130 * 60 * 1000);
+      };
 
-    // on prend le premier évènement actif
-    const current = list.find(ev => isActive(ev.date));
-    if (current) {
-      renderFeaturedLive(current, usersInfo, onlineUsers);
+      const current = list.find(ev => isActive(ev.date));
+      if (current) {
+        await renderFeaturedLive(current, usersInfo, onlineUsers);
+      } else {
+        // Rien d'actif : cacher player si présent
+        const player = document.getElementById("featured-player");
+        if (player) player.style.display = "none";
+      }
     }
+  } catch (e) {
+    console.warn("Erreur lecture featured.json", e);
   }
-} catch (e) {
-  console.warn("Erreur lecture featured.json", e);
 }
-   }
 
-
-/* ====== Helpers accueil ====== */
+/* -------------------------------------------------------
+   Helpers accueil (livebar, stats, reveal, skeletons)
+-------------------------------------------------------- */
 function nfSyncLiveBar() {
   const liveCountEl = document.getElementById("live-count");
   const barCount = document.getElementById("nf-live-count");
@@ -562,118 +609,5 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   setInterval(poll, intervalMs);
 }
 
-/* ====== Fonction mise en avant enrichie ====== */
-function minutesSince(iso){
-  const diff = Math.max(0, (Date.now() - new Date(iso).getTime())/60000);
-  return Math.round(diff);
-}
-
-/**
- * Rendu enrichi de la mise en avant :
- * - vignette HD du stream si dispo
- * - jeu, viewers, durée, titre du stream
- */
-function renderFeaturedLive(ev, usersInfo, onlineUsers){
-  const section = document.getElementById("featured-live");
-  if (!section) return;
-
-  // user + lien
-  const user = String(ev.user || "").toLowerCase();
-  const link = document.getElementById("featured-link");
-  const userEl = document.getElementById("featured-user");
-  if (link) link.href = ev.url || `https://twitch.tv/${user}`;
-  if (userEl) userEl.textContent = `@${user}`;
-
-  // essaie de trouver le stream courant
-  const stream = (onlineUsers || []).find(s => (s.user_login||"").toLowerCase() === user);
-  const gameEl = document.getElementById("featured-game");
-  const viewersEl = document.getElementById("featured-viewers");
-  const sinceEl = document.getElementById("featured-since");
-  const titleEl = document.getElementById("featured-stream-title");
-  const bg = document.getElementById("featured-bg");
-
-  if (stream){
-    const thumb = (stream.thumbnail_url||"").replace("{width}","1280").replace("{height}","720");
-    if (bg) bg.style.backgroundImage = `url("${thumb}")`;
-    if (gameEl) gameEl.textContent = stream.game_name || "En live";
-    if (viewersEl) viewersEl.textContent = `👁️ ${stream.viewer_count||0}`;
-    if (sinceEl) sinceEl.textContent = `⏱️ ${minutesSince(stream.started_at)} min`;
-    if (titleEl) titleEl.textContent = stream.title || "Live en cours";
-  } else {
-    // pas trouvé (offline ?)
-    if (bg) bg.style.background = "linear-gradient(135deg,#2a1050,#0c0720)";
-    if (gameEl) gameEl.textContent = "Mise en avant";
-    if (viewersEl) viewersEl.textContent = "👁️ —";
-    if (sinceEl) sinceEl.textContent = "⏱️ —";
-    if (titleEl) titleEl.textContent = "Live mis en avant";
-  }
-
-  section.style.display = "block";
-   // Affiche le lecteur vidéo en temps réel si le stream est live
-if (stream) {
-  mountFeaturedPlayer(user);
-}
-}
-/* === TEST VIDEO TWITCH LIVE === */
-function testTwitchEmbed() {
-  const testContainer = document.createElement('div');
-  testContainer.id = 'test-twitch-player';
-  testContainer.style.width = '480px';
-  testContainer.style.height = '270px';
-  testContainer.style.margin = '2rem auto';
-  testContainer.style.borderRadius = '12px';
-  testContainer.style.overflow = 'hidden';
-  testContainer.style.boxShadow = '0 0 20px #9146ff70';
-  document.body.prepend(testContainer);
-
-  new Twitch.Player("test-twitch-player", {
-    width: "100%",
-    height: "100%",
-    channel: "thedark_sand", // 👈 tu peux mettre le pseudo de ton choix ici
-    autoplay: true,
-    muted: true,
-    parent: [window.location.hostname]
-  });
-   /* === Lecteur Twitch intégré pour la mise en avant === */
-function mountFeaturedPlayer(channel) {
-  const parent = window.location.hostname.replace(/^www\./, "");
-  const container = document.getElementById("featured-player");
-  if (!container) return;
-
-  container.style.display = "block";
-
-  // Si le lecteur existe déjà, on le remplace
-  container.innerHTML = "";
-
-  try {
-    // eslint-disable-next-line no-undef
-    new Twitch.Player("featured-player", {
-      width: "100%",
-      height: "100%",
-      channel: channel,
-      muted: true,
-      autoplay: true,
-      parent: [parent, "localhost", "127.0.0.1"]
-    });
-  } catch (e) {
-    console.error("Erreur création lecteur Twitch:", e);
-  }
-}
-
-}
-
 /* ---- GO ---- */
 init();
-// On attend que la librairie Twitch soit chargée
-window.addEventListener("load", () => {
-  const twitchScript = document.getElementById("twitch-sdk");
-  if (twitchScript) {
-    twitchScript.addEventListener("load", () => {
-      console.log("✅ Twitch SDK chargé, lancement du test vidéo");
-      testTwitchEmbed();
-    });
-  } else {
-    console.warn("⚠️ Twitch SDK non trouvé, test annulé");
-  }
-});
-
