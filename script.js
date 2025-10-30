@@ -625,7 +625,7 @@ function testTwitchEmbed() {
   new Twitch.Player("test-twitch-player", {
     width: "100%",
     height: "100%",
-    channel: "nexou31", // 👈 tu peux mettre le pseudo de ton choix ici
+    channel: "thedark_sand", // 👈 tu peux mettre le pseudo de ton choix ici
     autoplay: true,
     muted: true,
     parent: [window.location.hostname]
