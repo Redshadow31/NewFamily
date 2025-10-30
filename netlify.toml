@@ -1,5 +1,7 @@
-[functions]
-  directory = "netlify/functions"
 [build]
+  command = "npm ci && npm run build"  # npm ci pour install rapide/locké
   publish = "."
   functions = "netlify/functions"
+
+[functions]
+  directory = "netlify/functions"
