@@ -1,60 +1,46 @@
 /* =========================================================
-   New Family — script.js (READY)
-   - API Twitch + rendu cartes
-   - Thème clair/sombre
-   - Badges rôles + LIVE
-   - Stats dynamiques (Actifs & Lives/jour)
-   - Polling live (maj périodique sans recharger la page)
+   New Family — script.js (FIXED & READY)
+   - Résilient aux fichiers manquants
+   - Moyenne lives/jour sur 30 jours (inclut 0)
+   - UI + polling + badges + VIP
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
 
 /* -------------------------------
-   🎛️ Thème clair/sombre
+   THEME clair/sombre
 ----------------------------------*/
 const THEME_CLASS = "dark";
 
 function applyThemeFromStorage() {
-  const saved = localStorage.getItem("theme"); // "dark" | "light" | null
+  const saved = localStorage.getItem("theme");
   const root = document.documentElement;
-
-  if (saved === "dark") {
-    root.classList.add(THEME_CLASS);
-  } else if (saved === "light") {
-    root.classList.remove(THEME_CLASS);
-  } else {
-    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  if (saved === "dark") root.classList.add(THEME_CLASS);
+  else if (saved === "light") root.classList.remove(THEME_CLASS);
+  else {
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
     root.classList.toggle(THEME_CLASS, !!prefersDark);
   }
 }
 
 function setupThemeToggle() {
   applyThemeFromStorage();
-
   let btn = document.getElementById("theme-toggle");
   if (!btn) {
     btn = document.createElement("button");
     btn.id = "theme-toggle";
     btn.type = "button";
     btn.setAttribute("aria-label", "Changer de thème");
-    btn.style.position = "absolute";
-    btn.style.top = "1rem";
-    btn.style.right = "1rem";
-    btn.style.background = "var(--surface)";
-    btn.style.color = "var(--text)";
-    btn.style.border = "1px solid var(--border)";
-    btn.style.borderRadius = "50%";
-    btn.style.width = "42px";
-    btn.style.height = "42px";
-    btn.style.fontSize = "1.1rem";
-    btn.style.cursor = "pointer";
-    btn.style.boxShadow = "var(--shadow)";
-    btn.style.display = "flex";
-    btn.style.alignItems = "center";
-    btn.style.justifyContent = "center";
-    btn.style.transition = "background .2s ease, transform .2s ease";
-
+    btn.style.cssText = `
+      position:absolute;top:1rem;right:1rem;
+      background:var(--surface);color:var(--text);
+      border:1px solid var(--border);border-radius:50%;
+      width:42px;height:42px;font-size:1.1rem;
+      cursor:pointer;box-shadow:var(--shadow);
+      display:flex;align-items:center;justify-content:center;
+      transition:background .2s,transform .2s;
+    `;
     const header = document.querySelector("header") || document.body;
     if (!header.style.position) header.style.position = "relative";
     header.appendChild(btn);
@@ -62,202 +48,178 @@ function setupThemeToggle() {
 
   const setIcon = () => {
     const isDark = document.documentElement.classList.contains(THEME_CLASS);
-    btn.textContent = isDark ? "☀️" : "🌙";
-    btn.title = isDark ? "Passer en mode clair" : "Passer en mode sombre";
+    btn.textContent = isDark ? "Sun" : "Moon";
+    btn.title = isDark ? "Mode clair" : "Mode sombre";
   };
   setIcon();
 
   btn.addEventListener("click", () => {
-    const root = document.documentElement;
-    root.classList.toggle(THEME_CLASS);
-    const isDark = root.classList.contains(THEME_CLASS);
+    document.documentElement.classList.toggle(THEME_CLASS);
+    const isDark = document.documentElement.classList.contains(THEME_CLASS);
     localStorage.setItem("theme", isDark ? "dark" : "light");
     setIcon();
   });
 }
 
 /* -------------------------------
-   🔑 Auth & appels Twitch
+   AUTH & appels Twitch
 ----------------------------------*/
 async function getToken() {
-  const response = await fetch("/.netlify/functions/getTwitchData");
-  const data = await response.json();
-  token = data.access_token;
+  try {
+    const res = await fetch("/.netlify/functions/getTwitchData");
+    const data = await res.json();
+    token = data.access_token;
+  } catch (e) {
+    console.error("Token Twitch échoué :", e);
+  }
 }
 
+/* --- CHARGEMENT RÉSILIENT DES LISTES --- */
 async function fetchUserLists() {
-  const [res1, res2, res3] = await Promise.all([
-    fetch("users1.json"),
-    fetch("users2.json"),
-    fetch("users3.json"),
-  ]);
+  const files = ["users1.json", "users2.json", "users3.json"];
+  const all = [];
 
-  const users1 = await res1.json();
-  const users2 = await res2.json();
-  const users3 = await res3.json();
+  for (const file of files) {
+    try {
+      const res = await fetch(file);
+      if (!res.ok) {
+        console.warn(`Fichier ${file} non trouvé (HTTP ${res.status})`);
+        continue;
+      }
+      const data = await res.json();
+      all.push(...(Array.isArray(data) ? data : []));
+      console.info(`Chargé ${file} → ${data.length} users`);
+    } catch (err) {
+      console.warn(`Échec chargement ${file}:`, err.message);
+    }
+  }
 
-  // Fusion + déduplication (lowercase)
-  return [...new Set([...users1, ...users2, ...users3].map(u => (u || "").toLowerCase()))];
+  return [...new Set(all.map(u => (u || "").toLowerCase().trim()))];
 }
 
+/* --- Twitch API --- */
 async function fetchStreams(logins) {
-  if (!logins || !logins.length) return { data: [] };
-  const query = logins.map((user) => `user_login=${encodeURIComponent(user)}`).join("&");
+  if (!logins?.length) return { data: [] };
+  const query = logins.map(l => `user_login=${encodeURIComponent(l)}`).join("&");
   const url = `https://api.twitch.tv/helix/streams?${query}`;
   try {
-    const response = await fetch(url, {
-      headers: {
-        "Client-ID": clientId,
-        Authorization: "Bearer " + token,
-      },
+    const r = await fetch(url, {
+      headers: { "Client-ID": clientId, Authorization: `Bearer ${token}` },
     });
-    if (!response.ok) {
-      console.warn(`⚠️ fetchStreams a échoué avec le code ${response.status}`);
-      return { data: [] };
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("❌ Erreur dans fetchStreams :", error);
+    return r.ok ? await r.json() : { data: [] };
+  } catch {
     return { data: [] };
   }
 }
 
-async function fetchUsersInfo(allUsers) {
+async function fetchUsersInfo(logins) {
   const results = [];
-  for (let i = 0; i < allUsers.length; i += 100) {
-    const chunk = allUsers.slice(i, i + 100);
-    const query = chunk.map((user) => `login=${encodeURIComponent(user)}`).join("&");
+  for (let i = 0; i < logins.length; i += 100) {
+    const chunk = logins.slice(i, i + 100);
+    const query = chunk.map(l => `login=${encodeURIComponent(l)}`).join("&");
     const url = `https://api.twitch.tv/helix/users?${query}`;
     try {
-      const response = await fetch(url, {
-        headers: {
-          "Client-ID": clientId,
-          Authorization: "Bearer " + token,
-        },
+      const r = await fetch(url, {
+        headers: { "Client-ID": clientId, Authorization: `Bearer ${token}` },
       });
-      if (!response.ok) throw new Error(`Erreur pour : ${chunk.join(", ")}`);
-      const data = await response.json();
-      results.push(...data.data);
-    } catch (error) {
-      console.warn("❌ Utilisateurs ignorés :", chunk, "-", error.message);
-    }
+      if (r.ok) results.push(...(await r.json()).data);
+    } catch {}
   }
   return results;
 }
 
 async function fetchVIPList() {
   try {
-    const response = await fetch("vip.json");
-    if (!response.ok) return [];
-
-    const data = await response.json();
-    // Toujours renvoyer une liste de pseudos en minuscule
-    return data.map(item =>
-      typeof item === "string"
-        ? item.toLowerCase()
-        : String(item.login || "").toLowerCase()
-    );
+    const r = await fetch("vip.json");
+    if (!r.ok) return [];
+    const data = await r.json();
+    return data.map(i => (typeof i === "string" ? i : i.login || "").toLowerCase());
   } catch {
     return [];
   }
 }
 
-
 /* -------------------------------
-   🏷️ Badges de rôle
+   BADGES rôle
 ----------------------------------*/
 function getRoleBadge(user) {
-  const u = (user || "").toLowerCase();
-  if (["clarastonewall","nexou31","red_shadow_31"].includes(u)) {
-    return '<span class="badge badge--founder">🔮 Fondateur</span>';
-  }
-  if (["selena_akemi","nangel89","tabs_up","jenny31200"].includes(u)) {
-    return '<span class="badge badge--adjoint">🏛️ Adjoint</span>';
-  }
-  if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikossama"].includes(u)) {
-    return '<span class="badge badge--mentor">🛡️ Mentor</span>';
-  }
-  if (["zylkao","sigurdson64","mmesigurdson64","mcfly_59140"].includes(u)) {
-    return '<span class="badge badge--junior">🔧 Junior</span>';
-  }
+  const u = user.toLowerCase();
+  if (["clarastonewall", "nexou31", "red_shadow_31"].includes(u))
+    return '<span class="badge badge--founder">Founder</span>';
+  if (["selena_akemi", "nangel89", "tabs_up", "jenny31200"].includes(u))
+    return '<span class="badge badge--adjoint">Adjoint</span>';
+  if (["mahyurah", "livio_on", "rubbycrea", "leviacarpe", "yaya_romali", "thedark_sand", "gilbert_hime", "saikossama"].includes(u))
+    return '<span class="badge badge--mentor">Mentor</span>';
+  if (["zylkao", "sigurdson64", "mmesigurdson64", "mcfly_59140"].includes(u))
+    return '<span class="badge badge--junior">Junior</span>';
   return "";
 }
 
 /* -------------------------------
-   🖼️ Rendu des cartes
+   CARTE utilisateur
 ----------------------------------*/
 function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
   const card = document.createElement("div");
-  card.classList.add("user-card");
-  if (isVip) card.classList.add("vip");
-  if (!isOnline) card.classList.add("offline");
-  if (isOnline) {
-    card.classList.add("is-live");
-    card.setAttribute("data-live", "LIVE");
-  }
+  card.className = `user-card${isVip ? " vip" : ""}${isOnline ? " is-live" : " offline"}`;
+  if (isOnline) card.dataset.live = "LIVE";
 
   const link = `https://twitch.tv/${user}`;
   const game = isOnline ? (streamData.game_name || "en live") : "";
   const title = isOnline
-    ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue actuellement à <em>${escapeHtml(game)}</em>.`
+    ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue à <em>${escapeHtml(game)}</em>.`
     : "Hors ligne";
-
   const img = isOnline
-    ? (streamData.thumbnail_url || "")
-        .replace("{width}", "320")
-        .replace("{height}", "180")
-    : (userInfo?.profile_image_url ||
-       "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
+    ? (streamData.thumbnail_url || "").replace("{width}", "320").replace("{height}", "180")
+    : (userInfo?.profile_image_url || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
   card.innerHTML = `
-  <div class="media-wrap">
-    <img src="${img}" alt="Preview de ${escapeHtml(user)}">
-    ${getRoleBadge(user)}
-    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
-  </div>
-  <div class="card-body">
-    <div class="username">${escapeHtml(user)}</div>
-    <p class="title">${title}</p>
-    <div class="card-footer">
-      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+    <div class="media-wrap">
+      <img src="${img}" alt="Preview ${escapeHtml(user)}">
+      ${getRoleBadge(user)}
+      ${isVip ? `<span class="vip-chip">VIP</span>` : ""}
     </div>
-  </div>
-`;
+    <div class="card-body">
+      <div class="username">${escapeHtml(user)}</div>
+      <p class="title">${title}</p>
+      <div class="card-footer">
+        <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+      </div>
+    </div>
+  `;
   return card;
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 /* -------------------------------
-   📊 Stats dynamiques (helpers)
+   STATS + MOYENNE 30 JOURS
 ----------------------------------*/
 function setStatValue(id, value) {
   const el = document.getElementById(id);
-  if (!el) return;
-  const v = Math.max(0, Math.round(value));
-  el.dataset.to = String(v);
-  el.textContent = String(v);
+  if (el) {
+    const v = Math.max(0, Math.round(value));
+    el.dataset.to = v;
+    el.textContent = v;
+  }
 }
 
-// LocalStorage des snapshots live pour moyenne quotidienne
-const SNAP_KEY = "nf_live_snapshots_v1";
-const SNAP_DAYS = 14;   // fenêtre glissante (jours)
-const SNAP_KEEP = 30;   // conservation max (jours)
+const SNAP_KEY = "nf_live_snapshots_v2";
+const DAYS_AVG = 30;
+const KEEP_DAYS = 60;
 
 function recordLiveSnapshot(count) {
   const now = Date.now();
   const arr = loadSnapshots();
   arr.push({ t: now, c: Number(count) || 0 });
-
-  const minKeep = now - SNAP_KEEP * 86400000;
-  const filtered = arr.filter(s => s.t >= minKeep).slice(-2000);
+  const cutoff = now - KEEP_DAYS * 86400000;
+  const filtered = arr.filter(s => s.t >= cutoff).slice(-5000);
   localStorage.setItem(SNAP_KEY, JSON.stringify(filtered));
 }
 
@@ -270,186 +232,100 @@ function loadSnapshots() {
   }
 }
 
-// moyenne du PIC quotidien sur les N derniers jours observés
 function computeLivesPerDayAverage() {
   const snaps = loadSnapshots();
   if (!snaps.length) return 0;
 
-  // regroupe par jour (UTC) et prend le max par jour
-  const byDay = new Map();
+  const dayMap = new Map();
   for (const s of snaps) {
     const d = new Date(s.t);
-    const key = `${d.getUTCFullYear()}-${(d.getUTCMonth()+1).toString().padStart(2,"0")}-${d.getUTCDate().toString().padStart(2,"0")}`;
-    const prev = byDay.get(key) ?? 0;
-    byDay.set(key, Math.max(prev, s.c));
+    const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+    dayMap.set(key, Math.max(dayMap.get(key) ?? 0, s.c));
   }
 
-  // ne garde que les 14 derniers jours, puis moyenne
-  const days = Array.from(byDay.keys()).sort();
-  const lastDays = days.slice(-SNAP_DAYS);
-  if (!lastDays.length) return 0;
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const days = [];
+  for (let i = 0; i < DAYS_AVG; i++) {
+    const d = new Date(today);
+    d.setUTCDate(d.getUTCDate() - i);
+    const key = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+    days.push(dayMap.get(key) ?? 0);
+  }
 
-  const sum = lastDays.reduce((acc, key) => acc + (byDay.get(key) || 0), 0);
-  return sum / lastDays.length;
+  return days.reduce((a, b) => a + b, 0) / days.length;
 }
 
 /* -------------------------------
-   🚀 Init principale
+   INIT
 ----------------------------------*/
 async function init() {
   setupThemeToggle();
-
   await getToken();
-  if (!token) {
-    console.error("❌ Token manquant !");
-    return;
-  }
+  if (!token) return console.error("Token manquant");
 
-  const [allUsers, vipList] = await Promise.all([
-    fetchUserLists(),
-    fetchVIPList(),
-  ]);
+  const [allUsers, vipList] = await Promise.all([fetchUserLists(), fetchVIPList()]);
 
-  // >>> STAT "Actifs" = nb d'utilisateurs uniques dans users1/2/3
   setStatValue("stat-actifs", allUsers.length);
 
   const usersInfo = await fetchUsersInfo(allUsers);
-
-  // streams en 2 paquets (limite query)
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
-  for (const group of streamChunks) {
-    const data = await fetchStreams(group);
+  for (const chunk of streamChunks) {
+    const data = await fetchStreams(chunk);
     if (data?.data?.length) onlineUsers.push(...data.data);
   }
 
-  // enregistre snapshot pour "Lives/jour" + mise à jour de la moyenne
   recordLiveSnapshot(onlineUsers.length);
   setStatValue("stat-lives", computeLivesPerDayAverage());
 
-  // Remplissage des grilles
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
-  if (!liveContainer || !offlineContainer) {
-    console.warn("⚠️ Conteneurs #live-users ou #offline-users introuvables.");
-    return;
-  }
+  if (!liveContainer || !offlineContainer) return console.warn("Conteneurs manquants");
 
-  const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
-
-  const sortedUsers = [...allUsers].sort((a, b) => {
-    const aIsVip = vipList.includes(a.toLowerCase());
-    const bIsVip = vipList.includes(b.toLowerCase());
-    return aIsVip === bIsVip ? 0 : aIsVip ? -1 : 1;
+  const onlineLogins = onlineUsers.map(s => (s.user_login || "").toLowerCase());
+  const sorted = [...allUsers].sort((a, b) => {
+    const aVip = vipList.includes(a.toLowerCase());
+    const bVip = vipList.includes(b.toLowerCase());
+    return aVip === bVip ? 0 : aVip ? -1 : 1;
   });
 
-  for (const user of sortedUsers) {
-    const lower = user.toLowerCase();
-    const isOnline = onlineLogins.includes(lower);
-    const streamData = isOnline
-      ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower)
-      : null;
-    const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
-    const isVip = vipList.includes(lower);
-
-    const card = createUserCard({
-      user,
-      isOnline,
-      streamData,
-      userInfo,
-      isVip,
-    });
-
-    if (isOnline) liveContainer.appendChild(card);
-    else offlineContainer.appendChild(card);
+  for (const user of sorted) {
+    const low = user.toLowerCase();
+    const isOn = onlineLogins.includes(low);
+    const stream = isOn ? onlineUsers.find(s => (s.user_login || "").toLowerCase() === low) : null;
+    const info = usersInfo.find(u => (u.login || "").toLowerCase() === low);
+    const vip = vipList.includes(low);
+    const card = createUserCard({ user, isOnline: isOn, streamData: stream, userInfo: info, isVip: vip });
+    (isOn ? liveContainer : offlineContainer).appendChild(card);
   }
 
-  // Texte "X membres en live" (eyebrow)
-  const liveCountElement = document.getElementById("live-count");
-  if (liveCountElement) {
-    const emoji =
-      onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
-      onlineUsers.length > 1 ? "s" : ""
-    } de la New Family ${
-      onlineUsers.length > 1 ? "sont" : "est"
-    } actuellement en live`;
-    liveCountElement.setAttribute("aria-live", "polite");
+  const liveEl = document.getElementById("live-count");
+  if (liveEl) {
+    const emoji = onlineUsers.length === 0 ? "Sleeping" : onlineUsers.length > 20 ? "Fire" : "Sparkles";
+    liveEl.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ${onlineUsers.length > 1 ? "sont" : "est"} en live`;
+    liveEl.setAttribute("aria-live", "polite");
   }
 
-  // Mémorise la liste pour le polling et démarre le suivi
   window.NF_ALL_USERS = allUsers;
-  startLivePolling(); // par défaut toutes les 5 minutes
+  startLivePolling();
 
-  // --- UI Enhancements ---
-  nfSetupSkeletons();       // squelettes pendant le fetch
-  nfSyncLiveBar();          // synchronise la barre live
-  nfAnimateStatsOnView();   // anime les compteurs au scroll
-  nfSetupRevealOnScroll();  // effets reveal
+  nfSetupSkeletons();
+  nfSyncLiveBar();
+  nfAnimateStatsOnView();
+  nfSetupRevealOnScroll();
 }
 
-/* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
-
-// 1) Barre live ← synchronisée avec #live-count (texte)
-function nfSyncLiveBar() {
-  const liveCountEl = document.getElementById("live-count");
-  const barCount = document.getElementById("nf-live-count");
-  if (!liveCountEl || !barCount) return;
-  const sync = () => {
-    const m = (liveCountEl.textContent || "").match(/\d+/);
-    if (m) barCount.textContent = m[0];
-  };
-  sync();
-  const obs = new MutationObserver(sync);
-  obs.observe(liveCountEl, { childList: true, subtree: true, characterData: true });
-}
-
-// 2) Animation des nombres quand la section devient visible
-function nfAnimateStatsOnView() {
-  const els = document.querySelectorAll(".nf-stats .num");
-  if (!els.length) return;
-  const animate = (el) => {
-    const to = +el.dataset.to || 0, dur = 900;
-    const t0 = performance.now();
-    const step = (now) => {
-      const p = Math.min(1, (now - t0) / dur);
-      el.textContent = Math.floor(p * to);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); }
-    });
-  }, { threshold: .5 });
-  els.forEach((el) => io.observe(el));
-}
-
-// 3) Effet reveal au scroll
-function nfSetupRevealOnScroll() {
-  const els = document.querySelectorAll(".reveal");
-  if (!els.length) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
-    });
-  }, { threshold: .2 });
-  els.forEach((el) => io.observe(el));
-}
-
-// 4) Squelettes pendant le chargement des lives
+/* -------------------------------
+   UI HELPERS
+----------------------------------*/
 function nfSetupSkeletons() {
   const container = document.getElementById("nf-skeletons");
   const liveGrid = document.getElementById("live-users");
   if (!container || !liveGrid) return;
   for (let i = 0; i < 6; i++) {
     const card = document.createElement("div"); card.className = "skel";
-    card.innerHTML = `
-      <div class="ph big"></div>
-      <div class="ph w80" style="margin:.4rem 0;"></div>
-      <div class="ph w60" style="margin:.3rem 0;"></div>
-      <div class="ph w40"></div>`;
+    card.innerHTML = `<div class="ph big"></div><div class="ph w80" style="margin:.4rem 0;"></div><div class="ph w60" style="margin:.3rem 0;"></div><div class="ph w40"></div>`;
     container.appendChild(card);
   }
   const obs = new MutationObserver(() => {
@@ -459,10 +335,62 @@ function nfSetupSkeletons() {
   setTimeout(() => { if (document.body.contains(container)) container.remove(); }, 10000);
 }
 
+function nfSyncLiveBar() {
+  const liveEl = document.getElementById("live-count");
+  const barEl = document.getElementById("nf-live-count");
+  if (!liveEl || !barEl) return;
+  const sync = () => {
+    const m = liveEl.textContent.match(/\d+/);
+    if (m) barEl.textContent = m[0];
+  };
+  sync();
+  new MutationObserver(sync).observe(liveEl, { childList: true, subtree: true, characterData: true });
+}
+
+function nfAnimateStatsOnView() {
+  const nums = document.querySelectorAll(".nf-stats .num");
+  if (!nums.length) return;
+  const obs = new IntersectionObserver(
+    entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const to = Number(el.dataset.to) || 0;
+          let cur = 0;
+          const step = Math.max(1, Math.round(to / 50));
+          const int = setInterval(() => {
+            cur = Math.min(cur + step, to);
+            el.textContent = cur;
+            if (cur >= to) clearInterval(int);
+          }, 20);
+          obs.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+  nums.forEach(n => obs.observe(n));
+}
+
+function nfSetupRevealOnScroll() {
+  const els = document.querySelectorAll(".reveal");
+  if (!els.length) return;
+  const obs = new IntersectionObserver(
+    entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-in");
+          obs.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+  els.forEach(el => obs.observe(el));
+}
+
 /* -------------------------------
-   🔁 Polling live (maj périodique)
-   - Refait les appels Twitch à intervalle régulier
-   - Met à jour: snapshot, moyenne Lives/jour, barre live & eyebrow
+   POLLING
 ----------------------------------*/
 async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   if (!Array.isArray(window.NF_ALL_USERS) || !window.NF_ALL_USERS.length) return;
@@ -470,38 +398,28 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   const poll = async () => {
     try {
       const chunks = [window.NF_ALL_USERS.slice(0, 100), window.NF_ALL_USERS.slice(100)];
-      const onlineUsers = [];
-      for (const group of chunks) {
-        const data = await fetchStreams(group);
-        if (data?.data?.length) onlineUsers.push(...data.data);
+      const online = [];
+      for (const c of chunks) {
+        const d = await fetchStreams(c);
+        if (d?.data?.length) online.push(...d.data);
       }
 
-      // 1) enregistre snapshot + met à jour la moyenne
-      recordLiveSnapshot(onlineUsers.length);
+      recordLiveSnapshot(online.length);
       setStatValue("stat-lives", computeLivesPerDayAverage());
 
-      // 2) synchro barre live
-      const barCount = document.getElementById("nf-live-count");
-      if (barCount) barCount.textContent = String(onlineUsers.length);
+      const bar = document.getElementById("nf-live-count");
+      if (bar) bar.textContent = online.length;
 
-      // 3) maj eyebrow texte (si présent)
-      const liveCountElement = document.getElementById("live-count");
-      if (liveCountElement) {
-        const emoji =
-          onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-        liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
-          onlineUsers.length > 1 ? "s" : ""
-        } de la New Family ${
-          onlineUsers.length > 1 ? "sont" : "est"
-        } actuellement en live`;
+      const eye = document.getElementById("live-count");
+      if (eye) {
+        const emoji = online.length === 0 ? "Sleeping" : online.length > 20 ? "Fire" : "Sparkles";
+        eye.textContent = `${emoji} ${online.length} membre${online.length > 1 ? "s" : ""} de la New Family ${online.length > 1 ? "sont" : "est"} en live`;
       }
-      // NB: on ne rerend pas toutes les cartes pour rester léger.
     } catch (e) {
-      console.warn("Polling live: erreur", e);
+      console.warn("Polling erreur:", e);
     }
   };
 
-  // premier run 10s après le chargement, puis intervalle régulier
   setTimeout(poll, 10_000);
   setInterval(poll, intervalMs);
 }
