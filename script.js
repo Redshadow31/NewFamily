@@ -634,3 +634,6 @@ function testTwitchEmbed() {
 
 /* ---- GO ---- */
 init();
+// test du lecteur twitch
+testTwitchEmbed();
+
