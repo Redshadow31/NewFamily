@@ -561,5 +561,54 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   setInterval(poll, intervalMs);
 }
 
+/* ====== Fonction mise en avant enrichie ====== */
+function minutesSince(iso){
+  const diff = Math.max(0, (Date.now() - new Date(iso).getTime())/60000);
+  return Math.round(diff);
+}
+
+/**
+ * Rendu enrichi de la mise en avant :
+ * - vignette HD du stream si dispo
+ * - jeu, viewers, durée, titre du stream
+ */
+function renderFeaturedLive(ev, usersInfo, onlineUsers){
+  const section = document.getElementById("featured-live");
+  if (!section) return;
+
+  // user + lien
+  const user = String(ev.user || "").toLowerCase();
+  const link = document.getElementById("featured-link");
+  const userEl = document.getElementById("featured-user");
+  if (link) link.href = ev.url || `https://twitch.tv/${user}`;
+  if (userEl) userEl.textContent = `@${user}`;
+
+  // essaie de trouver le stream courant
+  const stream = (onlineUsers || []).find(s => (s.user_login||"").toLowerCase() === user);
+  const gameEl = document.getElementById("featured-game");
+  const viewersEl = document.getElementById("featured-viewers");
+  const sinceEl = document.getElementById("featured-since");
+  const titleEl = document.getElementById("featured-stream-title");
+  const bg = document.getElementById("featured-bg");
+
+  if (stream){
+    const thumb = (stream.thumbnail_url||"").replace("{width}","1280").replace("{height}","720");
+    if (bg) bg.style.backgroundImage = `url("${thumb}")`;
+    if (gameEl) gameEl.textContent = stream.game_name || "En live";
+    if (viewersEl) viewersEl.textContent = `👁️ ${stream.viewer_count||0}`;
+    if (sinceEl) sinceEl.textContent = `⏱️ ${minutesSince(stream.started_at)} min`;
+    if (titleEl) titleEl.textContent = stream.title || "Live en cours";
+  } else {
+    // pas trouvé (offline ?)
+    if (bg) bg.style.background = "linear-gradient(135deg,#2a1050,#0c0720)";
+    if (gameEl) gameEl.textContent = "Mise en avant";
+    if (viewersEl) viewersEl.textContent = "👁️ —";
+    if (sinceEl) sinceEl.textContent = "⏱️ —";
+    if (titleEl) titleEl.textContent = "Live mis en avant";
+  }
+
+  section.style.display = "block";
+}
+
 /* ---- GO ---- */
 init();
