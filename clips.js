@@ -1,116 +1,24 @@
-console.log("⚡ clip.js optimisé + profil chargé");
+// clips.js — version "users1/2/3 loader"
+console.log("⚡ clip.js — chargement des membres via users1/2/3.json");
 
 // ---------- Config ----------
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
 let currentIndex = -1;
+const CONCURRENCY = 10; // nb de requêtes simultanées max vers l’API
 
-// parent dynamique
+// parent dynamique pour l'embed
 const PARENT_DOMAIN = window.location.hostname;
 
-// Pseudos ciblés
-const members = [
-  "nexou31",
-  "clarastonewall", 
-  "red_shadow_31", 
-  "thedark_sand", 
-  "selena_akemi", 
-  "altheatroy", 
-  "dylow95", 
-  "n0name_x_", 
-  "rubbycrea", 
-  "benzzootv", 
-  "mizu_energia", 
-  "livio_on", 
-  "misslyliee", 
-  "canardpuma_76", 
-  "yaya_romali", 
-  "jenny31200", 
-  "mishka_195", 
-  "darkip0tt3r", 
-  "jalnna76", 
-  "kalyshin", 
-  "thony1384", 
-  "Pic__Cindy", 
-  "saikossama", 
-  "p_ghostface", 
-  "mahyurah", 
-  "corbinks", 
-  "lilbaabs", 
-  "nemsb2b", 
-  "mousskeykong", 
-  "pierrotofficiel", 
-  "ledocmonky", 
-  "tabs_up", 
-  "kakarotto_9191", 
-  "loulangegaming", 
-  "xlsaladin", 
-  "bete_feroce", 
-  "flanbouille", 
-  "lilbutterfly444", 
-  "poseidon_117", 
-  "shakoune_senpai_tv", 
-  "zyrenstv", 
-  "onizuka2734", 
-  "emilysims76", 
-  "xxappleslayerxx", 
-  "maxroronoa22", 
-  "gorkaliam", 
-  "lawsilvers", 
-  "mcfly_59140", 
-  "hades92111516", 
-  "gilbert_hime", 
-  "mcaliena", 
-  "stormlight____", 
-  "leviacarpe", 
-  "lespydyverse", 
-  "blackenedforall", 
-  "hastune_mikumiku", 
-  "lelgamingandstreaming", 
-  "cuda_6000", 
-  "corba404", 
-  "draponch", 
-  "onclesmarius", 
-  "h2_narvalo", 
-  "etoras56", 
-  "tania2507", 
-  "clisandru", 
-  "lalic0rn3geek", 
-  "ssparrooh",
-  "anyak_29", 
-  "vanderwaaldorf",  
-  "sallyruby", 
-  "lawra_tv", 
-  "seykasuxkyas83", 
-  "dramazzz_", 
-  "leprofesseurx", 
-  "tsukilamoon", 
-  "lyxo8z", 
-  "alx_r1v3r", 
-  "mika17330", 
-  "moon_alonzo", 
-  "ugogoal", 
-  "vektor_live", 
-  "zhineko", 
-  "saijou__", 
-  "ixxzarakiixxi",  
-  "zelephs",
-  "daddygrizzi", 
-  "alexnocauf", 
-  "chtifou95", 
-  "legeek61230",
-   "gagini_",
-   "jogamerss", 
-  "eryseia", 
-  "scor__pion4", 
-  "fouinaxx", 
-  "la_filledu14", 
-  "knuckygp", 
-  "mr_fragile", 
-  "sigurdson64", 
-  "mmesigurdson64"
-];
+// ---------- Utilitaires ----------
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 // ---------- API helpers ----------
 async function getToken() {
@@ -120,49 +28,67 @@ async function getToken() {
     const data = await res.json();
     accessToken = data.access_token;
   } catch (e) {
-    console.error(e);
+    console.error("❌ Token Twitch introuvable :", e);
   }
 }
 
 // Renvoie l'objet utilisateur (pas juste l'ID)
 async function getUser(username) {
-  const res = await fetch(
-    `https://api.twitch.tv/helix/users?login=${encodeURIComponent(username)}`,
-    {
-      headers: {
-        "Client-ID": clientId,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-  if (!res.ok) return null;
-  const data = await res.json();
-  const u = data.data?.[0];
-  if (!u) return null;
-  return {
-    id: u.id,
-    login: u.login,
-    display_name: u.display_name || u.login,
-    avatar: u.profile_image_url || "",
-    bio: u.description || "",
-  };
+  try {
+    const res = await fetch(
+      `https://api.twitch.tv/helix/users?login=${encodeURIComponent(username)}`,
+      { headers: { "Client-ID": clientId, Authorization: `Bearer ${accessToken}` } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const u = data.data?.[0];
+    if (!u) return null;
+    return {
+      id: u.id,
+      login: u.login,
+      display_name: u.display_name || u.login,
+      avatar: u.profile_image_url || "",
+      bio: u.description || "",
+    };
+  } catch {
+    return null;
+  }
 }
 
 async function getRandomClip(userId) {
-  const res = await fetch(
-    `https://api.twitch.tv/helix/clips?broadcaster_id=${userId}&first=10`,
-    {
-      headers: {
-        "Client-ID": clientId,
-        Authorization: `Bearer ${accessToken}`,
-      },
+  try {
+    const res = await fetch(
+      `https://api.twitch.tv/helix/clips?broadcaster_id=${userId}&first=10`,
+      { headers: { "Client-ID": clientId, Authorization: `Bearer ${accessToken}` } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const valid = (data.data || []).filter((c) => c.thumbnail_url && c.id);
+    if (!valid.length) return null;
+    return valid[Math.floor(Math.random() * valid.length)];
+  } catch {
+    return null;
+  }
+}
+
+// ---------- Charge la liste des membres depuis users1/2/3 ----------
+async function fetchAllMembers() {
+  const files = ["users1.json", "users2.json", "users3.json"];
+  const all = [];
+  for (const f of files) {
+    try {
+      const r = await fetch(f, { cache: "no-store" });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      if (Array.isArray(data)) all.push(...data);
+      console.info(`Chargé ${f} → ${Array.isArray(data) ? data.length : 0} users`);
+    } catch (e) {
+      console.warn(`⚠️ Impossible de charger ${f} :`, e.message || e);
     }
-  );
-  if (!res.ok) return null;
-  const data = await res.json();
-  const valid = (data.data || []).filter((c) => c.thumbnail_url && c.id);
-  if (!valid.length) return null;
-  return valid[Math.floor(Math.random() * valid.length)];
+  }
+  // normalize + dedupe
+  const normalized = [...new Set(all.map((u) => String(u || "").trim().toLowerCase()).filter(Boolean))];
+  return normalized;
 }
 
 // ---------- UI helpers ----------
@@ -186,12 +112,13 @@ function updateProfileCard(profile) {
     login.textContent = "@—";
     bio.textContent = "Profil indisponible.";
     link.href = "#";
-    avatar.src = "";
+    if (avatar) avatar.src = "";
     return;
   }
-
-  avatar.src = profile.avatar || "";
-  avatar.alt = `Avatar de ${profile.display_name}`;
+  if (avatar) {
+    avatar.src = profile.avatar || "";
+    avatar.alt = `Avatar de ${profile.display_name}`;
+  }
   name.textContent = profile.display_name;
   login.textContent = `@${profile.login}`;
   bio.textContent = profile.bio && profile.bio.trim().length ? profile.bio : "Aucune bio renseignée.";
@@ -223,7 +150,6 @@ function displayClip(index) {
   `;
   u.textContent = `👤 ${clip.profile.display_name}`;
 
-  // MAJ carte profil
   updateProfileCard(clip.profile);
 
   // Préfetch du prochain embed
@@ -269,7 +195,7 @@ function displayPreviousClip() {
   }
 }
 
-// ---------- Préparation optimisée ----------
+// ---------- Préparation (avec limite de concurrence) ----------
 async function prepareOne(member) {
   try {
     const user = await getUser(member);
@@ -279,35 +205,37 @@ async function prepareOne(member) {
     return {
       id: clip.id,
       thumbnail: clip.thumbnail_url,
-      profile: user, // on garde TOUT le profil pour la carte
+      profile: user,
     };
   } catch {
     return null;
   }
 }
 
-async function prepareClipsFast() {
-  const tasks = members.map((m) => prepareOne(m));
+async function prepareClipsWithPool(members) {
+  // Option: randomiser l’ordre
+  shuffle(members);
 
+  // Pool de workers
+  let cursor = 0;
   let firstShown = false;
-  tasks.forEach(async (t) => {
-    const res = await t;
-    if (res) {
-      clipsQueue.push(res);
-      if (!firstShown) {
-        firstShown = true;
-        displayNextClip();
+
+  async function worker() {
+    while (cursor < members.length) {
+      const idx = cursor++;
+      const res = await prepareOne(members[idx]);
+      if (res) {
+        clipsQueue.push(res);
+        if (!firstShown) {
+          firstShown = true;
+          displayNextClip();
+        }
       }
     }
-  });
-
-  await Promise.allSettled(tasks);
-
-  // Mélange léger pour varier l'ordre
-  for (let i = clipsQueue.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [clipsQueue[i], clipsQueue[j]] = [clipsQueue[j], clipsQueue[i]];
   }
+
+  const workers = Array.from({ length: CONCURRENCY }, () => worker());
+  await Promise.all(workers);
 
   if (!firstShown) {
     const u = document.getElementById("clip-user");
@@ -333,6 +261,17 @@ document.addEventListener("DOMContentLoaded", () => {
     updateProfileCard(null);
     return;
   }
-  await prepareClipsFast();
-})();
 
+  let members = await fetchAllMembers();
+
+  // Fallback si vide
+  if (!members.length) {
+    console.warn("⚠️ Liste users1/2/3 vide — fallback minimal.");
+    members = ["nexou31", "clarastonewall", "red_shadow_31"];
+  }
+
+  // Si la liste est très longue, on peut tronquer (optionnel) :
+  // members = members.slice(0, 150);
+
+  await prepareClipsWithPool(members);
+})();
