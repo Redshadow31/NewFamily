@@ -5,13 +5,51 @@
   <title>Twitch Entraide New Family — Accueil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Communauté Twitch francophone d’entraide : mentoring, feedbacks, raids, événements et visibilité pour créateurs." />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="assets/favicon.ico" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://newfamily.netlify.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Twitch Entraide New Family — Accueil">
+  <meta property="og:description" content="Communauté Twitch francophone d’entraide : mentoring, feedbacks, raids, événements et visibilité.">
+  <meta property="og:url" content="https://newfamily.netlify.app/">
+  <meta property="og:image" content="https://newfamily.netlify.app/assets/og-cover.jpg">
+
+  <!-- Réseaux officiels -->
+  <link rel="me" href="https://www.instagram.com/TENF">
+  <link rel="me" href="https://www.tiktok.com/@TENF">
+
+  <!-- Perfs: DNS/Preconnect -->
+  <link rel="dns-prefetch" href="//player.twitch.tv">
+  <link rel="dns-prefetch" href="//static-cdn.jtvnw.net">
+  <link rel="preconnect" href="https://player.twitch.tv" crossorigin>
   <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin>
   <link rel="preconnect" href="https://api.twitch.tv" crossorigin>
 
+  <!-- Priorité au logo (meilleur LCP) -->
+  <link rel="preload" as="image" href="assets/logo.webp" fetchpriority="high">
+
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Données structurées (Organization) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Twitch Entraide New Family",
+    "url":"https://newfamily.netlify.app/",
+    "logo":"https://newfamily.netlify.app/assets/logo.webp",
+    "sameAs":[
+      "https://www.instagram.com/twitchentraidenewfamily",
+      "https://www.tiktok.com/@twitchentraidenewfamily"
+    ]
+  }
+  </script>
+
+  <!-- Styles rapides spécifiques accueil (tu peux garder comme avant) -->
   <style>
-    /* --------- Styles spécifiques accueil --------- */
     .nf-livebar{
       max-width:1100px;margin:1rem auto 0;background:#fff;color:#4b0082;
       border-radius:.8rem;padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;
@@ -19,35 +57,33 @@
     }
     .nf-livebar .dot{width:10px;height:10px;border-radius:50%;background:#e74c3c;box-shadow:0 0 0 0 rgba(231,76,60,.6);animation:pulse 1.8s infinite}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(231,76,60,.6)}70%{box-shadow:0 0 0 10px rgba(231,76,60,0)}100%{box-shadow:0 0 0 0 rgba(231,76,60,0)}}
-
     .home-intro{max-width:1100px;margin:1.2rem auto 0;padding:0 1rem;text-align:center}
     .nf-hero-badges{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin:1rem 0}
     .nf-hero-badges span{background:#f3e9ff;border:1px solid #ead9ff;padding:.4rem .7rem;border-radius:999px}
-
     .nf-stats{max-width:1100px;margin:2rem auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;padding:0 1rem}
     .nf-stats .stat{background:#fff;border-radius:1rem;padding:1.2rem;text-align:center;box-shadow:0 10px 20px rgba(0,0,0,.08)}
     .nf-stats .num{font-weight:800;font-size:clamp(1.8rem,4vw,2.4rem);color:#c0392b;transition:color .3s ease}
     .nf-stats .label{margin-top:.3rem;font-size:.95rem;font-weight:600;color:#4b0082;opacity:.85}
-
     .nf-why{max-width:1100px;margin:1rem auto 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:0 1rem}
     .nf-why article{background:#fff;border-radius:1rem;padding:1rem 1.2rem;box-shadow:0 10px 20px rgba(0,0,0,.08);transition:transform .25s ease,box-shadow .25s ease}
     .nf-why article:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.12)}
     .nf-why h3{margin:.2rem 0 .3rem;color:#8e44ad}
-
     #nf-skeletons{max-width:1100px;margin:1.5rem auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:0 1rem}
     .user-skeleton{background:#fff;border-radius:1rem;height:200px;box-shadow:0 10px 20px rgba(0,0,0,.08);animation:pulse 1.8s infinite}
-
     .reveal{opacity:0;transform:translateY(12px);transition:.6s ease}
     .reveal.revealed{opacity:1;transform:none}
-
     .header-logo img{animation:floaty 6s ease-in-out infinite;transform-origin:center}
     @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-
     .about-button,.event-button{transition:transform .15s ease,box-shadow .15s ease}
     .about-button:hover,.event-button:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.15)}
   </style>
 </head>
 <body>
+  <!-- Lien d’évitement (accessibilité) -->
+  <a href="#main" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+    Aller au contenu
+  </a>
+
   <!-- HEADER -->
   <header>
     <div class="header-content">
@@ -61,9 +97,8 @@
     </div>
   </header>
 
-  <main>
+  <main id="main">
     <!-- Intro -->
-   
     <div class="home-intro">
       <div class="button-container">
         <a href="a-propos.html" class="about-button">🎭 En savoir plus</a>
@@ -77,46 +112,44 @@
 
     <!-- BARRE LIVE -->
     <div class="nf-livebar" role="status" aria-live="polite">
-      <span class="dot"></span>
+      <span class="dot" aria-hidden="true"></span>
       <strong id="nf-live-count">0</strong> live(s) en cours •
       <em id="live-count">Chargement des données...</em>
     </div>
 
-    <!-- LIVE MISE EN AVANT (HERO) -->
-<section id="featured-live" class="featured-live" style="display:none;">
-  <div class="featured-card">
-    <div class="featured-media" id="featured-bg" aria-hidden="true"></div>
+    <!-- LIVE MISE EN AVANT -->
+    <section id="featured-live" class="featured-live" style="display:none;">
+      <div class="featured-card">
+        <div class="featured-media" id="featured-bg" aria-hidden="true"></div>
+        <div class="featured-ribbon">🔥 Mise en avant exceptionnelle</div>
 
-    <div class="featured-ribbon">🔥 Mise en avant exceptionnelle</div>
+        <div class="featured-content">
+          <div class="featured-meta">
+            <span class="pill pill-live">LIVE</span>
+            <span class="pill" id="featured-game">-</span>
+            <span class="pill" id="featured-viewers" title="Viewers">👁️ 0</span>
+            <span class="pill" id="featured-since" title="Depuis">⏱️ 0 min</span>
+          </div>
 
-    <div class="featured-content">
-      <div class="featured-meta">
-        <span class="pill pill-live">LIVE</span>
-        <span class="pill" id="featured-game">-</span>
-        <span class="pill" id="featured-viewers" title="Viewers">👁️ 0</span>
-        <span class="pill" id="featured-since" title="Depuis">⏱️ 0 min</span>
+          <h3 class="featured-title">
+            <span id="featured-user">@user</span>
+            <span class="dot" aria-hidden="true">•</span>
+            <span id="featured-stream-title">Live en cours</span>
+          </h3>
+
+          <div class="featured-actions">
+            <a id="featured-link" href="#" target="_blank" rel="noopener" class="cta">
+              🎥 Rejoindre le live
+            </a>
+          </div>
+        </div>
       </div>
 
-      <h3 class="featured-title">
-        <span id="featured-user">@user</span>
-        <span class="dot">•</span>
-        <span id="featured-stream-title">Live en cours</span>
-      </h3>
-
-      <div class="featured-actions">
-        <a id="featured-link" href="#" target="_blank" rel="noopener" class="cta">
-          🎥 Rejoindre le live
-        </a>
+      <!-- Lecteur Twitch pour le live mis en avant -->
+      <div id="featured-player"
+           style="width:100%;max-width:1100px;margin:1rem auto;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.2);display:none;">
       </div>
-    </div>
-  </div>
-  <!-- Lecteur Twitch pour le live mis en avant -->
-<div id="featured-player"
-     style="width:100%;max-width:1100px;margin:1rem auto;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.2);display:none;">
-</div>
-
-</section>
-
+    </section>
 
     <!-- BOUTONS PRINCIPAUX -->
     <div class="button-container" style="text-align:center;margin-top:.6rem;">
@@ -169,8 +202,9 @@
     </section>
   </main>
 
- <script src="https://player.twitch.tv/js/embed/v1.js" async></script>
-  <script src="script.js"></script>
-  
+  <!-- Scripts (ordre propre) -->
+  <script src="https://player.twitch.tv/js/embed/v1.js" async></script>
+  <script src="script.js" defer></script>
+  <noscript>Ce site utilise JavaScript pour afficher les lives en temps réel.</noscript>
 </body>
 </html>
