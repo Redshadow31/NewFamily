@@ -634,6 +634,16 @@ function testTwitchEmbed() {
 
 /* ---- GO ---- */
 init();
-// test du lecteur twitch
-testTwitchEmbed();
+// On attend que la librairie Twitch soit chargée
+window.addEventListener("load", () => {
+  const twitchScript = document.getElementById("twitch-sdk");
+  if (twitchScript) {
+    twitchScript.addEventListener("load", () => {
+      console.log("✅ Twitch SDK chargé, lancement du test vidéo");
+      testTwitchEmbed();
+    });
+  } else {
+    console.warn("⚠️ Twitch SDK non trouvé, test annulé");
+  }
+});
 
