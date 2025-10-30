@@ -1,0 +1,77 @@
+/* Base commune carte */
+.card,.user-card,.staff-card,.vip-card{
+  background:var(--surface);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:.18s transform,.18s box-shadow;
+}
+.card:hover,.user-card:hover,.staff-card:hover,.vip-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 26px rgba(0,0,0,.12);
+}
+
+/* Grilles utilisateurs */
+.users-grid{
+  max-width:1600px; margin:1rem auto; padding:0 1rem;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;
+}
+
+/* User card */
+.user-card{display:flex;flex-direction:column; position:relative}
+.user-card .media-wrap{position:relative;overflow:hidden}
+.user-card .card-thumb,
+.user-card img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;border:0;transition:transform .35s ease}
+.user-card:hover .media-wrap img{transform:scale(1.04)}
+.card-body{padding:.9rem .95rem .95rem;border-top:1px solid rgba(0,0,0,.06);background:var(--surface);display:flex;flex-direction:column;gap:.35rem;flex:1}
+.username{font-weight:900}
+.title{color:var(--muted)}
+.card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.card-footer a{background:#efe8f8;padding:.45rem .7rem;border-radius:9px;text-decoration:none;font-weight:800;color:#2b1a5a}
+.card-footer a:hover{filter:brightness(1.04)}
+.user-card.offline{opacity:1;filter:none}
+.user-card.offline .media-wrap img{filter:grayscale(.85) brightness(.92)}
+
+/* Badges génériques */
+.badge{
+  display:inline-flex;align-items:center;gap:6px; font-size:.8rem;font-weight:700;
+  border-radius:999px; padding:.25rem .65rem; backdrop-filter:blur(4px); letter-spacing:.2px; white-space:nowrap;
+}
+.user-card .badge{
+  position:absolute; top:10px; left:10px;
+  background:linear-gradient(135deg,#fff8db,#ffe18b); color:#8a6d00; border:1px solid #f1c40f;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+/* Staff */
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,260px));gap:22px;justify-content:center}
+.staff-card{max-width:260px;text-align:center}
+.staff-card .avatar-box{position:relative;background:#1f1f23}
+.staff-card img.avatar{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.staff-card .badge{position:absolute;top:10px;left:10px;color:#fff;border:1px solid rgba(255,255,255,.6);box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.badge--founder{ background: linear-gradient(135deg, #b8336a, #6a0572); }
+.badge--adjoint{ background: linear-gradient(135deg, #845ec2, #2c73d2); }
+.badge--mentor{  background: linear-gradient(135deg, #008e9b, #0081cf); }
+.badge--junior{  background: linear-gradient(135deg, #4caf50, #2e7d32); }
+.body{padding:.6rem .3rem 0;text-align:center}
+.name{margin:.35rem 0 .15rem; color:#4b0082; font-weight:800}
+.desc{color:#333;font-size:.95rem;line-height:1.35}
+.body .btns{display:flex;gap:.5rem;justify-content:center;margin-top:.5rem}
+
+/* VIP card (réutilise user-card) */
+.vip-card{position:relative}
+.vip-card::before{
+  content:""; position:absolute; inset:-40%; border-radius:50%;
+  background: radial-gradient(closest-side, rgba(241,196,15,.35), rgba(241,196,15,0));
+  transform: scale(.6); opacity:0; transition: opacity .25s ease, transform .25s ease; z-index:0;
+}
+.vip-card:hover::before{opacity:1; transform:scale(1)}
+.vip-card .card-body,.vip-card .media-wrap,.vip-card .vip-badges{position:relative;z-index:1}
+
+/* LIVE pill overlay (optionnelle) */
+.live-dot{
+  position:absolute; right:10px; top:10px; display:inline-flex; align-items:center; gap:.3rem;
+  background:#ff4757; color:#fff; border-radius:999px; padding:.22rem .5rem; font-weight:800; font-size:.78rem
+}
+.live-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.8);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}70%{box-shadow:0 0 0 8px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
