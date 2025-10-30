@@ -1,62 +1,219 @@
-/* ===== Hero / Header ===== */
-/* HEADER avec image + dégradés, coins arrondis, centrage */
-header{
-  /* 👉 corrige le chemin selon ton arbo :
-     - si l'image est dans /assets/, mets: url("../assets/Design sans titre (17).png")
-     - si elle est à la racine, mets: url("/Design sans titre (17).png")
-  */
-  background:
-    url("../assets/Design sans titre (17).png") no-repeat center top / contain, /* pinceau par-dessus */
-    radial-gradient(1200px 600px at 20% -20%, rgba(255,255,255,.08), transparent 60%),
-    radial-gradient(1200px 600px at 110% 10%, rgba(255,255,255,.06), transparent 60%),
-    linear-gradient(135deg,#5f2c82 0%, #b06ab3 35%, #ff6a88 100%);            /* beau dégradé */
+/* ===========================
+   LAYOUT (header, socials, live strip, backbar)
+   =========================== */
 
-  color: var(--text);
-  min-height: clamp(260px, 48vh, 520px);
+/* ===== HEADER — version moderne sans image ===== */
+header{
+  position: relative;
+  min-height: clamp(300px, 48vh, 540px);
   display: grid;
   place-items: center;
+  text-align: center;
+
+  /* dégradé principal + légères lueurs */
+  background:
+    radial-gradient(1200px 600px at 20% -20%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(1200px 600px at 110% 10%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(135deg, #5f2c82 0%, #b06ab3 35%, #ff6a88 100%);
+
+  color: #fff;
   padding: clamp(1.2rem, 3.5vw, 2.2rem) 1rem;
-  border-bottom-left-radius: 22px;
-  border-bottom-right-radius: 22px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.25);
   overflow: hidden;
 }
 
-/* Contenu centré et responsive */
-.header-content{max-width:1100px;margin:0 auto;text-align:center;display:grid;gap:1rem}
-.header-logo img{width: clamp(120px, 14vw, 170px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));transition:.25s transform,.25s filter}
-.header-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 10px 24px rgba(0,0,0,.45))}
-.header-text h1{font-size: clamp(1.9rem, 4.2vw, 3rem); margin:.4rem 0; color:#1f1933}
-.header-text p{opacity:.95;margin:.2rem 0 1rem;color:#1f1933}
+.header-content{
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
 
-/* Sommeil automatique en sombre : texte clair */
+/* Logo optionnel au centre */
+.header-logo img{
+  width: min(240px, 36vw);
+  height: auto;
+  margin-bottom: .6rem;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,.35));
+  transition: transform .25s ease, filter .25s ease;
+}
+.header-logo img:hover{
+  transform: scale(1.06);
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
+}
+
+/* Titres et sous-titres */
+.header-text h1{
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  margin: .4rem 0;
+  color: #fff; /* texte clair par défaut */
+}
+.header-text p{
+  opacity: .95;
+  margin: .2rem 0 1rem;
+  color: #fff;
+}
+
+/* Rangée de boutons sous le titre */
+.header-button-wrapper{
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: .8rem 0 1.2rem;
+}
+
+/* Bouton de switch thème (optionnel) */
+.theme-toggle{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+/* Variante du header en mode sombre (facultatif si tu gères ça dans darkmode.css) */
+html.dark header,
+[data-theme="dark"] header{
+  background:
+    radial-gradient(1200px 600px at 20% -20%, rgba(255,255,255,.06), transparent 60%),
+    radial-gradient(1200px 600px at 110% 10%, rgba(255,255,255,.05), transparent 60%),
+    linear-gradient(135deg, #2c0f47 0%, #4c2474 35%, #ad4b6d 100%);
+}
 html.dark .header-text h1,
 html.dark .header-text p{ color:#fff }
 
-/* Socials (header/footer) */
-.socials{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+/* ===== Socials (header/footer) ===== */
+.socials{
+  display:flex;
+  gap:.6rem;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 .socials__item{
-  display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .7rem;border-radius:999px;
-  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); color:#fff;
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.45rem .7rem;
+  border-radius:999px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);
+  color:#fff;
+  text-decoration:none;
 }
-.site-footer{max-width:1100px;margin:2rem auto 2.4rem;padding:0 1rem;text-align:center;color:var(--muted)}
-.socials--footer{justify-content:center;margin-top:.4rem}
+.socials__item img{ display:block }
 
-/* Back bar (clips.html) */
-.backbar{position:relative;max-width:1100px;margin:1rem auto 0;padding:0 1rem;display:flex;justify-content:center}
-.backbar .btn{position:static;top:auto;transform:none}
+.site-footer{
+  max-width:1100px;
+  margin:2rem auto 2.4rem;
+  padding:0 1rem;
+  text-align:center;
+  color: var(--muted, #6b7280);
+}
+.socials--footer{ justify-content:center; margin-top:.4rem }
 
-/* Live strip & bandeau live */
-#live-strip,.live-strip{max-width:1100px;margin:.8rem auto 0;padding:.6rem .75rem;border-radius:.9rem;background:var(--surface);box-shadow:var(--shadow);overflow:hidden}
-.live-strip__inner{display:flex;gap:.75rem;overflow-x:auto;scrollbar-width:thin;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+/* ===== Back bar (ex: bouton retour sur clips.html) ===== */
+.backbar{
+  position:relative;
+  max-width:1100px;
+  margin:1rem auto 0;
+  padding:0 1rem;
+  display:flex;
+  justify-content:center;
+}
+.backbar .btn{
+  position:static;
+  top:auto;
+  transform:none;
+}
+
+/* ===== Live strip (liste horizontale des lives) ===== */
+#live-strip,
+.live-strip{
+  max-width:1100px;
+  margin: .8rem auto 0;
+  padding: .6rem .75rem;
+  border-radius: .9rem;
+  background: var(--surface, #fff);
+  box-shadow: var(--shadow, 0 8px 20px rgba(0,0,0,.08));
+  overflow: hidden;
+}
+
+.live-strip__inner{
+  display:flex;
+  gap:.75rem;
+  overflow-x:auto;
+  scrollbar-width: thin;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
 .live-chip{
-  flex:0 0 auto;display:flex;align-items:center;gap:.6rem;padding:.5rem .7rem;border:1px solid #eee;background:#faf7ff;border-radius:999px;
-  scroll-snap-align:center; box-shadow:0 3px 10px rgba(0,0,0,.04); transition:.15s transform,.15s box-shadow,.2s background;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  padding:.5rem .7rem;
+  border:1px solid var(--border, #eee);
+  background: #faf7ff;
+  border-radius: 999px;
+  scroll-snap-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.04);
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
 }
-.live-chip:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.10);background:#fff}
-.live-chip__avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;display:block}
-.live-chip__texts{display:flex;flex-direction:column;line-height:1.1}
-.live-chip__name{font-weight:800;font-size:.92rem;color:#2b1a5a}
-.live-chip__game{font-size:.78rem;opacity:.8;color:#4b0082}
-.live-chip__dot{width:8px;height:8px;border-radius:50%;background:#ff4757;margin-left:.2rem;box-shadow:0 0 0 0 rgba(255,71,87,.8);animation:stripPulse 1.6s infinite}
-@keyframes stripPulse{0%{box-shadow:0 0 0 0 rgba(255,71,87,.6)}70%{box-shadow:0 0 0 7px rgba(255,71,87,0)}100%{box-shadow:0 0 0 0 rgba(255,71,87,0)}}
+.live-chip:hover{
+  transform: translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.10);
+  background:#fff;
+}
+
+.live-chip__avatar{
+  width:34px; height:34px; border-radius:50%;
+  object-fit:cover; display:block;
+}
+.live-chip__texts{ display:flex; flex-direction:column; line-height:1.1 }
+.live-chip__name{ font-weight:800; font-size:.92rem; color:#2b1a5a }
+.live-chip__game{ font-size:.78rem; opacity:.8; color:#4b0082 }
+
+/* dot animé "LIVE" */
+.live-chip__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:#ff4757; margin-left:.2rem;
+  box-shadow:0 0 0 0 rgba(255,71,87,.8);
+  animation: stripPulse 1.6s infinite;
+}
+@keyframes stripPulse{
+  0%  { box-shadow:0 0 0 0 rgba(255,71,87,.6) }
+  70% { box-shadow:0 0 0 7px rgba(255,71,87,0) }
+  100%{ box-shadow:0 0 0 0 rgba(255,71,87,0) }
+}
+
+/* Live strip — mode sombre */
+html.dark #live-strip,
+[data-theme="dark"] #live-strip,
+html.dark .live-strip,
+[data-theme="dark"] .live-strip{
+  background: var(--surface, #1b1430);
+}
+html.dark .live-chip,
+[data-theme="dark"] .live-chip{
+  border-color: #2a2148;
+  background:#20173e;
+}
+html.dark .live-chip__name,
+[data-theme="dark"] .live-chip__name{ color:#fff }
+html.dark .live-chip__game,
+[data-theme="dark"] .live-chip__game{ color:#cbb8ff }
