@@ -147,17 +147,15 @@ html.dark .header-text p{ color:#fff }
   overflow: hidden;
 }
 
-.live-strip__inner{
+.live-strip__inner {
+  display: flex;
+  gap: .75rem;
   overflow-x: auto;
-  overflow-y: hidden;          /* évite une barre verticale parasite */
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* IE/Edge legacy */
+  scrollbar-width: thin;               /* barre fine (Firefox) */
+  scroll-snap-type: x proximity;       /* effet d’ancrage fluide */
+  -webkit-overflow-scrolling: touch;   /* défilement fluide sur mobile */
 }
-.live-strip__inner::-webkit-scrollbar{ /* Chrome/Safari/Edge */
-  height: 0;
-  width: 0;
-  display: none;
-}
+
 
 
 .live-chip{
