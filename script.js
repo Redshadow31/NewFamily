@@ -177,7 +177,7 @@ function getRoleBadge(user) {
   if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikossama"].includes(u)) {
     return '<span class="badge badge--mentor">🛡️ Mentor</span>';
   }
-  if (["lespydyverse","mcaliena","mcfly_59140"].includes(u)) {
+  if (["zylkao","sigurdson64","mmesigurdson","mcfly_59140"].includes(u)) {
     return '<span class="badge badge--junior">🔧 Junior</span>';
   }
   return "";
