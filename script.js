@@ -609,6 +609,10 @@ function renderFeaturedLive(ev, usersInfo, onlineUsers){
   }
 
   section.style.display = "block";
+   // Affiche le lecteur vidéo en temps réel si le stream est live
+if (stream) {
+  mountFeaturedPlayer(user);
+}
 }
 /* === TEST VIDEO TWITCH LIVE === */
 function testTwitchEmbed() {
@@ -630,6 +634,32 @@ function testTwitchEmbed() {
     muted: true,
     parent: [window.location.hostname]
   });
+   /* === Lecteur Twitch intégré pour la mise en avant === */
+function mountFeaturedPlayer(channel) {
+  const parent = window.location.hostname.replace(/^www\./, "");
+  const container = document.getElementById("featured-player");
+  if (!container) return;
+
+  container.style.display = "block";
+
+  // Si le lecteur existe déjà, on le remplace
+  container.innerHTML = "";
+
+  try {
+    // eslint-disable-next-line no-undef
+    new Twitch.Player("featured-player", {
+      width: "100%",
+      height: "100%",
+      channel: channel,
+      muted: true,
+      autoplay: true,
+      parent: [parent, "localhost", "127.0.0.1"]
+    });
+  } catch (e) {
+    console.error("Erreur création lecteur Twitch:", e);
+  }
+}
+
 }
 
 /* ---- GO ---- */
