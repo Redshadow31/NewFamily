@@ -2,7 +2,7 @@
    New Family — script.js (FINAL 2025)
    - Résilient aux fichiers manquants
    - Moyenne lives/jour sur 30 jours
-   - Système de mise en avant exceptionnelle (featured.json)
+   - Mise en avant exceptionnelle (featured.json) avec visuel
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -149,9 +149,7 @@ async function fetchVIPList() {
     if (!response.ok) return [];
     const data = await response.json();
     return data.map(item =>
-      typeof item === "string"
-        ? item.toLowerCase()
-        : String(item.login || "").toLowerCase()
+      typeof item === "string" ? item.toLowerCase() : String(item.login || "").toLowerCase()
     );
   } catch {
     return [];
@@ -198,26 +196,23 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
     : "Hors ligne";
 
   const img = isOnline
-    ? (streamData.thumbnail_url || "")
-        .replace("{width}", "320")
-        .replace("{height}", "180")
-    : (userInfo?.profile_image_url ||
-       "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
+    ? (streamData.thumbnail_url || "").replace("{width}", "320").replace("{height}", "180")
+    : (userInfo?.profile_image_url || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
   card.innerHTML = `
-  <div class="media-wrap">
-    <img src="${img}" alt="Preview de ${escapeHtml(user)}">
-    ${getRoleBadge(user)}
-    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
-  </div>
-  <div class="card-body">
-    <div class="username">${escapeHtml(user)}</div>
-    <p class="title">${title}</p>
-    <div class="card-footer">
-      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+    <div class="media-wrap">
+      <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+      ${getRoleBadge(user)}
+      ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
     </div>
-  </div>
-`;
+    <div class="card-body">
+      <div class="username">${escapeHtml(user)}</div>
+      <p class="title">${title}</p>
+      <div class="card-footer">
+        <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+      </div>
+    </div>
+  `;
   return card;
 }
 
@@ -231,7 +226,7 @@ function escapeHtml(str) {
 }
 
 /* -------------------------------
-   📊 Stats dynamiques (helpers)
+   📊 Stats dynamiques
 ----------------------------------*/
 function setStatValue(id, value) {
   const el = document.getElementById(id);
@@ -281,6 +276,78 @@ function computeLivesPerDayAverage() {
 }
 
 /* -------------------------------
+   🔥 Mise en avant — helpers
+----------------------------------*/
+function fmtUptime(startedAt) {
+  if (!startedAt) return "";
+  const diffMs = Date.now() - new Date(startedAt).getTime();
+  const m = Math.floor(diffMs / 60000);
+  const h = Math.floor(m / 60);
+  const mm = m % 60;
+  return h ? `${h}h${mm.toString().padStart(2, "0")}` : `${mm} min`;
+}
+
+async function renderFeaturedLive(ev, usersInfo) {
+  const section = document.getElementById("featured-live");
+  if (!section) return;
+  section.style.display = "block";
+
+  const link = document.getElementById("featured-link");
+  const channelA = document.getElementById("fl-channel");
+  const titleEl = document.getElementById("fl-title");
+  const gameEl = document.getElementById("fl-game");
+  const thumbImg = document.getElementById("fl-thumb");
+  const avatarImg = document.getElementById("fl-avatar");
+  const viewersEl = document.getElementById("fl-viewers");
+  const uptimeEl = document.getElementById("fl-uptime");
+
+  const login = (ev.user || "").toLowerCase();
+  const url = ev.url || `https://www.twitch.tv/${login}`;
+  if (link) link.href = url;
+  if (channelA) { channelA.href = url; channelA.textContent = ev.user; }
+
+  // stream live
+  const sRes = await fetchStreams([login]);
+  const s = sRes?.data?.[0];
+
+  // avatar
+  let userInfo = usersInfo?.find(u => (u.login || "").toLowerCase() === login);
+  if (!userInfo) {
+    try {
+      const r = await fetch(`https://api.twitch.tv/helix/users?login=${encodeURIComponent(login)}`, {
+        headers: { "Client-ID": clientId, Authorization: "Bearer " + token }
+      });
+      if (r.ok) {
+        const j = await r.json();
+        userInfo = j.data?.[0];
+      }
+    } catch {}
+  }
+
+  if (s) {
+    if (titleEl) titleEl.textContent = s.title || "Live en cours";
+    if (gameEl) gameEl.textContent = s.game_name || "Jeu";
+    if (viewersEl) viewersEl.textContent = `👀 ${s.viewer_count ?? 0}`;
+    if (uptimeEl) uptimeEl.textContent = `⏱️ ${fmtUptime(s.started_at)}`;
+    if (thumbImg) {
+      thumbImg.src = (s.thumbnail_url || "").replace("{width}", "1280").replace("{height}", "720");
+      thumbImg.alt = `Aperçu du live de ${ev.user}`;
+    }
+  } else {
+    if (titleEl) titleEl.textContent = `${ev.user} — mise en avant exceptionnelle`;
+    if (gameEl) gameEl.textContent = "New Family";
+    if (viewersEl) viewersEl.textContent = `👀 —`;
+    if (uptimeEl) uptimeEl.textContent = `⏱️ —`;
+    if (thumbImg) thumbImg.src = "assets/featured_placeholder.jpg";
+  }
+
+  if (userInfo && avatarImg) {
+    avatarImg.src = userInfo.profile_image_url;
+    avatarImg.alt = `Avatar de ${ev.user}`;
+  }
+}
+
+/* -------------------------------
    🚀 Init principale
 ----------------------------------*/
 async function init() {
@@ -295,10 +362,12 @@ async function init() {
   }
 
   const [allUsers, vipList] = await Promise.all([fetchUserLists(), fetchVIPList()]);
-  setStatValue("stat-members", 418); // adapte si besoin
+  setStatValue("stat-members", 418);
   setStatValue("stat-actifs", allUsers.length || 0);
 
   const usersInfo = await fetchUsersInfo(allUsers);
+
+  // Streams (2 chunks)
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
   for (const group of streamChunks) {
@@ -306,9 +375,11 @@ async function init() {
     if (data?.data?.length) onlineUsers.push(...data.data);
   }
 
+  // Stats dynamiques
   recordLiveSnapshot(onlineUsers.length);
   setStatValue("stat-lives", computeLivesPerDayAverage());
 
+  // Événements
   try {
     const evRes = await fetch("events.json");
     if (evRes.ok) {
@@ -320,6 +391,7 @@ async function init() {
     console.warn("Erreur lecture events.json", e);
   }
 
+  // Rendu cartes
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
   if (!liveContainer || !offlineContainer) {
@@ -344,10 +416,13 @@ async function init() {
     (isOnline ? liveContainer : offlineContainer).appendChild(card);
   }
 
+  // Texte barre
   const liveCountElement = document.getElementById("live-count");
   if (liveCountElement) {
     const emoji = onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
+    liveCountElement.textContent =
+      `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ` +
+      `${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
   }
 
   hideSkeletons();
@@ -355,10 +430,11 @@ async function init() {
   nfSyncLiveBar();
   nfSetupRevealOnScroll();
 
+  // Polling régulier
   window.NF_ALL_USERS = allUsers;
   startLivePolling();
 
-  // 🎯 Mise en avant exceptionnelle (featured.json)
+  // 🎯 Mise en avant (featured.json)
   try {
     const fRes = await fetch("featured.json");
     if (fRes.ok) {
@@ -368,14 +444,7 @@ async function init() {
         const start = new Date(ev.date);
         const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // +2h
         if (now >= start && now <= end) {
-          const section = document.getElementById("featured-live");
-          const txt = document.getElementById("featured-text");
-          const link = document.getElementById("featured-link");
-          if (section && txt && link) {
-            section.style.display = "block";
-            txt.innerHTML = `<strong>${escapeHtml(ev.user)}</strong> est actuellement mis(e) en avant par la communauté New Family ! 🎉`;
-            link.href = ev.url;
-          }
+          await renderFeaturedLive(ev, usersInfo);
           break;
         }
       }
@@ -476,7 +545,9 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
       const liveCountElement = document.getElementById("live-count");
       if (liveCountElement) {
         const emoji = onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-        liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
+        liveCountElement.textContent =
+          `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ` +
+          `${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
       }
     } catch (e) {
       console.warn("Polling live: erreur", e);
