@@ -71,7 +71,11 @@ function setupThemeToggle() {
    AUTH & appels Twitch
 ----------------------------------*/
 async function getToken() {
-  const response = await fetch("/.netlify/functions/getTwitchData");
+  const response = await fetch("/.netlify/functions/getTwitchData").catch(() => null);
+  if (!response || !response.ok) {
+    console.error("❌ Impossible de récupérer le token Twitch.");
+    return;
+  }
   const data = await response.json();
   token = data.access_token;
 }
@@ -143,7 +147,6 @@ async function fetchVIPList() {
   try {
     const response = await fetch("vip.json");
     if (!response.ok) return [];
-
     const data = await response.json();
     // Toujours renvoyer une liste de pseudos en minuscule
     return data.map(item =>
@@ -155,7 +158,6 @@ async function fetchVIPList() {
     return [];
   }
 }
-
 
 /* -------------------------------
    🏷️ Badges de rôle
@@ -228,6 +230,7 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
 /* -------------------------------
    📊 Stats dynamiques (helpers)
 ----------------------------------*/
@@ -241,7 +244,7 @@ function setStatValue(id, value) {
 
 // LocalStorage des snapshots live pour moyenne quotidienne
 const SNAP_KEY = "nf_live_snapshots_v1";
-const SNAP_DAYS = 14; // fenêtre glissante (jours)
+const SNAP_DAYS = 30; // fenêtre glissante (jours)
 const SNAP_KEEP = 30; // conservation max (jours)
 
 function recordLiveSnapshot(count) {
@@ -276,7 +279,7 @@ function computeLivesPerDayAverage() {
     byDay.set(key, Math.max(prev, s.c));
   }
 
-  // ne garde que les 14 derniers jours, puis moyenne
+  // ne garde que les SNAP_DAYS derniers jours, puis moyenne
   const days = Array.from(byDay.keys()).sort();
   const lastDays = days.slice(-SNAP_DAYS);
   if (!lastDays.length) return 0;
@@ -288,42 +291,78 @@ function computeLivesPerDayAverage() {
    🚀 Init principale
 ----------------------------------*/
 async function init() {
+  // 1) UI immédiate
   setupThemeToggle();
+  nfSetupSkeletons(); // afficher des placeholders TOUT DE SUITE
+
+  // 2) Auth
   await getToken();
   if (!token) {
     console.error("❌ Token manquant !");
+    // retire quand même les skeletons au bout de 5s pour éviter un écran figé
+    setTimeout(hideSkeletons, 5000);
     return;
   }
+
+  // 3) Données principales
   const [allUsers, vipList] = await Promise.all([
     fetchUserLists(),
     fetchVIPList(),
   ]);
-  // >>> STAT "Actifs" = nb d'utilisateurs uniques dans users1/2/3
-  setStatValue("stat-actifs", allUsers.length);
+
+  // 4) Stats immédiates (sans attendre le rendu des cartes)
+  // Membres totaux (Discord) — adapte 418 si besoin
+  setStatValue("stat-members", 418);
+  // Actifs = utilisateurs uniques dans users1/2/3
+  setStatValue("stat-actifs", allUsers.length || 0);
+
+  // 5) Infos utilisateurs Twitch
   const usersInfo = await fetchUsersInfo(allUsers);
-  // streams en 2 paquets (limite query)
+
+  // 6) Streams en 2 paquets
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
   for (const group of streamChunks) {
     const data = await fetchStreams(group);
     if (data?.data?.length) onlineUsers.push(...data.data);
   }
-  // enregistre snapshot pour "Lives/jour" + mise à jour de la moyenne
+
+  // 7) Stats dynamiques liées au live
   recordLiveSnapshot(onlineUsers.length);
   setStatValue("stat-lives", computeLivesPerDayAverage());
-  // Remplissage des grilles
+
+  // 8) Événements (si events.json existe)
+  try {
+    const evRes = await fetch("events.json");
+    if (evRes.ok) {
+      const ev = await evRes.json();
+      const nbEvents = Array.isArray(ev) ? ev.length : (ev?.count || 0);
+      setStatValue("stat-events", nbEvents);
+    } else {
+      // fallback : garder la valeur existante (data-to dans le HTML) ou 0
+      setStatValue("stat-events", Number(document.getElementById("stat-events")?.dataset?.to || 0));
+    }
+  } catch (e) {
+    console.warn("Erreur lecture events.json", e);
+    setStatValue("stat-events", Number(document.getElementById("stat-events")?.dataset?.to || 0));
+  }
+
+  // 9) Remplissage des grilles
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
   if (!liveContainer || !offlineContainer) {
     console.warn("⚠️ Conteneurs #live-users ou #offline-users introuvables.");
+    hideSkeletons();
     return;
   }
+
   const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
   const sortedUsers = [...allUsers].sort((a, b) => {
     const aIsVip = vipList.includes(a.toLowerCase());
     const bIsVip = vipList.includes(b.toLowerCase());
     return aIsVip === bIsVip ? 0 : aIsVip ? -1 : 1;
   });
+
   for (const user of sortedUsers) {
     const lower = user.toLowerCase();
     const isOnline = onlineLogins.includes(lower);
@@ -331,10 +370,10 @@ async function init() {
     const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
     const isVip = vipList.includes(lower);
     const card = createUserCard({ user, isOnline, streamData, userInfo, isVip });
-    if (isOnline) liveContainer.appendChild(card);
-    else offlineContainer.appendChild(card);
+    (isOnline ? liveContainer : offlineContainer).appendChild(card);
   }
-  // Texte "X membres en live" (eyebrow)
+
+  // 10) Texte "X membres en live"
   const liveCountElement = document.getElementById("live-count");
   if (liveCountElement) {
     const emoji =
@@ -346,18 +385,19 @@ async function init() {
     } actuellement en live`;
     liveCountElement.setAttribute("aria-live", "polite");
   }
-  // Mémorise la liste pour le polling et démarre le suivi
+
+  // 11) Nettoyage skeletons + animations
+  hideSkeletons();
+  nfAnimateStatsOnView();
+  nfSyncLiveBar();
+  nfSetupRevealOnScroll();
+
+  // 12) Polling
   window.NF_ALL_USERS = allUsers;
   startLivePolling(); // par défaut toutes les 5 minutes
-  // --- UI Enhancements ---
-  nfSetupSkeletons(); // squelettes pendant le fetch
-  nfSyncLiveBar(); // synchronise la barre live
-  nfAnimateStatsOnView(); // anime les compteurs au scroll
-  nfSetupRevealOnScroll(); // effets reveal
 }
 
 /* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
-// 1) Barre live ← synchronisée avec #live-count (texte)
 function nfSyncLiveBar() {
   const liveCountEl = document.getElementById("live-count");
   const barCount = document.getElementById("nf-live-count");
@@ -370,7 +410,7 @@ function nfSyncLiveBar() {
   const obs = new MutationObserver(sync);
   obs.observe(liveCountEl, { childList: true, subtree: true, characterData: true });
 }
-// 2) Animation des nombres quand la section devient visible
+
 function nfAnimateStatsOnView() {
   const els = document.querySelectorAll(".num[data-to]");
   if (!els.length) return;
@@ -395,7 +435,7 @@ function nfAnimateStatsOnView() {
   }, { threshold: 0.5 });
   els.forEach(el => observer.observe(el));
 }
-// 3) Effets reveal au scroll (sections .reveal)
+
 function nfSetupRevealOnScroll() {
   const reveals = document.querySelectorAll(".reveal");
   if (!reveals.length) return;
@@ -409,16 +449,27 @@ function nfSetupRevealOnScroll() {
   }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
 }
+
 // 4) Squelettes pendant le chargement
 function nfSetupSkeletons() {
   const skeletonContainer = document.getElementById("nf-skeletons");
   if (!skeletonContainer) return;
+  skeletonContainer.innerHTML = "";
   for (let i = 0; i < 20; i++) {
     const skel = document.createElement("div");
     skel.classList.add("user-skeleton");
     skeletonContainer.appendChild(skel);
   }
 }
+
+function hideSkeletons() {
+  const sk = document.getElementById("nf-skeletons");
+  if (sk) {
+    sk.innerHTML = "";
+    sk.style.display = "none";
+  }
+}
+
 /* -------------------------------
    🔁 Polling live (maj périodique)
    - Refait les appels Twitch à intervalle régulier
@@ -460,5 +511,6 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   setTimeout(poll, 10_000);
   setInterval(poll, intervalMs);
 }
+
 /* ---- GO ---- */
 init();
