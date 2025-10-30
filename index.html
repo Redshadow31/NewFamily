@@ -4,126 +4,58 @@
   <meta charset="UTF-8" />
   <title>Twitch Entraide New Family — Accueil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Communauté Twitch francophone d’entraide : mentoring, feedbacks, raids, événements et visibilité pour créateurs." />
-
-  <!-- Canonical -->
-  <link rel="canonical" href="https://newfamily.netlify.app/">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Twitch Entraide New Family — Accueil">
-  <meta property="og:description" content="Communauté Twitch francophone d’entraide : mentoring, feedbacks, raids, événements et visibilité.">
-  <meta property="og:url" content="https://newfamily.netlify.app/">
-  <meta property="og:image" content="https://newfamily.netlify.app/assets/og-cover.jpg">
-
-  <!-- Réseaux officiels -->
-  <link rel="me" href="https://www.instagram.com/TENF">
-  <link rel="me" href="https://www.tiktok.com/@TENF">
-
-  <!-- Perfs -->
-  <link rel="dns-prefetch" href="//player.twitch.tv">
-  <link rel="dns-prefetch" href="//static-cdn.jtvnw.net">
-  <link rel="preconnect" href="https://player.twitch.tv" crossorigin>
+  <meta name="description" content="Communauté Twitch francophone d’entraide : mentorat, feedbacks, raids, événements et visibilité pour créateurs." />
+  <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin>
   <link rel="preconnect" href="https://api.twitch.tv" crossorigin>
-  <link rel="preload" as="image" href="assets/logo.webp" fetchpriority="high">
-
-  <link rel="icon" href="assets/favicon.ico" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Données structurées -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Twitch Entraide New Family",
-    "url":"https://newfamily.netlify.app/",
-    "logo":"https://newfamily.netlify.app/assets/logo.webp",
-    "sameAs":[
-      "https://www.instagram.com/TENF",
-      "https://www.tiktok.com/@TENF"
-    ]
-  }
-  </script>
-
-  <!-- Styles rapides (tu peux les migrer plus tard dans style.css) -->
-  <style>
-    .nf-livebar{
-      max-width:1100px;margin:1rem auto 0;background:#fff;color:#4b0082;
-      border-radius:.8rem;padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;
-      box-shadow:0 8px 20px rgba(0,0,0,.08);justify-content:center;flex-wrap:wrap;text-align:center
-    }
-    .nf-livebar .dot{width:10px;height:10px;border-radius:50%;background:#e74c3c;box-shadow:0 0 0 0 rgba(231,76,60,.6);animation:pulse 1.8s infinite}
-    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(231,76,60,.6)}70%{box-shadow:0 0 0 10px rgba(231,76,60,0)}100%{box-shadow:0 0 0 0 rgba(231,76,60,0)}}
-    .home-intro{max-width:1100px;margin:1.2rem auto 0;padding:0 1rem;text-align:center}
-    .nf-hero-badges{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin:1rem 0}
-    .nf-hero-badges span{background:#f3e9ff;border:1px solid #ead9ff;padding:.4rem .7rem;border-radius:999px}
-    .nf-stats{max-width:1100px;margin:2rem auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;padding:0 1rem}
-    .nf-stats .stat{background:#fff;border-radius:1rem;padding:1.2rem;text-align:center;box-shadow:0 10px 20px rgba(0,0,0,.08)}
-    .nf-stats .num{font-weight:800;font-size:clamp(1.8rem,4vw,2.4rem);color:#c0392b;transition:color .3s ease}
-    .nf-stats .label{margin-top:.3rem;font-size:.95rem;font-weight:600;color:#4b0082;opacity:.85}
-    .nf-why{max-width:1100px;margin:1rem auto 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:0 1rem}
-    .nf-why article{background:#fff;border-radius:1rem;padding:1rem 1.2rem;box-shadow:0 10px 20px rgba(0,0,0,.08);transition:transform .25s ease,box-shadow .25s ease}
-    .nf-why article:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.12)}
-    .nf-why h3{margin:.2rem 0 .3rem;color:#8e44ad}
-    #nf-skeletons{max-width:1100px;margin:1.5rem auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:0 1rem}
-    .user-skeleton{background:#fff;border-radius:1rem;height:200px;box-shadow:0 10px 20px rgba(0,0,0,.08);animation:pulse 1.8s infinite}
-    .reveal{opacity:0;transform:translateY(12px);transition:.6s ease}
-    .reveal.revealed{opacity:1;transform:none}
-    .header-logo img{animation:floaty 6s ease-in-out infinite;transform-origin:center}
-    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-    .social-links{display:flex;justify-content:center;gap:.8rem;margin-top:.6rem;}
-    .social-links a img{width:36px;height:36px;border-radius:50%;transition:transform .2s ease,box-shadow .2s ease;}
-    .social-links a:hover img{transform:scale(1.1);box-shadow:0 0 10px rgba(0,0,0,.2);}
-  </style>
 </head>
 <body>
-  <a href="#main" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Aller au contenu</a>
+  <!-- ===== Hero / Header ===== -->
+  <header class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__inner">
+      <img class="hero__logo" src="assets/logo.webp" alt="Logo Twitch Entraide New Family">
+      <h1 class="hero__title">Bienvenue sur le site de la New Family !</h1>
+      <p class="hero__subtitle">La communauté francophone d’entraide entre streamers & viewers ✨</p>
 
-  <!-- HEADER -->
-  <header>
-    <div class="header-content">
-      <div class="header-logo">
-        <img src="assets/logo.webp" alt="Logo New Family" />
+      <div class="hero__cta">
+        <a href="a-propos.html" class="btn btn--primary">🎭 En savoir plus</a>
+        <a href="staff.html" class="btn">👥 Staff</a>
+        <a href="blog.html" class="btn">📰 Actualités</a>
       </div>
-      <div class="header-text">
-        <h1>Bienvenue sur le site de la New Family !</h1>
-        <p>La communauté francophone d’entraide entre streamers & viewers ✨</p>
 
-        <!-- Réseaux sociaux -->
-        <div class="social-links" aria-label="Réseaux sociaux officiels">
-          <a href="https://www.instagram.com/TENF" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="assets/Instagram.webp" alt="Instagram New Family">
-          </a>
-          <a href="https://www.tiktok.com/@TENF" target="_blank" rel="noopener" aria-label="TikTok">
-            <img src="assets/Tiktok.webp" alt="TikTok New Family">
-          </a>
-        </div>
-      </div>
+      <!-- Réseaux -->
+      <nav class="socials" aria-label="Réseaux sociaux">
+        <a class="socials__item" href="https://www.instagram.com/twitchentraidnewfamily" target="_blank" rel="noopener" aria-label="Instagram New Family">
+          <img src="assets/Instagram.webp" width="26" height="26" alt="Instagram">
+          <span>@twitchentraidnewfamily</span>
+        </a>
+        <a class="socials__item" href="https://www.tiktok.com/@twitchentraidnewfamily" target="_blank" rel="noopener" aria-label="TikTok New Family">
+          <img src="assets/Tiktok.webp" width="26" height="26" alt="TikTok">
+          <span>@twitchentraidnewfamily</span>
+        </a>
+      </nav>
     </div>
+    <!-- Bouton thème (ton JS le crée si absent, mais on laisse un emplacement propre) -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Changer de thème">🌙</button>
   </header>
 
- <main id="main">
-  <!-- Intro -->
-    <!-- Intro -->
-    <div class="home-intro">
-      <div class="button-container">
-        <a href="a-propos.html" class="about-button">🎭 En savoir plus</a>
-        <a href="staff.html" class="about-button">👥 Staff</a>
-        <a href="blog.html" class="about-button">📰 Actualités</a>
+  <main>
+    <!-- ===== Barre live ===== -->
+    <div id="live-strip" class="live-strip" aria-label="Chaînes en direct">
+      <div class="live-strip__inner" id="live-strip-inner">
+        <!-- rempli/actualisé par script.js (si tu le fais plus tard) -->
       </div>
-      <div class="nf-hero-badges">
-        <span>✨ Mentorat</span><span>🎯 Feedback</span><span>🚀 Raids</span>
-      </div>
-    </div>
-<!-- BARRE LIVE -->
-    <div class="nf-livebar" role="status" aria-live="polite">
-      <span class="dot" aria-hidden="true"></span>
-      <strong id="nf-live-count">0</strong> live(s) en cours •
-      <em id="live-count">Chargement des données...</em>
     </div>
 
-    <!-- LIVE MISE EN AVANT -->
+    <div class="nf-livebar" role="status" aria-live="polite">
+      <span class="dot"></span>
+      <strong id="nf-live-count">0</strong> live(s) en cours •
+      <em id="live-count">Chargement des données…</em>
+    </div>
+
+    <!-- ===== Mise en avant ===== -->
     <section id="featured-live" class="featured-live" style="display:none;">
       <div class="featured-card">
         <div class="featured-media" id="featured-bg" aria-hidden="true"></div>
@@ -139,7 +71,7 @@
 
           <h3 class="featured-title">
             <span id="featured-user">@user</span>
-            <span class="dot" aria-hidden="true">•</span>
+            <span class="dot">•</span>
             <span id="featured-stream-title">Live en cours</span>
           </h3>
 
@@ -150,69 +82,81 @@
           </div>
         </div>
       </div>
- <!-- Lecteur Twitch pour le live mis en avant -->
+
+      <!-- Lecteur Twitch -->
       <div id="featured-player"
            style="width:100%;max-width:1100px;margin:1rem auto;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.2);display:none;">
       </div>
     </section>
 
-    <!-- BOUTONS PRINCIPAUX -->
-    <div class="button-container" style="text-align:center;margin-top:.6rem;">
-      <a href="vip.html" class="event-button">⭐ VIP du mois</a>
-      <a href="evenements.html" class="event-button">📅 Événements</a>
-      <a href="clips.html" class="event-button">📽️ Clips</a>
-      <a href="interviews.html" class="event-button">🎤 Interviews</a>
-      <a href="aventura2026.html" class="event-button">🌴 Aventura 2026</a>
+    <!-- ===== Boutons principaux ===== -->
+    <div class="button-row">
+      <a href="vip.html" class="btn btn--gold">⭐ VIP du mois</a>
+      <a href="evenements.html" class="btn">📅 Événements</a>
+      <a href="clips.html" class="btn">📽️ Clips</a>
+      <a href="interviews.html" class="btn">🎤 Interviews</a>
+      <a href="aventura2026.html" class="btn">🌴 Aventura 2026</a>
     </div>
-  <!-- Statistiques -->
-  <section class="nf-stats reveal" aria-label="Statistiques de la communauté">
-    <div class="stat">
-      <div class="num" id="stat-members" data-to="418">418</div>
-      <div class="label">Membres (Discord)</div>
+
+    <!-- ===== Stats ===== -->
+    <section class="nf-stats" aria-label="Statistiques de la communauté">
+      <div class="stat">
+        <div class="num" id="stat-members" data-to="418">418</div>
+        <div class="label">Membres (Discord)</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-actifs" data-to="0">0</div>
+        <div class="label">Actifs (entraide)</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-lives" data-to="0">0</div>
+        <div class="label">Lives / jour (moyenne)</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-events" data-to="0">0</div>
+        <div class="label">Événements / mois</div>
+      </div>
+    </section>
+
+    <!-- ===== Pourquoi nous ===== -->
+    <section class="nf-why" aria-label="Pourquoi nous rejoindre">
+      <article><h3>🎯 Progression</h3><p>Mentorat, feedbacks, ateliers et entraide structurée.</p></article>
+      <article><h3>🤝 Humain d’abord</h3><p>Ambiance safe, modération formée, zéro drama.</p></article>
+      <article><h3>🚀 Visibilité</h3><p>Raids, relais, mise en avant des créateurs motivés.</p></article>
+    </section>
+
+    <!-- ===== Squelettes chargement ===== -->
+    <div id="nf-skeletons" aria-hidden="true"></div>
+
+    <!-- ===== Grilles membres ===== -->
+    <section id="online" aria-label="Membres actuellement en live">
+      <h2>🎥 Actuellement en direct</h2>
+      <div id="live-users" class="users-grid"></div>
+    </section>
+
+    <section id="offline" aria-label="Membres hors ligne">
+      <h2>👀 À découvrir bientôt</h2>
+      <div id="offline-users" class="users-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© New Family — Communauté d’entraide Twitch</p>
+    <div class="socials socials--footer">
+      <a class="socials__item" href="https://www.instagram.com/twitchentraidnewfamily" target="_blank" rel="noopener" aria-label="Instagram New Family">
+        <img src="assets/Instagram.webp" width="22" height="22" alt="Instagram">
+        <span>Instagram</span>
+      </a>
+      <a class="socials__item" href="https://www.tiktok.com/@twitchentraidnewfamily" target="_blank" rel="noopener" aria-label="TikTok New Family">
+        <img src="assets/Tiktok.webp" width="22" height="22" alt="TikTok">
+        <span>TikTok</span>
+      </a>
     </div>
-    <div class="stat">
-      <div class="num" id="stat-actifs" data-to="0">0</div>
-      <div class="label">Actifs (entraide)</div>
-    </div>
-    <div class="stat">
-      <div class="num" id="stat-lives" data-to="0">0</div>
-      <div class="label">Lives / jour (moyenne)</div>
-    </div>
-    <div class="stat">
-      <div class="num" id="stat-events" data-to="0">0</div>
-      <div class="label">Événements / mois</div>
-    </div>
-  </section>
+  </footer>
 
-  <!-- Pourquoi nous -->
-  <section class="nf-why reveal" aria-label="Pourquoi nous rejoindre">
-    <article><h3>🎯 Progression</h3><p>Mentorat, feedbacks, ateliers et entraide structurée.</p></article>
-    <article><h3>🤝 Humain d’abord</h3><p>Ambiance safe, modération formée, zéro drama.</p></article>
-    <article><h3>🚀 Visibilité</h3><p>Raids, relais, mise en avant des créateurs motivés.</p></article>
-  </section>
-
-  <!-- Skeletons (chargement) -->
-  <div id="nf-skeletons" aria-hidden="true"></div>
-
-  <!-- Membres en ligne -->
-  <section id="online" class="reveal" aria-label="Membres actuellement en live">
-    <h2>🎥 Actuellement en direct</h2>
-    <div id="live-users" class="users-grid"></div>
-  </section>
-
-  <!-- Membres hors ligne -->
-  <section id="offline" class="reveal" aria-label="Membres hors ligne">
-    <h2>👀 À découvrir bientôt</h2>
-    <div id="offline-users" class="users-grid"></div>
-  </section>
-</main>
-
-<script src="https://player.twitch.tv/js/embed/v1.js" async></script>
-<script src="script.js" defer></script>
-
-
+  <!-- Lecteur Twitch -->
   <script src="https://player.twitch.tv/js/embed/v1.js" async></script>
-  <script src="script.js" defer></script>
-  <noscript>Ce site utilise JavaScript pour afficher les lives en temps réel.</noscript>
+  <!-- Ton JS existant -->
+  <script src="script.js"></script>
 </body>
 </html>
