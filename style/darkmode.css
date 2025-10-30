@@ -1,0 +1,51 @@
+/* Dark mode via media query + classes html.dark/body.dark */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#231335;
+    --surface:#1b1430;
+    --surface-2:#2E1750;
+    --text:#f2ecff;
+    --muted:#cbb8ff;
+    --border:rgba(255,255,255,.12);
+    --accent:#c084fc;
+    --accent-2:#ff7a7a;
+    --shadow:0 10px 28px rgba(0,0,0,.45);
+  }
+}
+
+html.dark, body.dark, [data-theme="dark"]{
+  background-color:var(--bg) !important; color:var(--text) !important;
+}
+
+/* Cartes & éléments */
+html.dark .card, html.dark .user-card, html.dark .staff-card, html.dark .vip-card,
+[data-theme="dark"] .card, [data-theme="dark"] .user-card, [data-theme="dark"] .staff-card, [data-theme="dark"] .vip-card{
+  background:var(--surface); box-shadow:0 6px 20px rgba(0,0,0,.35); border:1px solid var(--border);
+}
+html.dark .card-body, [data-theme="dark"] .card-body{ background:var(--surface); border-top:1px solid var(--border) }
+html.dark .username, html.dark .title, html.dark .card-footer, [data-theme="dark"] .username, [data-theme="dark"] .title, [data-theme="dark"] .card-footer{ color:var(--text) }
+html.dark .card-footer a, [data-theme="dark"] .card-footer a{ background:#372052; color:#fff; border:1px solid var(--border) }
+html.dark .card-footer a:hover, [data-theme="dark"] .card-footer a:hover{ background:#432665 }
+
+html.dark #live-strip{ background:#1b1430 }
+html.dark .live-chip{ border-color:#2a2148; background:#20173e }
+html.dark .live-chip__name{ color:#fff }
+html.dark .live-chip__game{ color:#cbb8ff }
+
+/* Spotlight sombre */
+html.dark .vip-spotlight-card,[data-theme="dark"] .vip-spotlight-card{
+  background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:0 10px 28px rgba(0,0,0,.4)!important;color:var(--text)!important
+}
+html.dark .vip-spotlight-body,.vip-spotlight-name,.vip-spotlight-quote,.vip-spotlight-bio{
+  background:var(--surface)!important;color:var(--text)!important
+}
+
+/* Inputs */
+html.dark input, html.dark select, html.dark textarea,
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea{
+  background:#1F1133; color:#fff; border:1px solid var(--border);
+}
+
+/* Liens */
+html.dark a, [data-theme="dark"] a{ color:#E2D1FF }
+html.dark a:hover, [data-theme="dark"] a:hover{ color:#fff }
