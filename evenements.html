@@ -147,9 +147,146 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-  <!-- Ton script d’origine reste inchangé -->
   <script>
-    // ... ton code JS existant ici ...
+    // ------ Data source ------
+    let ALL_EVENTS = [];
+    let CURRENT_FILTER = 'all';
+    const grid = document.getElementById('eventsGrid');
+
+    async function loadEvents(){
+      const res = await fetch('events.json', {cache:'no-store'});
+      ALL_EVENTS = await res.json();
+      renderGrid();
+      renderCalendar();
+    }
+
+    // ------ Filtres ------
+    document.getElementById('filters').addEventListener('click', (e)=>{
+      if(!e.target.matches('.filter-btn')) return;
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      e.target.classList.add('active');
+      CURRENT_FILTER = e.target.dataset.cat;
+      renderGrid();
+    });
+
+    // Ajout de la catégorie "live"
+    function categoryBadge(cat){
+      const map = {
+        jeux:'jeux',
+        formations:'formations',
+        integration:'integration',
+        apero:'apero',
+        cine:'cine',
+        live:'live'
+      };
+      const label = {
+        jeux:'🎮 Jeux',
+        formations:'🎓 Formations',
+        integration:'✅ Réunions',
+        apero:'🥂 Apéros',
+        cine:'🎬 Ciné Clara',
+        live:'🎥 Live Gagnant'
+      }[cat.toLowerCase()] || cat;
+      return `<span class="badge ${map[cat.toLowerCase()]||''}">${label}</span>`;
+    }
+
+    function renderGrid(){
+      const items = (CURRENT_FILTER==='all'? ALL_EVENTS : ALL_EVENTS.filter(e=>e.category.toLowerCase()===CURRENT_FILTER));
+      if(!items.length){ grid.innerHTML = `<p>Aucun événement dans cette catégorie pour le moment.</p>`; return; }
+      grid.innerHTML = items.map(e=>{
+        return `
+          <article class="card">
+            ${categoryBadge(e.category)}
+            <h3>${e.title}</h3>
+            <p class="meta">🗓️ ${new Date(e.start).toLocaleString('fr-FR', {dateStyle:'full', timeStyle:'short'})}${e.end?'' : ''}</p>
+            ${e.location ? `<p class="meta">📍 ${e.location}</p>`:''}
+            <p>${e.description||''}</p>
+            <div class="cta">
+              <button class="btn" onclick="openSignup('${e.id}')">Je m’inscris</button>
+              <span class="count" id="count-${e.id}">Inscrits : …</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+      items.forEach(e=>updateCount(e.id));
+    }
+
+    // ------ Calendrier ------
+    function renderCalendar(){
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        timeZone: 'Europe/Madrid',
+        height: 'auto',
+        events: ALL_EVENTS.map(e=>({
+          id: e.id,
+          title: e.title,
+          start: e.start,
+          end: e.end || null,
+          extendedProps: { category:e.category, location:e.location, description:e.description }
+        })),
+        eventClick: function(info){ openSignup(info.event.id); }
+      });
+      calendar.render();
+    }
+
+    // ------ Modal + Form ------
+    const backdrop = document.getElementById('modalBackdrop');
+    const form = document.getElementById('signupForm');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const countText = document.getElementById('countText');
+
+    function openSignup(id){
+      const ev = ALL_EVENTS.find(x=>x.id===id);
+      if(!ev) return;
+      document.getElementById('modalTitle').textContent = `Inscription – ${ev.title}`;
+      document.getElementById('f_eventId').value = ev.id;
+      document.getElementById('f_eventTitle').value = ev.title;
+      countText.textContent = '';
+      backdrop.style.display = 'flex';
+      updateCount(ev.id, true);
+    }
+    cancelBtn.addEventListener('click', ()=> backdrop.style.display = 'none');
+    backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) backdrop.style.display='none' });
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = new FormData(form);
+      const payload = Object.fromEntries(data.entries());
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(payload).toString()
+      });
+      try{
+        await fetch('/.netlify/functions/register', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+      }catch(e){ console.warn('Discord notification échouée', e); }
+
+      alert('Inscription enregistrée. Merci !');
+      backdrop.style.display = 'none';
+      updateCount(payload.eventId);
+      form.reset();
+    });
+
+    async function updateCount(eventId, intoModal=false){
+      try{
+        const r = await fetch('/.netlify/functions/list-registrations?eventId='+encodeURIComponent(eventId));
+        if(!r.ok) throw new Error('no count');
+        const {count} = await r.json();
+        const target = document.getElementById('count-'+eventId);
+        if(target) target.textContent = `Inscrits : ${count}`;
+        if(intoModal) countText.textContent = `Déjà ${count} inscrit·e·s pour cet événement.`;
+      }catch{
+        const target = document.getElementById('count-'+eventId);
+        if(target) target.textContent = `Inscrits : —`;
+      }
+    }
+
+    loadEvents();
   </script>
 </body>
 </html>
