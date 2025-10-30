@@ -212,3 +212,47 @@ html.dark .live-chip__name,
 [data-theme="dark"] .live-chip__name{ color:#fff }
 html.dark .live-chip__game,
 [data-theme="dark"] .live-chip__game{ color:#cbb8ff }
+/* ==== PATCH INDEX & STAFF ==== */
+
+/* 1) Header compact commun (index + staff) */
+header{
+  min-height: clamp(180px, 28vh, 320px) !important;
+  padding: clamp(.8rem, 2.5vw, 1.4rem) 1rem !important;
+  background:
+    radial-gradient(900px 420px at 20% -20%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(900px 420px at 110% 10%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(135deg,#5f2c82 0%, #b06ab3 35%, #ff6a88 100%) !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+
+/* 2) INDEX — logo + overlay + blocs de boutons */
+.hero__logo{               /* <img class="hero__logo" ...> */
+  width: clamp(100px, 12vw, 150px);
+  height: auto;
+  display: block;
+  margin: 0 auto .4rem;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
+}
+.hero__overlay{ display:none; } /* si un overlay poussait le header */
+
+.button-container{         /* 1ère rangée de boutons */
+  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
+  margin:.6rem 0 .8rem;
+}
+
+.actions-row{              /* 2e rangée : VIP / Événements / Clips / ... */
+  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
+  margin:.8rem auto 0; padding:0 1rem; max-width:1100px;
+}
+
+/* 3) STAFF — logo dans la structure header-logo si présent */
+.header-logo img{
+  width: clamp(100px, 12vw, 150px);
+  height:auto;
+  margin-bottom:.4rem;
+}
+
+/* 4) Titres un peu plus compacts partout */
+.header-text h1{ font-size: clamp(1.4rem, 3.2vw, 2.2rem) !important; margin:.2rem 0 .2rem !important; }
+.header-text p { font-size: clamp(.9rem, 1.5vw, 1rem) !important;  margin:0 0 .6rem !important; opacity:.95; }
