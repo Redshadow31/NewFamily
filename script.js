@@ -1,7 +1,8 @@
 /* =========================================================
-   New Family — script.js (FIXED)
+   New Family — script.js (FINAL 2025)
    - Résilient aux fichiers manquants
-   - Moyenne lives/jour sur 30 jours (inclut 0)
+   - Moyenne lives/jour sur 30 jours
+   - Système de mise en avant exceptionnelle (featured.json)
    ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -94,7 +95,6 @@ async function fetchUserLists() {
       console.warn(`Impossible de charger ${file}:`, error.message);
     }
   }
-  // Fusion + déduplication (lowercase)
   return [...new Set(allUsers.map(u => (u || "").toLowerCase()))];
 }
 
@@ -148,7 +148,6 @@ async function fetchVIPList() {
     const response = await fetch("vip.json");
     if (!response.ok) return [];
     const data = await response.json();
-    // Toujours renvoyer une liste de pseudos en minuscule
     return data.map(item =>
       typeof item === "string"
         ? item.toLowerCase()
@@ -242,10 +241,9 @@ function setStatValue(id, value) {
   el.textContent = String(v);
 }
 
-// LocalStorage des snapshots live pour moyenne quotidienne
 const SNAP_KEY = "nf_live_snapshots_v1";
-const SNAP_DAYS = 30; // fenêtre glissante (jours)
-const SNAP_KEEP = 30; // conservation max (jours)
+const SNAP_DAYS = 30;
+const SNAP_KEEP = 30;
 
 function recordLiveSnapshot(count) {
   const now = Date.now();
@@ -265,12 +263,9 @@ function loadSnapshots() {
   }
 }
 
-// moyenne du PIC quotidien sur les N derniers jours observés
 function computeLivesPerDayAverage() {
   const snaps = loadSnapshots();
   if (!snaps.length) return 0;
-
-  // regroupe par jour (UTC) et prend le max par jour
   const byDay = new Map();
   for (const s of snaps) {
     const d = new Date(s.t);
@@ -278,8 +273,6 @@ function computeLivesPerDayAverage() {
     const prev = byDay.get(key) ?? 0;
     byDay.set(key, Math.max(prev, s.c));
   }
-
-  // ne garde que les SNAP_DAYS derniers jours, puis moyenne
   const days = Array.from(byDay.keys()).sort();
   const lastDays = days.slice(-SNAP_DAYS);
   if (!lastDays.length) return 0;
@@ -291,35 +284,21 @@ function computeLivesPerDayAverage() {
    🚀 Init principale
 ----------------------------------*/
 async function init() {
-  // 1) UI immédiate
   setupThemeToggle();
-  nfSetupSkeletons(); // afficher des placeholders TOUT DE SUITE
+  nfSetupSkeletons();
 
-  // 2) Auth
   await getToken();
   if (!token) {
     console.error("❌ Token manquant !");
-    // retire quand même les skeletons au bout de 5s pour éviter un écran figé
     setTimeout(hideSkeletons, 5000);
     return;
   }
 
-  // 3) Données principales
-  const [allUsers, vipList] = await Promise.all([
-    fetchUserLists(),
-    fetchVIPList(),
-  ]);
-
-  // 4) Stats immédiates (sans attendre le rendu des cartes)
-  // Membres totaux (Discord) — adapte 418 si besoin
-  setStatValue("stat-members", 418);
-  // Actifs = utilisateurs uniques dans users1/2/3
+  const [allUsers, vipList] = await Promise.all([fetchUserLists(), fetchVIPList()]);
+  setStatValue("stat-members", 418); // adapte si besoin
   setStatValue("stat-actifs", allUsers.length || 0);
 
-  // 5) Infos utilisateurs Twitch
   const usersInfo = await fetchUsersInfo(allUsers);
-
-  // 6) Streams en 2 paquets
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
   const onlineUsers = [];
   for (const group of streamChunks) {
@@ -327,31 +306,23 @@ async function init() {
     if (data?.data?.length) onlineUsers.push(...data.data);
   }
 
-  // 7) Stats dynamiques liées au live
   recordLiveSnapshot(onlineUsers.length);
   setStatValue("stat-lives", computeLivesPerDayAverage());
 
-  // 8) Événements (si events.json existe)
   try {
     const evRes = await fetch("events.json");
     if (evRes.ok) {
       const ev = await evRes.json();
       const nbEvents = Array.isArray(ev) ? ev.length : (ev?.count || 0);
       setStatValue("stat-events", nbEvents);
-    } else {
-      // fallback : garder la valeur existante (data-to dans le HTML) ou 0
-      setStatValue("stat-events", Number(document.getElementById("stat-events")?.dataset?.to || 0));
     }
   } catch (e) {
     console.warn("Erreur lecture events.json", e);
-    setStatValue("stat-events", Number(document.getElementById("stat-events")?.dataset?.to || 0));
   }
 
-  // 9) Remplissage des grilles
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
   if (!liveContainer || !offlineContainer) {
-    console.warn("⚠️ Conteneurs #live-users ou #offline-users introuvables.");
     hideSkeletons();
     return;
   }
@@ -373,31 +344,48 @@ async function init() {
     (isOnline ? liveContainer : offlineContainer).appendChild(card);
   }
 
-  // 10) Texte "X membres en live"
   const liveCountElement = document.getElementById("live-count");
   if (liveCountElement) {
-    const emoji =
-      onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
-      onlineUsers.length > 1 ? "s" : ""
-    } de la New Family ${
-      onlineUsers.length > 1 ? "sont" : "est"
-    } actuellement en live`;
-    liveCountElement.setAttribute("aria-live", "polite");
+    const emoji = onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
+    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
   }
 
-  // 11) Nettoyage skeletons + animations
   hideSkeletons();
   nfAnimateStatsOnView();
   nfSyncLiveBar();
   nfSetupRevealOnScroll();
 
-  // 12) Polling
   window.NF_ALL_USERS = allUsers;
-  startLivePolling(); // par défaut toutes les 5 minutes
+  startLivePolling();
+
+  // 🎯 Mise en avant exceptionnelle (featured.json)
+  try {
+    const fRes = await fetch("featured.json");
+    if (fRes.ok) {
+      const list = await fRes.json();
+      const now = new Date();
+      for (const ev of list) {
+        const start = new Date(ev.date);
+        const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // +2h
+        if (now >= start && now <= end) {
+          const section = document.getElementById("featured-live");
+          const txt = document.getElementById("featured-text");
+          const link = document.getElementById("featured-link");
+          if (section && txt && link) {
+            section.style.display = "block";
+            txt.innerHTML = `<strong>${escapeHtml(ev.user)}</strong> est actuellement mis(e) en avant par la communauté New Family ! 🎉`;
+            link.href = ev.url;
+          }
+          break;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("Erreur lecture featured.json", e);
+  }
 }
 
-/* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
+/* ====== Helpers accueil ====== */
 function nfSyncLiveBar() {
   const liveCountEl = document.getElementById("live-count");
   const barCount = document.getElementById("nf-live-count");
@@ -450,7 +438,6 @@ function nfSetupRevealOnScroll() {
   reveals.forEach(r => observer.observe(r));
 }
 
-// 4) Squelettes pendant le chargement
 function nfSetupSkeletons() {
   const skeletonContainer = document.getElementById("nf-skeletons");
   if (!skeletonContainer) return;
@@ -470,11 +457,6 @@ function hideSkeletons() {
   }
 }
 
-/* -------------------------------
-   🔁 Polling live (maj périodique)
-   - Refait les appels Twitch à intervalle régulier
-   - Met à jour: snapshot, moyenne Lives/jour, barre live & eyebrow
-----------------------------------*/
 async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   if (!Array.isArray(window.NF_ALL_USERS) || !window.NF_ALL_USERS.length) return;
   const poll = async () => {
@@ -485,56 +467,23 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
         const data = await fetchStreams(group);
         if (data?.data?.length) onlineUsers.push(...data.data);
       }
-      // 1) enregistre snapshot + met à jour la moyenne
       recordLiveSnapshot(onlineUsers.length);
       setStatValue("stat-lives", computeLivesPerDayAverage());
-      // 2) synchro barre live
+
       const barCount = document.getElementById("nf-live-count");
       if (barCount) barCount.textContent = String(onlineUsers.length);
-      // 3) maj eyebrow texte (si présent)
+
       const liveCountElement = document.getElementById("live-count");
       if (liveCountElement) {
-        const emoji =
-          onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-        liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
-          onlineUsers.length > 1 ? "s" : ""
-        } de la New Family ${
-          onlineUsers.length > 1 ? "sont" : "est"
-        } actuellement en live`;
+        const emoji = onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
+        liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : ""} de la New Family ${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
       }
-      // NB: on ne rerend pas toutes les cartes pour rester léger.
     } catch (e) {
       console.warn("Polling live: erreur", e);
     }
   };
-  // premier run 10s après le chargement, puis intervalle régulier
   setTimeout(poll, 10_000);
   setInterval(poll, intervalMs);
-}
-// 11bis) Vérifie si un live "mise en avant" est en cours
-try {
-  const fRes = await fetch("featured.json");
-  if (fRes.ok) {
-    const list = await fRes.json();
-    const now = new Date();
-    for (const ev of list) {
-      const start = new Date(ev.date);
-      const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // +2h
-      if (now >= start && now <= end) {
-        const section = document.getElementById("featured-live");
-        const txt = document.getElementById("featured-text");
-        const link = document.getElementById("featured-link");
-        if (section && txt && link) {
-          section.style.display = "block";
-          txt.innerHTML = `<strong>${escapeHtml(ev.user)}</strong> est actuellement mis(e) en avant par la communauté New Family ! 🎉`;
-          link.href = ev.url;
-        }
-        break;
-      }
-    }
-  }
-} catch (e) {
-  console.warn("Erreur lecture featured.json", e);
 }
 
 /* ---- GO ---- */
