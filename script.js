@@ -86,24 +86,30 @@ async function getToken() {
 }
 
 async function fetchUserLists() {
-  const [res1, res2, res3] = await Promise.all([
-    fetch("users1.json"),
-    fetch("users2.json"),
-    fetch("users3.json"),
-  ]);
+  const files = ["users1.json", "users2.json", "users3.json"];
+  const allUsers = [];
 
-  const users1 = await res1.json();
-  const users2 = await res2.json();
-  const users3 = await res3.json();
+  for (const file of files) {
+    try {
+      const response = await fetch(file);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      allUsers.push(...(Array.isArray(data) ? data : []));
+      console.info(`Chargé ${file} → ${data.length} users`);
+    } catch (error) {
+      console.warn(`Impossible de charger ${file}:`, error.message);
+    }
+  }
 
-  // Fusion + déduplication (lowercase)
-  return [...new Set([...users1, ...users2, ...users3].map(u => (u || "").toLowerCase()))];
+  // Déduplication et minuscule
+  return [...new Set(allUsers.map(u => (u || "").toLowerCase().trim()))];
 }
 
 async function fetchStreams(logins) {
   if (!logins || !logins.length) return { data: [] };
   const query = logins.map((user) => `user_login=${encodeURIComponent(user)}`).join("&");
   const url = `https://api.twitch.tv/helix/streams?${query}`;
+
   try {
     const response = await fetch(url, {
       headers: {
@@ -128,6 +134,7 @@ async function fetchUsersInfo(allUsers) {
     const chunk = allUsers.slice(i, i + 100);
     const query = chunk.map((user) => `login=${encodeURIComponent(user)}`).join("&");
     const url = `https://api.twitch.tv/helix/users?${query}`;
+
     try {
       const response = await fetch(url, {
         headers: {
@@ -149,36 +156,30 @@ async function fetchVIPList() {
   try {
     const response = await fetch("vip.json");
     if (!response.ok) return [];
-
     const data = await response.json();
     // Toujours renvoyer une liste de pseudos en minuscule
-    return data.map(item =>
-      typeof item === "string"
-        ? item.toLowerCase()
-        : String(item.login || "").toLowerCase()
-    );
+    return data.map(item => typeof item === "string" ? item.toLowerCase() : String(item.login || "").toLowerCase());
   } catch {
     return [];
   }
 }
-
 
 /* -------------------------------
    🏷️ Badges de rôle
 ----------------------------------*/
 function getRoleBadge(user) {
   const u = (user || "").toLowerCase();
-  if (["clarastonewall","nexou31","red_shadow_31"].includes(u)) {
-    return '<span class="badge badge--founder">🔮 Fondateur</span>';
+  if (["clarastonewall", "nexou31", "red_shadow_31"].includes(u)) {
+    return ' 🔮 Fondateur';
   }
-  if (["selena_akemi","nangel89","tabs_up","jenny31200"].includes(u)) {
-    return '<span class="badge badge--adjoint">🏛️ Adjoint</span>';
+  if (["selena_akemi", "nangel89", "tabs_up", "jenny31200"].includes(u)) {
+    return ' 🏛️ Adjoint';
   }
-  if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikossama"].includes(u)) {
-    return '<span class="badge badge--mentor">🛡️ Mentor</span>';
+  if (["mahyurah", "livio_on", "rubbycrea", "leviacarpe", "yaya_romali", "thedark_sand", "gilbert_hime", "saikossama"].includes(u)) {
+    return ' 🛡️ Mentor';
   }
-  if (["lespydyverse","mcaliena","mcfly_59140"].includes(u)) {
-    return '<span class="badge badge--junior">🔧 Junior</span>';
+  if (["lespydyverse", "mcaliena", "mcfly_59140"].includes(u)) {
+    return ' 🔧 Junior';
   }
   return "";
 }
@@ -198,31 +199,19 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
 
   const link = `https://twitch.tv/${user}`;
   const game = isOnline ? (streamData.game_name || "en live") : "";
-  const title = isOnline
-    ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue actuellement à <em>${escapeHtml(game)}</em>.`
-    : "Hors ligne";
-
-  const img = isOnline
-    ? (streamData.thumbnail_url || "")
-        .replace("{width}", "320")
-        .replace("{height}", "180")
-    : (userInfo?.profile_image_url ||
-       "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
+  const title = isOnline ? ` Venez soutenir ce membre de la New Family qui joue actuellement à ${escapeHtml(game)}.` : "Hors ligne";
+  const img = isOnline ? (streamData.thumbnail_url || "")
+    .replace("{width}", "320")
+    .replace("{height}", "180") : (userInfo?.profile_image_url || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
   card.innerHTML = `
-  <div class="media-wrap">
-    <img src="${img}" alt="Preview de ${escapeHtml(user)}">
-    ${getRoleBadge(user)}
-    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
-  </div>
-  <div class="card-body">
-    <div class="username">${escapeHtml(user)}</div>
-    <p class="title">${title}</p>
-    <div class="card-footer">
-      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
-    </div>
-  </div>
-`;
+    <a href="${link}" target="_blank" rel="noopener noreferrer" title="${title}">
+      <img src="${img}" alt="Preview de ${escapeHtml(user)}" loading="lazy" decoding="async">
+      <div class="user-info">
+        <h3>${escapeHtml(user)}${getRoleBadge(user)}${isVip ? ` ⭐ VIP` : ""}</h3>
+      </div>
+    </a>
+  `;
   return card;
 }
 
@@ -248,14 +237,13 @@ function setStatValue(id, value) {
 
 // LocalStorage des snapshots live pour moyenne quotidienne
 const SNAP_KEY = "nf_live_snapshots_v1";
-const SNAP_DAYS = 14;   // fenêtre glissante (jours)
-const SNAP_KEEP = 30;   // conservation max (jours)
+const SNAP_DAYS = 14; // fenêtre glissante (jours)
+const SNAP_KEEP = 30; // conservation max (jours)
 
 function recordLiveSnapshot(count) {
   const now = Date.now();
   const arr = loadSnapshots();
   arr.push({ t: now, c: Number(count) || 0 });
-
   const minKeep = now - SNAP_KEEP * 86400000;
   const filtered = arr.filter(s => s.t >= minKeep).slice(-2000);
   localStorage.setItem(SNAP_KEY, JSON.stringify(filtered));
@@ -288,7 +276,6 @@ function computeLivesPerDayAverage() {
   const days = Array.from(byDay.keys()).sort();
   const lastDays = days.slice(-SNAP_DAYS);
   if (!lastDays.length) return 0;
-
   const sum = lastDays.reduce((acc, key) => acc + (byDay.get(key) || 0), 0);
   return sum / lastDays.length;
 }
@@ -298,7 +285,6 @@ function computeLivesPerDayAverage() {
 ----------------------------------*/
 async function init() {
   setupThemeToggle();
-
   await getToken();
   if (!token) {
     console.error("❌ Token manquant !");
@@ -346,20 +332,10 @@ async function init() {
   for (const user of sortedUsers) {
     const lower = user.toLowerCase();
     const isOnline = onlineLogins.includes(lower);
-    const streamData = isOnline
-      ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower)
-      : null;
+    const streamData = isOnline ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower) : null;
     const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
     const isVip = vipList.includes(lower);
-
-    const card = createUserCard({
-      user,
-      isOnline,
-      streamData,
-      userInfo,
-      isVip,
-    });
-
+    const card = createUserCard({ user, isOnline, streamData, userInfo, isVip });
     if (isOnline) liveContainer.appendChild(card);
     else offlineContainer.appendChild(card);
   }
@@ -367,13 +343,8 @@ async function init() {
   // Texte "X membres en live" (eyebrow)
   const liveCountElement = document.getElementById("live-count");
   if (liveCountElement) {
-    const emoji =
-      onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
-    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${
-      onlineUsers.length > 1 ? "s" : ""
-    } de la New Family ${
-      onlineUsers.length > 1 ? "sont" : "est"
-    } actuellement en live`;
+    const emoji = onlineUsers.length === 0 ? "😴" : onlineUsers.length > 20 ? "🔥" : "✨";
+    liveCountElement.textContent = `${emoji} ${onlineUsers.length} membre${onlineUsers.length > 1 ? "s" : "" } de la New Family ${onlineUsers.length > 1 ? "sont" : "est" } actuellement en live`;
     liveCountElement.setAttribute("aria-live", "polite");
   }
 
@@ -382,10 +353,10 @@ async function init() {
   startLivePolling(); // par défaut toutes les 5 minutes
 
   // --- UI Enhancements ---
-  nfSetupSkeletons();       // squelettes pendant le fetch
-  nfSyncLiveBar();          // synchronise la barre live
-  nfAnimateStatsOnView();   // anime les compteurs au scroll
-  nfSetupRevealOnScroll();  // effets reveal
+  nfSetupSkeletons(); // squelettes pendant le fetch
+  nfSyncLiveBar(); // synchronise la barre live
+  nfAnimateStatsOnView(); // anime les compteurs au scroll
+  nfSetupRevealOnScroll(); // effets reveal
 }
 
 /* ====== NF — helpers accueil (livebar, stats, reveal, skeletons) ====== */
@@ -395,68 +366,72 @@ function nfSyncLiveBar() {
   const liveCountEl = document.getElementById("live-count");
   const barCount = document.getElementById("nf-live-count");
   if (!liveCountEl || !barCount) return;
+
   const sync = () => {
     const m = (liveCountEl.textContent || "").match(/\d+/);
     if (m) barCount.textContent = m[0];
   };
   sync();
+
   const obs = new MutationObserver(sync);
   obs.observe(liveCountEl, { childList: true, subtree: true, characterData: true });
 }
 
 // 2) Animation des nombres quand la section devient visible
 function nfAnimateStatsOnView() {
-  const els = document.querySelectorAll(".nf-stats .num");
+  const els = document.querySelectorAll(".num[data-to]");
   if (!els.length) return;
-  const animate = (el) => {
-    const to = +el.dataset.to || 0, dur = 900;
-    const t0 = performance.now();
-    const step = (now) => {
-      const p = Math.min(1, (now - t0) / dur);
-      el.textContent = Math.floor(p * to);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const to = Number(el.dataset.to) || 0;
+        let from = Number(el.textContent) || 0;
+        const step = Math.max(1, Math.round(to / 50));
+        const interval = setInterval(() => {
+          from += step;
+          if (from >= to) {
+            from = to;
+            clearInterval(interval);
+          }
+          el.textContent = from;
+        }, 20);
+        observer.unobserve(el);
+      }
     });
-  }, { threshold: .5 });
-  els.forEach((el) => io.observe(el));
+  }, { threshold: 0.5 });
+
+  els.forEach(el => observer.observe(el));
 }
 
-// 3) Effet reveal au scroll
+// 3) Effets reveal au scroll (sections .reveal)
 function nfSetupRevealOnScroll() {
-  const els = document.querySelectorAll(".reveal");
-  if (!els.length) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+  const reveals = document.querySelectorAll(".reveal");
+  if (!reveals.length) return;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("revealed");
+        observer.unobserve(e.target);
+      }
     });
-  }, { threshold: .2 });
-  els.forEach((el) => io.observe(el));
+  }, { threshold: 0.1 });
+
+  reveals.forEach(r => observer.observe(r));
 }
 
-// 4) Squelettes pendant le chargement des lives
+// 4) Squelettes pendant le chargement
 function nfSetupSkeletons() {
-  const container = document.getElementById("nf-skeletons");
-  const liveGrid = document.getElementById("live-users");
-  if (!container || !liveGrid) return;
-  for (let i = 0; i < 6; i++) {
-    const card = document.createElement("div"); card.className = "skel";
-    card.innerHTML = `
-      <div class="ph big"></div>
-      <div class="ph w80" style="margin:.4rem 0;"></div>
-      <div class="ph w60" style="margin:.3rem 0;"></div>
-      <div class="ph w40"></div>`;
-    container.appendChild(card);
+  const skeletonContainer = document.getElementById("nf-skeletons");
+  if (!skeletonContainer) return;
+
+  for (let i = 0; i < 20; i++) {
+    const skel = document.createElement("div");
+    skel.classList.add("user-skeleton");
+    skeletonContainer.appendChild(skel);
   }
-  const obs = new MutationObserver(() => {
-    if (liveGrid.children.length > 0) { container.remove(); obs.disconnect(); }
-  });
-  obs.observe(liveGrid, { childList: true });
-  setTimeout(() => { if (document.body.contains(container)) container.remove(); }, 10000);
 }
 
 /* -------------------------------
