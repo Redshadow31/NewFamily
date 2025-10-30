@@ -434,25 +434,29 @@ async function init() {
   window.NF_ALL_USERS = allUsers;
   startLivePolling();
 
-  // 🎯 Mise en avant (featured.json)
-  try {
-    const fRes = await fetch("featured.json");
-    if (fRes.ok) {
-      const list = await fRes.json();
-      const now = new Date();
-      for (const ev of list) {
-        const start = new Date(ev.date);
-        const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // +2h
-        if (now >= start && now <= end) {
-          await renderFeaturedLive(ev, usersInfo);
-          break;
-        }
-      }
+// 🎯 Mise en avant exceptionnelle (featured.json) — anticache + fenêtre de tolérance
+try {
+  const fRes = await fetch(`featured.json?ts=${Date.now()}`);
+  if (fRes.ok) {
+    const list = await fRes.json();
+    const now = Date.now();
+
+    // actif si dans [-5 min ; +2h10] par rapport à 'date'
+    const isActive = (iso) => {
+      const start = new Date(iso).getTime();
+      return now >= (start - 5*60*1000) && now <= (start + 130*60*1000);
+    };
+
+    // on prend le premier évènement actif
+    const current = list.find(ev => isActive(ev.date));
+    if (current) {
+      renderFeaturedLive(current, usersInfo, onlineUsers);
     }
-  } catch (e) {
-    console.warn("Erreur lecture featured.json", e);
   }
+} catch (e) {
+  console.warn("Erreur lecture featured.json", e);
 }
+
 
 /* ====== Helpers accueil ====== */
 function nfSyncLiveBar() {
