@@ -47,6 +47,7 @@ function setupThemeToggle() {
     btn.style.alignItems = "center";
     btn.style.justifyContent = "center";
     btn.style.transition = "background .2s ease, transform .2s ease";
+
     const header = document.querySelector("header") || document.body;
     if (!header.style.position) header.style.position = "relative";
     header.appendChild(btn);
@@ -142,13 +143,19 @@ async function fetchVIPList() {
   try {
     const response = await fetch("vip.json");
     if (!response.ok) return [];
+
     const data = await response.json();
     // Toujours renvoyer une liste de pseudos en minuscule
-    return data.map(item => typeof item === "string" ? item.toLowerCase() : String(item.login || "").toLowerCase());
+    return data.map(item =>
+      typeof item === "string"
+        ? item.toLowerCase()
+        : String(item.login || "").toLowerCase()
+    );
   } catch {
     return [];
   }
 }
+
 
 /* -------------------------------
    🏷️ Badges de rôle
@@ -156,16 +163,16 @@ async function fetchVIPList() {
 function getRoleBadge(user) {
   const u = (user || "").toLowerCase();
   if (["clarastonewall","nexou31","red_shadow_31"].includes(u)) {
-    return ' 🔮 Fondateur';
+    return '<span class="badge badge--founder">🔮 Fondateur</span>';
   }
   if (["selena_akemi","nangel89","tabs_up","jenny31200"].includes(u)) {
-    return ' 🏛️ Adjoint';
+    return '<span class="badge badge--adjoint">🏛️ Adjoint</span>';
   }
   if (["mahyurah","livio_on","rubbycrea","leviacarpe","yaya_romali","thedark_sand","gilbert_hime","saikossama"].includes(u)) {
-    return ' 🛡️ Mentor';
+    return '<span class="badge badge--mentor">🛡️ Mentor</span>';
   }
   if (["lespydyverse","mcaliena","mcfly_59140"].includes(u)) {
-    return ' 🔧 Junior';
+    return '<span class="badge badge--junior">🔧 Junior</span>';
   }
   return "";
 }
@@ -182,21 +189,34 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
     card.classList.add("is-live");
     card.setAttribute("data-live", "LIVE");
   }
+
   const link = `https://twitch.tv/${user}`;
   const game = isOnline ? (streamData.game_name || "en live") : "";
-  const title = isOnline ? ` Venez soutenir ce membre de la New Family qui joue actuellement à ${escapeHtml(game)}.` : "Hors ligne";
-  const img = isOnline ? (streamData.thumbnail_url || "")
-    .replace("{width}", "320")
-    .replace("{height}", "180") : (userInfo?.profile_image_url || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
+  const title = isOnline
+    ? `<strong>Venez soutenir</strong> ce membre de la <strong>New Family</strong> qui joue actuellement à <em>${escapeHtml(game)}</em>.`
+    : "Hors ligne";
+
+  const img = isOnline
+    ? (streamData.thumbnail_url || "")
+        .replace("{width}", "320")
+        .replace("{height}", "180")
+    : (userInfo?.profile_image_url ||
+       "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png");
 
   card.innerHTML = `
-    <a href="${link}" target="_blank" rel="noopener noreferrer" title="${title}">
-      <img src="${img}" alt="Preview de ${escapeHtml(user)}" loading="lazy" decoding="async">
-      <div class="user-info">
-        <h3>${escapeHtml(user)}${getRoleBadge(user)}${isVip ? ` ⭐ VIP` : ""}</h3>
-      </div>
-    </a>
-  `;
+  <div class="media-wrap">
+    <img src="${img}" alt="Preview de ${escapeHtml(user)}">
+    ${getRoleBadge(user)}
+    ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
+  </div>
+  <div class="card-body">
+    <div class="username">${escapeHtml(user)}</div>
+    <p class="title">${title}</p>
+    <div class="card-footer">
+      <a href="${link}" target="_blank" rel="noopener">Regarder</a>
+    </div>
+  </div>
+`;
   return card;
 }
 
@@ -208,7 +228,6 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-
 /* -------------------------------
    📊 Stats dynamiques (helpers)
 ----------------------------------*/
