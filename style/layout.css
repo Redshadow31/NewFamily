@@ -1,22 +1,37 @@
 /* ===== Hero / Header ===== */
+/* HEADER avec image + dégradés, coins arrondis, centrage */
 header{
-  background:url("Design sans titre (17).png") no-repeat center/cover;
-  color:#fff; padding: clamp(1.2rem, 3.5vw, 2.2rem) 1rem;
-  border-bottom-left-radius:22px; border-bottom-right-radius:22px;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-}
-.header-content{display:flex;align-items:center;gap:clamp(1rem,2.5vw,1.6rem);max-width:1100px;margin:0 auto}
-.header-logo img{width:clamp(120px,14vw,170px);height:auto;display:block;transition:.25s transform,.25s filter;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
-.header-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 10px 24px rgba(0,0,0,.45))}
-.header-text{text-align:center;margin:0 auto}
-.header-text h1{font-size:clamp(1.6rem,3.3vw,2.2rem);line-height:1.15;margin:.2rem 0 .4rem;color:#fff}
-.header-text p{font-size:clamp(.95rem,1.6vw,1.05rem);margin:0;color:#fff}
+  /* 👉 corrige le chemin selon ton arbo :
+     - si l'image est dans /assets/, mets: url("../assets/Design sans titre (17).png")
+     - si elle est à la racine, mets: url("/Design sans titre (17).png")
+  */
+  background:
+    url("../assets/Design sans titre (17).png") no-repeat center top / contain, /* pinceau par-dessus */
+    radial-gradient(1200px 600px at 20% -20%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(1200px 600px at 110% 10%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(135deg,#5f2c82 0%, #b06ab3 35%, #ff6a88 100%);            /* beau dégradé */
 
-.theme-toggle{
-  position:absolute; top:16px; right:16px; width:42px; height:42px;
-  border-radius:50%; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.18);
-  color:#fff; backdrop-filter: blur(4px); cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.25);
+  color: var(--text);
+  min-height: clamp(260px, 48vh, 520px);
+  display: grid;
+  place-items: center;
+  padding: clamp(1.2rem, 3.5vw, 2.2rem) 1rem;
+  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  overflow: hidden;
 }
+
+/* Contenu centré et responsive */
+.header-content{max-width:1100px;margin:0 auto;text-align:center;display:grid;gap:1rem}
+.header-logo img{width: clamp(120px, 14vw, 170px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));transition:.25s transform,.25s filter}
+.header-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 10px 24px rgba(0,0,0,.45))}
+.header-text h1{font-size: clamp(1.9rem, 4.2vw, 3rem); margin:.4rem 0; color:#1f1933}
+.header-text p{opacity:.95;margin:.2rem 0 1rem;color:#1f1933}
+
+/* Sommeil automatique en sombre : texte clair */
+html.dark .header-text h1,
+html.dark .header-text p{ color:#fff }
 
 /* Socials (header/footer) */
 .socials{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
