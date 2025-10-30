@@ -148,13 +148,17 @@ html.dark .header-text p{ color:#fff }
 }
 
 .live-strip__inner{
-  -webkit-mask-image: linear-gradient(to right,
-    transparent 0, black 16px,
-    black calc(100% - 16px), transparent 100%);
-          mask-image: linear-gradient(to right,
-    transparent 0, black 16px,
-    black calc(100% - 16px), transparent 100%);
+  overflow-x: auto;
+  overflow-y: hidden;          /* évite une barre verticale parasite */
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge legacy */
 }
+.live-strip__inner::-webkit-scrollbar{ /* Chrome/Safari/Edge */
+  height: 0;
+  width: 0;
+  display: none;
+}
+
 
 .live-chip{
   flex:0 0 auto;
