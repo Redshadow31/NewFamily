@@ -148,12 +148,12 @@ html.dark .header-text p{ color:#fff }
 }
 
 .live-strip__inner{
-  display:flex;
-  gap:.75rem;
-  overflow-x:auto;
-  scrollbar-width: thin;
-  scroll-snap-type:x proximity;
-  -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0, black 16px,
+    black calc(100% - 16px), transparent 100%);
+          mask-image: linear-gradient(to right,
+    transparent 0, black 16px,
+    black calc(100% - 16px), transparent 100%);
 }
 
 .live-chip{
