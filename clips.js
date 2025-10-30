@@ -1,17 +1,20 @@
-// clips.js — version "users1/2/3 loader"
-console.log("⚡ clip.js — chargement des membres via users1/2/3.json");
+// clips.js — version alignée avec le nouveau clips.html
+// Utilise users1/2/3.json, Netlify token, pool de requêtes, et iframe direct.
+console.log("⚡ clip.js — new UI (iframe direct) + users1/2/3 loader");
 
-// ---------- Config ----------
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let accessToken = "";
 let clipsQueue = [];
 let currentIndex = -1;
-const CONCURRENCY = 10; // nb de requêtes simultanées max vers l’API
+const CONCURRENCY = 10;
 
-// parent dynamique pour l'embed
-const PARENT_DOMAIN = window.location.hostname;
+// parent pour l'embed
+const PARENT_DOMAIN =
+  (window.CLIPS_PARENT && String(window.CLIPS_PARENT)) ||
+  window.location.hostname.replace(/^www\./, "") ||
+  "localhost";
 
-// ---------- Utilitaires ----------
+/* ------------------- Utils ------------------- */
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -20,7 +23,7 @@ function shuffle(arr) {
   return arr;
 }
 
-// ---------- API helpers ----------
+/* ------------------- API ------------------- */
 async function getToken() {
   try {
     const res = await fetch("/.netlify/functions/getTwitchData", { cache: "no-store" });
@@ -32,7 +35,6 @@ async function getToken() {
   }
 }
 
-// Renvoie l'objet utilisateur (pas juste l'ID)
 async function getUser(username) {
   try {
     const res = await fetch(
@@ -63,7 +65,7 @@ async function getRandomClip(userId) {
     );
     if (!res.ok) return null;
     const data = await res.json();
-    const valid = (data.data || []).filter((c) => c.thumbnail_url && c.id);
+    const valid = (data.data || []).filter((c) => c.id);
     if (!valid.length) return null;
     return valid[Math.floor(Math.random() * valid.length)];
   } catch {
@@ -71,7 +73,7 @@ async function getRandomClip(userId) {
   }
 }
 
-// ---------- Charge la liste des membres depuis users1/2/3 ----------
+/* -------- members from users1/2/3 -------- */
 async function fetchAllMembers() {
   const files = ["users1.json", "users2.json", "users3.json"];
   const all = [];
@@ -86,137 +88,97 @@ async function fetchAllMembers() {
       console.warn(`⚠️ Impossible de charger ${f} :`, e.message || e);
     }
   }
-  // normalize + dedupe
   const normalized = [...new Set(all.map((u) => String(u || "").trim().toLowerCase()).filter(Boolean))];
   return normalized;
 }
 
-// ---------- UI helpers ----------
-function tuneThumb(url) {
-  if (!url) return { small: url, medium: url };
-  return {
-    small: url.replace(/-preview-\d+x\d+\.jpg/, "-preview-320x180.jpg"),
-    medium: url.replace(/-preview-\d+x\d+\.jpg/, "-preview-480x272.jpg"),
-  };
-}
-
-function updateProfileCard(profile) {
-  const avatar = document.getElementById("profile-avatar");
-  const name = document.getElementById("profile-name");
-  const login = document.getElementById("profile-login");
-  const bio = document.getElementById("profile-bio");
-  const link = document.getElementById("profile-link");
+/* ------------------- UI helpers ------------------- */
+function updateProfile(profile) {
+  const avatar = document.getElementById("stream-avatar");
+  const name = document.getElementById("stream-name");
+  const handle = document.getElementById("stream-handle");
+  const bio = document.getElementById("stream-bio");
+  const link = document.getElementById("stream-link");
 
   if (!profile) {
-    name.textContent = "—";
-    login.textContent = "@—";
-    bio.textContent = "Profil indisponible.";
-    link.href = "#";
-    if (avatar) avatar.src = "";
+    if (avatar) avatar.src = "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png";
+    if (name) name.textContent = "—";
+    if (handle) handle.textContent = "@—";
+    if (bio) bio.textContent = "Profil indisponible.";
+    if (link) link.href = "#";
     return;
   }
   if (avatar) {
-    avatar.src = profile.avatar || "";
+    avatar.src = profile.avatar || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png";
     avatar.alt = `Avatar de ${profile.display_name}`;
   }
-  name.textContent = profile.display_name;
-  login.textContent = `@${profile.login}`;
-  bio.textContent = profile.bio && profile.bio.trim().length ? profile.bio : "Aucune bio renseignée.";
-  link.href = `https://twitch.tv/${profile.login}`;
+  if (name) name.textContent = profile.display_name;
+  if (handle) handle.textContent = `@${profile.login}`;
+  if (bio) bio.textContent = profile.bio && profile.bio.trim().length ? profile.bio : "Aucune bio renseignée.";
+  if (link) link.href = `https://twitch.tv/${profile.login}`;
 }
 
+function setIframeClip(clipId) {
+  const iframe = document.getElementById("clip-iframe");
+  if (!iframe) return;
+  const url = new URL("https://clips.twitch.tv/embed");
+  url.searchParams.set("clip", clipId);
+  url.searchParams.set("parent", PARENT_DOMAIN);
+  url.searchParams.set("autoplay", "true");
+  url.searchParams.set("muted", "false");
+  iframe.src = url.toString();
+}
+
+/* ------------------- Display ------------------- */
 function displayClip(index) {
-  const clip = clipsQueue[index];
-  if (!clip) return;
+  const item = clipsQueue[index];
+  if (!item) return;
+  // lecteur
+  setIframeClip(item.id);
+  // profil
+  updateProfile(item.profile);
 
-  const p = document.getElementById("clip-player");
-  const u = document.getElementById("clip-user");
-  if (!p || !u) return;
-
-  const tuned = tuneThumb(clip.thumbnail);
-  p.innerHTML = `
-    <img
-      src="${tuned.small}"
-      srcset="${tuned.small} 320w, ${tuned.medium} 480w"
-      sizes="(max-width: 480px) 320px, 480px"
-      alt="Preview du clip"
-      loading="lazy"
-      decoding="async"
-      fetchpriority="${index === 0 ? "high" : "low"}"
-      style="width:100%;border-radius:14px;cursor:pointer;"
-      onclick="loadTwitchClip(this,'${clip.id}')"
-    >
-    <div class="play-button">▶</div>
-  `;
-  u.textContent = `👤 ${clip.profile.display_name}`;
-
-  updateProfileCard(clip.profile);
-
-  // Préfetch du prochain embed
+  // Prefetch du prochain document embed (micro-opt)
   const next = clipsQueue[index + 1];
   if (next) {
-    const prefetch = document.createElement("link");
-    prefetch.rel = "prefetch";
-    prefetch.as = "document";
-    prefetch.href = `https://clips.twitch.tv/embed?clip=${next.id}&parent=${encodeURIComponent(PARENT_DOMAIN)}`;
-    document.head.appendChild(prefetch);
+    const l = document.createElement("link");
+    l.rel = "prefetch";
+    l.as = "document";
+    l.href = `https://clips.twitch.tv/embed?clip=${next.id}&parent=${encodeURIComponent(PARENT_DOMAIN)}`;
+    document.head.appendChild(l);
   }
 }
 
-window.loadTwitchClip = function (imgEl, clipId) {
-  const container = imgEl.parentElement;
-  if (!container) return;
-  container.innerHTML = `
-    <iframe
-      src="https://clips.twitch.tv/embed?clip=${clipId}&parent=${encodeURIComponent(PARENT_DOMAIN)}"
-      width="100%"
-      height="405"
-      frameborder="0"
-      allowfullscreen
-      loading="lazy"
-      title="Twitch clip"
-    ></iframe>
-  `;
-};
-
-function displayNextClip() {
+function nextClip() {
   if (currentIndex < clipsQueue.length - 1) {
     currentIndex++;
     displayClip(currentIndex);
-  } else {
-    const u = document.getElementById("clip-user");
-    if (u) u.textContent = "🚫 Aucun autre clip disponible.";
   }
 }
-function displayPreviousClip() {
+
+function prevClip() {
   if (currentIndex > 0) {
     currentIndex--;
     displayClip(currentIndex);
   }
 }
 
-// ---------- Préparation (avec limite de concurrence) ----------
+/* ------------------- Build queue (pool) ------------------- */
 async function prepareOne(member) {
   try {
     const user = await getUser(member);
     if (!user) return null;
     const clip = await getRandomClip(user.id);
     if (!clip) return null;
-    return {
-      id: clip.id,
-      thumbnail: clip.thumbnail_url,
-      profile: user,
-    };
+    return { id: clip.id, profile: user };
   } catch {
     return null;
   }
 }
 
 async function prepareClipsWithPool(members) {
-  // Option: randomiser l’ordre
   shuffle(members);
 
-  // Pool de workers
   let cursor = 0;
   let firstShown = false;
 
@@ -228,7 +190,7 @@ async function prepareClipsWithPool(members) {
         clipsQueue.push(res);
         if (!firstShown) {
           firstShown = true;
-          displayNextClip();
+          nextClip();
         }
       }
     }
@@ -238,40 +200,31 @@ async function prepareClipsWithPool(members) {
   await Promise.all(workers);
 
   if (!firstShown) {
-    const u = document.getElementById("clip-user");
-    if (u) u.textContent = "Aucun clip disponible pour le moment.";
-    updateProfileCard(null);
+    updateProfile(null);
   }
 }
 
-// ---------- DOM ----------
+/* ------------------- DOM ------------------- */
 document.addEventListener("DOMContentLoaded", () => {
-  const nextBtn = document.getElementById("next-button");
-  if (nextBtn) nextBtn.addEventListener("click", displayNextClip);
-  const prevBtn = document.getElementById("prev-button");
-  if (prevBtn) prevBtn.addEventListener("click", displayPreviousClip);
+  const btnNext = document.getElementById("btn-next");
+  if (btnNext) btnNext.addEventListener("click", nextClip);
+  const btnPrev = document.getElementById("btn-prev");
+  if (btnPrev) btnPrev.addEventListener("click", prevClip);
 });
 
-// ---------- Init ----------
+/* ------------------- Init ------------------- */
 (async () => {
   await getToken();
   if (!accessToken) {
-    const u = document.getElementById("clip-user");
-    if (u) u.textContent = "Erreur d’authentification Twitch.";
-    updateProfileCard(null);
+    updateProfile(null);
     return;
   }
 
   let members = await fetchAllMembers();
-
-  // Fallback si vide
   if (!members.length) {
     console.warn("⚠️ Liste users1/2/3 vide — fallback minimal.");
     members = ["nexou31", "clarastonewall", "red_shadow_31"];
   }
-
-  // Si la liste est très longue, on peut tronquer (optionnel) :
-  // members = members.slice(0, 150);
 
   await prepareClipsWithPool(members);
 })();
