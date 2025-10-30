@@ -1,183 +1,161 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Clips à la une</title>
-    <link rel="stylesheet" href="style.css" />
+<head>
+  <meta charset="UTF-8" />
+  <title>Clips — Twitch Entraide New Family</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Clips à la une de la communauté Twitch Entraide New Family." />
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="preconnect" href="https://clips.twitch.tv" crossorigin>
+  <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin>
 
-    <!-- ⚡ Optimisations de chargement Twitch -->
-    <link rel="preconnect" href="https://clips.twitch.tv">
-    <link rel="preconnect" href="https://player.twitch.tv">
-    <link rel="preconnect" href="https://gql.twitch.tv">
+  <!-- Styles locaux : mêmes codes visuels que l’index (compact + boutons unifiés) -->
+  <style>
+    :root{
+      --bg:#f4e9f9; --text:#1f2937; --muted:#444; --surface:#fff; --border:#eee;
+      --brand:#e74c3c; --violet:#4b0082;
+      --ring:rgba(192,57,43,.35); --shadow:0 10px 24px rgba(0,0,0,.10);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#3B1D5A; --text:#ffffff; --muted:#cbb8ff; --surface:#26143F; --border:rgba(255,255,255,.15); --shadow:0 10px 28px rgba(0,0,0,.45); }
+    }
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 
-    <style>
-      /* ===== Mise en page : 2 colonnes (lecteur + profil) ===== */
-      .content-grid {
-        width: min(1200px, 95%);
-        margin: 2rem auto;
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 1.25rem;
-      }
-      @media (max-width: 900px) {
-        .content-grid { grid-template-columns: 1fr; }
-      }
+    /* HERO compact */
+    header{
+      background: radial-gradient(1100px 600px at 75% -50%, rgba(0,0,0,.25), transparent),
+                  linear-gradient(135deg, #6a2c91 0%, #b04b8b 50%, #d06a79 100%);
+      color:#fff; padding:clamp(1rem, 2.2vw + 0.6rem, 2rem) 1rem;
+      border-bottom-left-radius:24px; border-bottom-right-radius:24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.18);
+    }
+    .hero{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:.8rem}
+    .hero-logo{width:150px;filter: drop-shadow(0 8px 18px rgba(0,0,0,.35));}
+    h1{margin:.2rem 0 0;font-size:clamp(1.6rem,2.2vw+1rem,2.2rem);text-align:center}
+    .sub{opacity:.95;margin:0 0 .2rem;text-align:center}
 
-      /* ===== Lecteur ===== */
-      #clip-player {
-        position: relative;
-        width: 100%;
-        border-radius: 14px;
-        overflow: hidden;
-        background: #1f1f23;
-        box-shadow: 0 10px 30px rgba(0,0,0,.15);
-      }
-      #clip-player img {
-        display: block;
-        width: 100%;
-        border-radius: 14px;
-      }
-      .play-button {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 3rem;
-        color: white;
-        text-shadow: 1px 1px 5px black;
-        pointer-events: none;
-      }
-      #clip-user {
-        font-size: 1.1em;
-        margin: .75em 0 0;
-        font-weight: 700;
-        text-align: center;
-      }
+    /* Boutons unifiés */
+    .btn{
+      display:inline-flex;align-items:center;gap:.55rem;border:1px solid transparent;
+      padding:.7rem 1.05rem;border-radius:12px;font-weight:800;text-decoration:none;cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);transition:transform .15s, box-shadow .15s, filter .2s, background .2s, color .2s;
+      line-height:1;color:#fff;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.14)}
+    .btn--primary{background:var(--brand)}
+    .btn--primary:hover{filter:brightness(1.05)}
+    .btn--soft{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.35)}
+    .btn-row{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 
-      /* ===== Boutons nav ===== */
-      .button-row {
-        margin-top: 1em;
-        text-align: center;
-        display: flex;
-        gap: .75rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-      .nf-btn {
-        padding: 0.7em 1.2em;
-        font-size: 1em;
-        background-color: #9146ff;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-      }
-      .nf-btn:hover { background-color: #772ce8; }
+    /* Shell page */
+    main{max-width:1100px;margin:1rem auto 2rem;padding:0 1rem}
 
-      /* ===== Carte profil ===== */
-      #profile-card {
-        border-radius: 14px;
-        background: #ffffff10;
-        backdrop-filter: blur(4px);
-        padding: 1.25rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,.12);
-      }
-      #profile-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: .75rem;
-      }
-      #profile-avatar {
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        object-fit: cover;
-        background: #2a2a2e;
-      }
-      #profile-name {
-        font-weight: 800;
-        font-size: 1.15rem;
-        margin: 0;
-      }
-      #profile-login {
-        color: #9146ff;
-        font-size: .95rem;
-        margin: 0;
-      }
-      #profile-bio {
-        margin-top: .5rem;
-        line-height: 1.5;
-        white-space: pre-wrap;
-      }
-      #profile-actions {
-        margin-top: 1rem;
-        display: flex;
-        gap: .5rem;
-        flex-wrap: wrap;
-      }
-      .link-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: .5rem;
-        padding: .55rem .9rem;
-        border-radius: 10px;
-        background: #9146ff;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 600;
-      }
-      .link-btn:hover { background: #772ce8; }
+    /* Carte lecteur + fiche droite */
+    .clip-grid{
+      display:grid;grid-template-columns: 1.3fr .9fr;gap:16px;
+    }
+    @media (max-width: 960px){ .clip-grid{grid-template-columns:1fr} }
 
-      /* Header existant (laisse tel quel chez toi) */
-      header .header-content { max-width: 1200px; margin: 0 auto; }
-    </style>
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    .card-body{padding:1rem 1rem 1.1rem}
 
-    <script src="clips.js" defer></script>
-  </head>
+    /* Lecteur 16/9 */
+    .player-box{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden}
+    .player-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
-  <body>
-    <header>
-  <div class="header-content">
-    <div class="header-logo">
-      <img src="assets/logo.webp" alt="Logo New Family">
+    /* Fiche streamer */
+    .profile{display:grid;grid-template-columns:64px 1fr;gap:.8rem;align-items:center;margin-bottom:.6rem}
+    .avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.6);box-shadow:0 6px 16px rgba(0,0,0,.2)}
+    .name{margin:0;font-size:1.15rem;font-weight:900}
+    .handle{margin:.1rem 0 0;opacity:.8}
+    .bio{margin:.5rem 0 1rem;color:var(--muted);line-height:1.55}
+
+    /* Nav clips */
+    .clip-nav{display:flex;gap:.6rem;justify-content:center;margin:1rem auto 0}
+    .btn--ghost{
+      background:#fff;color:#2b1a5a;border-color:#ead9ff;
+    }
+    @media (prefers-color-scheme: dark){
+      .btn--ghost{ background:#2E1750; color:#fff; border-color:rgba(255,255,255,.18); }
+    }
+
+    /* Back button floating */
+    .backbar{position:relative;max-width:1100px;margin:-.6rem auto 0;padding:0 1rem}
+    .backbar .btn{position:relative;top:-18px}
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header>
+    <div class="hero">
+      <img src="assets/logo.webp" alt="New Family" class="hero-logo" />
+      <h1>📼 Clips de la New Family</h1>
+      <p class="sub">Nos meilleurs moments, sélectionnés chaque semaine ✨</p>
+      <div class="btn-row" aria-label="Liens rapides">
+        <a class="btn btn--primary" href="index.html">← Retour à l’accueil</a>
+      </div>
     </div>
-    <div class="header-text">
-      <h1>🎬 Clip à la une</h1>
-    </div>
+  </header>
+
+  <!-- (optionnel) petit bouton retour flottant sous le hero -->
+  <div class="backbar">
+    <a class="btn btn--soft" href="index.html">🏠 Accueil</a>
   </div>
-</header>
 
-<!-- Bouton centré sous la bannière -->
-<div class="header-button-wrapper">
-  <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
-</div>
+  <main>
 
+    <div class="clip-grid">
+      <!-- Lecteur -->
+      <section class="card">
+        <div class="player-box">
+          <!-- clips.js doit remplir ce src avec le bon clip + parent -->
+          <iframe id="clip-iframe"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  title="Clip Twitch"
+                  src=""
+                  referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+        </div>
 
-    <!-- ===== Zone principale : lecteur + profil ===== -->
-    <main class="content-grid">
-      <section id="clip-frame">
-        <div id="clip-player"></div>
-        <div id="clip-user"></div>
-        <div class="button-row">
-          <button id="prev-button" class="nf-btn">🎞️ Clip précédent</button>
-          <button id="next-button" class="nf-btn">🎞️ Clip suivant</button>
+        <div class="card-body">
+          <div class="clip-nav">
+            <button id="btn-prev" class="btn btn--ghost">⏮️ Clip précédent</button>
+            <button id="btn-next" class="btn btn--ghost">⏭️ Clip suivant</button>
+          </div>
         </div>
       </section>
 
-      <aside id="profile-card" aria-live="polite">
-        <div id="profile-header">
-          <img id="profile-avatar" src="" alt="Avatar Twitch du streamer" loading="lazy" decoding="async">
-          <div>
-            <p id="profile-name">—</p>
-            <p id="profile-login">@—</p>
+      <!-- Fiche streamer -->
+      <aside class="card">
+        <div class="card-body">
+          <div class="profile">
+            <img id="stream-avatar" class="avatar" src="https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png" alt="" />
+            <div>
+              <h2 id="stream-name" class="name">Streamer</h2>
+              <p id="stream-handle" class="handle">@handle</p>
+            </div>
+          </div>
+
+          <p id="stream-bio" class="bio">
+            Description du créateur. Elle sera remplacée dynamiquement si disponible.
+          </p>
+
+          <div class="btn-row">
+            <a id="stream-link" class="btn btn--primary" href="#" target="_blank" rel="noopener">
+              Voir la chaîne Twitch
+            </a>
           </div>
         </div>
-        <div id="profile-bio">Chargement de la bio…</div>
-        <div id="profile-actions">
-          <a id="profile-link" class="link-btn" href="#" target="_blank" rel="noopener">Voir la chaîne Twitch</a>
-        </div>
       </aside>
-    </main>
-  </body>
+    </div>
+  </main>
+
+  <!-- Script clip (ton fichier) -->
+  <script>
+    // Petite aide utilitaire : construit une URL "parent" sûre pour l’iframe clip
+    window.CLIPS_PARENT = location.hostname.replace(/^www\./,'') || 'localhost';
+  </script>
+  <script src="clips.js"></script>
+</body>
 </html>
