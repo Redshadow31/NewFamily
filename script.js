@@ -1,9 +1,10 @@
 /* =========================================================
-   New Family — script.js (FINAL 2025 - hover previews)
+   New Family — script.js (FINAL 2025 - hover previews + live strip)
    - Résilient aux fichiers manquants
    - Moyenne lives/jour sur 30 jours
    - Mise en avant exceptionnelle (featured.json) avec lecteur Twitch temps réel
    - Mini lecteur vidéo sur les cartes "en ligne" au survol (lazy)
+   - Barre horizontale des lives (avatar + nom + jeu)
 ========================================================= */
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
@@ -204,7 +205,6 @@ function createUserCard({ user, isOnline, streamData, userInfo, isVip }) {
   card.innerHTML = `
     <div class="media-wrap" style="position:relative;">
       <img class="card-thumb" src="${img}" loading="lazy" alt="Preview de ${escapeHtml(user)}" style="display:block;width:100%;height:auto;border-radius:.6rem;">
-      <!-- le mini lecteur (créé au survol) sera injecté ici -->
       ${getRoleBadge(user)}
       ${isVip ? `<span class="vip-chip">⭐ VIP</span>` : ""}
     </div>
@@ -298,6 +298,10 @@ function mountFeaturedPlayer(channel) {
   container.style.display = "block";
   container.innerHTML = "";
   try {
+    if (typeof Twitch === "undefined" || !Twitch?.Player) {
+      console.warn("Twitch Player non chargé (embed script manquant).");
+      return;
+    }
     new Twitch.Player("featured-player", {
       width: "100%",
       height: "100%",
@@ -399,18 +403,15 @@ function makeIframeSrc(channel) {
 }
 
 function mountHoverPlayer(mediaWrap, login) {
-  // Si déjà présent → rien
   if (hoverPlayers.has(mediaWrap)) return;
 
-  // Respecte la limite de lecteurs
   if (hoverPlayers.size >= HOVER_MAX_PLAYERS) {
-    // retire le plus ancien
     const firstKey = hoverPlayers.keys().next().value;
     unmountHoverPlayer(firstKey);
   }
 
   const img = mediaWrap.querySelector(".card-thumb");
-  if (img) img.style.opacity = "0"; // transition visuelle discrète
+  if (img) img.style.opacity = "0";
 
   const iframe = document.createElement("iframe");
   iframe.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
@@ -439,7 +440,6 @@ function unmountHoverPlayer(mediaWrap) {
 }
 
 function setupHoverPreviews() {
-  // Desktop seulement (éviter mobile)
   const isTouch = matchMedia("(pointer: coarse)").matches;
   if (isTouch) return;
 
@@ -449,12 +449,10 @@ function setupHoverPreviews() {
     const login = (card?.dataset?.login || "").toLowerCase();
     if (!login) return;
 
-    // Nettoie écouteurs existants
     mediaWrap.onmouseenter = null;
     mediaWrap.onmouseleave = null;
 
     mediaWrap.addEventListener("mouseenter", () => {
-      // petit délai pour éviter clignotement quand on traverse
       const t = setTimeout(() => mountHoverPlayer(mediaWrap, login), 220);
       hoverTimers.set(mediaWrap, t);
     });
@@ -466,6 +464,51 @@ function setupHoverPreviews() {
       unmountHoverPlayer(mediaWrap);
     });
   });
+}
+
+/* -------------------------------------------------------
+   ⭐ Barre live (avatars + nom + jeu)
+-------------------------------------------------------- */
+function renderLiveStrip(onlineUsers, usersInfo){
+  const section = document.getElementById("live-strip");
+  const inner = document.getElementById("live-strip-inner");
+  if (!section || !inner) return;
+
+  inner.innerHTML = "";
+
+  if (!onlineUsers || !onlineUsers.length){
+    section.hidden = true;
+    return;
+  }
+
+  const byLogin = new Map();
+  (usersInfo || []).forEach(u => byLogin.set((u.login||"").toLowerCase(), u));
+
+  for (const s of onlineUsers){
+    const login = (s.user_login || "").toLowerCase();
+    const info = byLogin.get(login);
+    const display = info?.display_name || s.user_name || login;
+    const avatar = info?.profile_image_url || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png";
+    const game = s.game_name || "En live";
+    const url = `https://twitch.tv/${login}`;
+
+    const a = document.createElement("a");
+    a.className = "live-chip";
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.ariaLabel = `${display} — ${game}`;
+    a.innerHTML = `
+      <img class="live-chip__avatar" src="${avatar}" alt="Avatar de ${display}" loading="lazy">
+      <div class="live-chip__texts">
+        <span class="live-chip__name">${display}<span class="live-chip__dot" aria-hidden="true"></span></span>
+        <span class="live-chip__game">${game}</span>
+      </div>
+    `;
+    inner.appendChild(a);
+  }
+
+  section.hidden = false;
 }
 
 /* -------------------------------------------------------
@@ -487,6 +530,7 @@ async function init() {
   setStatValue("stat-actifs", allUsers.length || 0);
 
   const usersInfo = await fetchUsersInfo(allUsers);
+  window.NF_USERS_INFO = usersInfo; // pour réutiliser dans le polling
 
   // Streams (2 chunks) en parallèle
   const streamChunks = [allUsers.slice(0, 100), allUsers.slice(100)];
@@ -552,7 +596,8 @@ async function init() {
   nfSyncLiveBar();
   nfSetupRevealOnScroll();
 
-  // Préviews au survol (mini lecteurs)
+  // Barre live + previews au survol
+  renderLiveStrip(onlineUsers, usersInfo);
   setupHoverPreviews();
 
   // Polling régulier
@@ -680,7 +725,8 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
           `${onlineUsers.length > 1 ? "sont" : "est"} actuellement en live`;
       }
 
-      // Rebranche les préviews (au cas où la liste a changé)
+      // Barre live + previews (liste peut avoir changé)
+      renderLiveStrip(onlineUsers, window.NF_USERS_INFO || []);
       setupHoverPreviews();
     } catch (e) {
       console.warn("Polling live: erreur", e);
