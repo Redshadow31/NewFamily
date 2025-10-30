@@ -1,0 +1,64 @@
+/* ===== Variables & Reset ===== */
+:root{
+  --bg:#f4e9f9;
+  --surface:#ffffff;
+  --surface-2:#fafafa;
+  --text:#1f1933;
+  --muted:#554c6e;
+  --accent:#8e44ad;
+  --accent-2:#e74c3c;
+  --nf-red:#c0392b;
+  --border:#e6e2ee;
+  --ring:rgba(192,57,43,.35);
+  --shadow:0 10px 24px rgba(10,10,20,.10);
+
+  /* Buttons */
+  --btn-primary:#e74c3c;
+  --btn-primary-hover:#d64537;
+  --btn-ghost-bg:#ffffffc7;
+  --btn-ghost-br:#ead9ff;
+}
+
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+}
+
+h1,h2,h3,h4,p{margin:0 0 .5rem}
+h2{text-align:center;margin:2rem 0 .6rem}
+
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible,.tab:focus-visible,input:focus-visible{
+  outline:3px solid #f1c40f; outline-offset:3px
+}
+
+/* ===== Buttons (système unifié) ===== */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.62rem .95rem;border-radius:12px;font-weight:800;line-height:1;
+  border:1px solid transparent; text-decoration:none; cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.10);
+  transition:transform .15s, box-shadow .15s, background .2s, color .2s;
+}
+.btn:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.12) }
+.btn--primary{ background:var(--btn-primary); color:#fff }
+.btn--primary:hover{ background:var(--btn-primary-hover) }
+.btn--ghost{ background:var(--btn-ghost-bg); border-color:var(--btn-ghost-br); color:#2b1a5a }
+.btn--ghost:hover{ background:#fff }
+.btn--gold{ background:linear-gradient(135deg,#f1c40f,#f39c12); color:#1b1200 }
+.btn--pill{ border-radius:999px }
+
+/* Pills sociaux */
+.nf-socials{display:flex;gap:.6rem;justify-content:center;margin-top:.6rem;flex-wrap:wrap}
+.social-pill{
+  display:inline-flex;align-items:center;gap:.5rem; padding:.55rem .9rem;border-radius:999px;
+  background:#ffffffc7;border:1px solid #ead9ff;color:#2b1a5a; font-weight:800; box-shadow:0 6px 16px rgba(0,0,0,.06)
+}
+.social-pill:hover{background:#fff}
+.social-pill img{width:18px;height:18px;display:block}
+
+/* Utilitaires */
+.reveal{opacity:0; transform:translateY(12px); transition:.6s ease}
+.reveal.is-in, .reveal.in{opacity:1; transform:none}
