@@ -1398,3 +1398,79 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
   padding:.25rem .55rem; border-radius:999px; font-size:.9rem; backdrop-filter: blur(2px)}
 .pill-live{background:#ff375f;border-color:#ff375f;font-weight:700}
 .featured-title{margin:0 0 .9rem;
+/* ===== Live Strip (horizontal list of live channels) ===== */
+#live-strip{
+  max-width:1100px;
+  margin: .8rem auto 0;
+  padding: .6rem .75rem;
+  border-radius: .9rem;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  overflow: hidden;
+}
+
+.live-strip__inner{
+  display:flex;
+  gap:.75rem;
+  overflow-x:auto;
+  scrollbar-width: thin;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.live-chip{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  padding:.5rem .7rem;
+  border:1px solid #eee;
+  background: #faf7ff;
+  border-radius: 999px;
+  scroll-snap-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.04);
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+}
+
+.live-chip:hover{
+  transform: translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.10);
+  background:#fff;
+}
+
+.live-chip__avatar{
+  width:34px; height:34px; border-radius:50%;
+  object-fit:cover;
+  display:block;
+}
+
+.live-chip__texts{
+  display:flex; flex-direction:column; line-height:1.1;
+}
+
+.live-chip__name{
+  font-weight:800; font-size:.92rem; color:#2b1a5a;
+}
+
+.live-chip__game{
+  font-size:.78rem; opacity:.8; color:#4b0082;
+}
+
+/* small “LIVE” dot */
+.live-chip__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:#ff4757; margin-left:.2rem;
+  box-shadow:0 0 0 0 rgba(255,71,87,.8);
+  animation: stripPulse 1.6s infinite;
+}
+
+@keyframes stripPulse{
+  0%{ box-shadow:0 0 0 0 rgba(255,71,87,.6)}
+  70%{ box-shadow:0 0 0 7px rgba(255,71,87,0)}
+  100%{ box-shadow:0 0 0 0 rgba(255,71,87,0)}
+}
+
+html.dark #live-strip{ background:#1b1430; }
+html.dark .live-chip{ border-color:#2a2148; background:#20173e; }
+html.dark .live-chip__name{ color:#fff; }
+html.dark .live-chip__game{ color:#cbb8ff; }
