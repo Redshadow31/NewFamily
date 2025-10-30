@@ -456,6 +456,7 @@ try {
 } catch (e) {
   console.warn("Erreur lecture featured.json", e);
 }
+   }
 
 
 /* ====== Helpers accueil ====== */
