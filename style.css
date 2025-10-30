@@ -1701,5 +1701,20 @@ main{ margin-top: .6rem; }
   box-shadow:0 6px 16px rgba(0,0,0,.06);
 }
 .social-pill:hover{ background:#fff; }
-.social-pill img{ width:18px; height:18px; display:block; }
+.social-pill img{ width:18px; height:18px; display:block;
+                /* Bouton retour correctement positionné (Clips.html) */
+.backbar{
+  position:relative;
+  max-width:1100px;
+  margin:1rem auto 0;
+  padding:0 1rem;
+  display:flex;
+  justify-content:center;
+}
+.backbar .btn{
+  position:static;
+  top:auto;
+  transform:none;
+}
+}
 
