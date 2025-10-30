@@ -103,10 +103,72 @@
     </div>
   </header>
 
-  <main id="main">
-    <!-- reste inchangé -->
-    <!-- ... -->
-  </main>
+ <main id="main">
+  <!-- Intro -->
+  <div class="home-intro">
+    <div class="button-container">
+      <a href="a-propos.html" class="about-button">🎭 En savoir plus</a>
+      <a href="staff.html" class="about-button">👥 Staff</a>
+      <a href="blog.html" class="about-button">📰 Actualités</a>
+    </div>
+    <div class="nf-hero-badges">
+      <span>✨ Mentorat</span><span>🎯 Feedback</span><span>🚀 Raids</span>
+    </div>
+  </div>
+
+  <!-- Barre des lives -->
+  <div class="nf-livebar" role="status" aria-live="polite">
+    <span class="dot" aria-hidden="true"></span>
+    <strong id="nf-live-count">0</strong> live(s) en cours •
+    <em id="live-count">Chargement des données...</em>
+  </div>
+
+  <!-- Statistiques -->
+  <section class="nf-stats reveal" aria-label="Statistiques de la communauté">
+    <div class="stat">
+      <div class="num" id="stat-members" data-to="418">418</div>
+      <div class="label">Membres (Discord)</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="stat-actifs" data-to="0">0</div>
+      <div class="label">Actifs (entraide)</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="stat-lives" data-to="0">0</div>
+      <div class="label">Lives / jour (moyenne)</div>
+    </div>
+    <div class="stat">
+      <div class="num" id="stat-events" data-to="0">0</div>
+      <div class="label">Événements / mois</div>
+    </div>
+  </section>
+
+  <!-- Pourquoi nous -->
+  <section class="nf-why reveal" aria-label="Pourquoi nous rejoindre">
+    <article><h3>🎯 Progression</h3><p>Mentorat, feedbacks, ateliers et entraide structurée.</p></article>
+    <article><h3>🤝 Humain d’abord</h3><p>Ambiance safe, modération formée, zéro drama.</p></article>
+    <article><h3>🚀 Visibilité</h3><p>Raids, relais, mise en avant des créateurs motivés.</p></article>
+  </section>
+
+  <!-- Skeletons (chargement) -->
+  <div id="nf-skeletons" aria-hidden="true"></div>
+
+  <!-- Membres en ligne -->
+  <section id="online" class="reveal" aria-label="Membres actuellement en live">
+    <h2>🎥 Actuellement en direct</h2>
+    <div id="live-users" class="users-grid"></div>
+  </section>
+
+  <!-- Membres hors ligne -->
+  <section id="offline" class="reveal" aria-label="Membres hors ligne">
+    <h2>👀 À découvrir bientôt</h2>
+    <div id="offline-users" class="users-grid"></div>
+  </section>
+</main>
+
+<script src="https://player.twitch.tv/js/embed/v1.js" async></script>
+<script src="script.js" defer></script>
+
 
   <script src="https://player.twitch.tv/js/embed/v1.js" async></script>
   <script src="script.js" defer></script>
