@@ -105,13 +105,44 @@
       <em id="live-count">Chargement des données...</em>
     </div>
 <!-- LIVE MISE EN AVANT -->
-<section id="featured-live" class="reveal" style="display:none; max-width:1100px; margin:2rem auto; text-align:center;">
-  <div class="highlight-card" style="background:#fff; border-radius:1rem; padding:1.5rem; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
-    <h2 style="color:#c0392b;">🔥 Mise en avant exceptionnelle !</h2>
-    <p id="featured-text" style="font-size:1.1rem; margin:1rem 0;"></p>
-    <a id="featured-link" href="#" target="_blank" rel="noopener" class="event-button">👉 Rejoindre le live</a>
+<section id="featured-live" style="display:none; max-width:1100px; margin:2rem auto; padding:2rem; border-radius:1.5rem; background:linear-gradient(135deg, #fff0f5 0%, #fff 100%); box-shadow:0 15px 35px rgba(0,0,0,0.08); text-align:center; position:relative; overflow:hidden;">
+  
+  <!-- Effet lumineux -->
+  <div style="position:absolute; inset:0; background:radial-gradient(circle at top right, rgba(255,165,0,0.15), transparent 70%); z-index:0;"></div>
+
+  <!-- Contenu -->
+  <div style="position:relative; z-index:1;">
+    <h2 style="font-size:1.7rem; color:#e84118; font-weight:700; display:flex; align-items:center; justify-content:center; gap:.5rem; margin-bottom:1rem; animation:fadeIn 1s ease;">
+      🔥 Mise en avant exceptionnelle !
+    </h2>
+    <p id="featured-text" style="font-size:1.1rem; color:#2c2c2c; margin-bottom:1.5rem; animation:fadeIn 1.5s ease;"></p>
+    <a id="featured-link" href="#" target="_blank" rel="noopener" class="event-button" 
+       style="display:inline-block; background:#ff5f57; color:#fff; font-weight:600; padding:.8rem 1.5rem; border-radius:50px; text-decoration:none; box-shadow:0 4px 10px rgba(255,95,87,0.3); transition:all .25s ease; font-size:1.1rem;">
+      🎥 Rejoindre le live
+    </a>
+  </div>
+
+  <!-- Animation décorative -->
+  <div style="position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); font-size:1.5rem; opacity:.2; animation:floatEmojis 6s infinite ease-in-out;">
+    ✨🔥🎉
   </div>
 </section>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatEmojis {
+  0%, 100% { transform: translate(-50%, 0); opacity: .2; }
+  50% { transform: translate(-50%, -10px); opacity: .4; }
+}
+#featured-live:hover a {
+  transform: scale(1.05);
+  background:#ff3b2f;
+  box-shadow:0 6px 15px rgba(255,59,47,0.4);
+}
+</style>
 
     <!-- BOUTONS PRINCIPAUX -->
     <div class="button-container" style="text-align:center; margin-top:.6rem;">
