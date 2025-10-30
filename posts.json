@@ -1,5 +1,56 @@
 [
   {
+    "slug": "halloween-tenf-2025",
+    "title": "🎃 Halloween TENF 2025",
+    "date": "2025-10-31",
+    "author": "TENF Staff",
+    "summary": "Deux rendez-vous : l’événement serveur Deceit 2 animé par Rubby et le Live gagnant de BlackenedForAll.",
+    "tags": ["événements", "Halloween", "live gagnant"],
+    "image": "assets/blog/31octobre.png",
+    "content": "Soirée spéciale HALLOWEEN ! \\n\\n• **Deceit 2** — événement serveur animé par **Rubby**. \\n• **Live gagnant** — **BlackenedForAll** en tête d’affiche. \\n\\nMerci à toutes et tous pour l’ambiance 👻🦇"
+  },
+  {
+    "slug": "cycle-harry-potter-cine-clara",
+    "title": "🎥 Cycle Harry Potter – Ciné Clara",
+    "date": "2025-11-02",
+    "author": "Clara",
+    "summary": "Une semaine complète dédiée à Harry Potter, tous les soirs à 21h avec Clara.",
+    "tags": ["ciné clara", "harry potter", "projection"],
+    "image": "assets/blog/harry.png",
+    "content": "Rendez-vous **21h** chaque soir : \\n\\n• **Lun 3 nov** — *L’école des sorciers* \\n• **Mar 4 nov** — *La Chambre des Secrets* \\n• **Mer 5 nov** — *Le Prisonnier d’Azkaban* \\n• **Jeu 6 nov** — *La Coupe de Feu* \\n• **Ven 7 nov** — *L’Ordre du Phénix* \\n• **Sam 8 nov** — *Le Prince de Sang-Mêlé* \\n• **Dim 9 nov** — *Reliques de la Mort – Partie 1* \\n• **Lun 10 nov** — *Reliques de la Mort – Partie 2* \\n\\n**Projection + discussion** sur Discord #cine-clara. Pop-corn bienvenu 🍿"
+  },
+  {
+    "slug": "weekend-disney-tenf",
+    "title": "🏰 Week-end Disney : Blind Test, Quizz & Speedstorm",
+    "date": "2025-11-13",
+    "author": "TENF Staff",
+    "summary": "Trois soirées Disney à 21h : Blind Test (Oxi & Clara), Quizz (Rubby), Speedstorm (Nangel).",
+    "tags": ["événements", "disney", "jeux"],
+    "image": "assets/blog/disney.png",
+    "content": "Un **week-end spécial Disney** : \\n\\n• **Ven 14 nov** — *Blind Test Disney* avec **Oxi & Clara** \\n• **Sam 15 nov** — *Quizz Disney* animé par **Rubby** \\n• **Dim 16 nov** — *Disney Speedstorm* avec **Nangel** \\n\\nAmbiance chill, bonne humeur et un max de nostalgie ✨"
+  },
+  {
+    "slug": "aventura-2026-preparatifs",
+    "title": "🌴 Préparatifs Aventura 2026",
+    "date": "2025-11-05",
+    "author": "Red_Shadow_31",
+    "summary": "Les préparatifs continuent : un restaurant est d’ores et déjà réservé pour une soirée unique.",
+    "tags": ["Aventura 2026", "voyage", "staff"],
+    "image": "assets/blog/aventura.png",
+    "content": "Le projet **Aventura 2026** avance bien ! \\n\\n• **Soirée spéciale** : restaurant réservé pour l’équipe & la communauté présente. \\n• Hébergements et logistique en cours. \\n\\nToutes les infos pratiques arriveront dans les prochaines semaines."
+  },
+  {
+    "slug": "nouveautes-site-newfamily",
+    "title": "🧩 Nouveautés du site New Family",
+    "date": "2025-10-29",
+    "author": "TENF Web",
+    "summary": "Miniatures dynamiques et mise en avant du Live gagnant : le site s’améliore pour valoriser vos streams.",
+    "tags": ["site", "release notes", "live gagnant"],
+    "image": "assets/blog/site.png",
+    "content": "Deux améliorations visibles : \\n\\n• **Miniatures dynamiques** pour les cartes membres et sections vidéos. \\n• **Mise en avant du Live gagnant** directement sur la page d’accueil. \\n\\nMerci pour vos retours : ils guident les prochaines features !"
+  }
+
+  {
     "title": "Soirée film : Avatar avec Clara 🎬",
     "date": "2025-09-08",
     "summary": "Soirée cinéma en communauté : on regarde Avatar avec Clara. Rejoignez-nous pour papoter, théories et popcorn !",
