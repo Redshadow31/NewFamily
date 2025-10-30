@@ -1366,3 +1366,35 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
   transform: translateY(-4px);
   box-shadow: 0 12px 28px rgba(0,0,0,0.12);
 }
+.featured-live{max-width:1100px;margin:1.6rem auto 0;padding:0 1rem}
+.featured-card{
+  position:relative; border-radius:18px; overflow:hidden; box-shadow:0 18px 36px rgba(0,0,0,.12);
+  isolation:isolate; background:#12051a;
+}
+/* bordure dégradée animée */
+.featured-card::before{
+  content:""; position:absolute; inset:0; padding:2px; border-radius:18px;
+  background:linear-gradient(120deg,#ff7a7a,#ffb86c,#ffd166,#a3e635,#60a5fa,#c084fc,#ff7a7a);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude; animation:hue 8s linear infinite;
+}
+@keyframes hue{to{filter:hue-rotate(360deg)}}
+
+.featured-media{
+  position:absolute; inset:0; background:#1a0b24 center/cover no-repeat; opacity:.35; z-index:0;
+  transform:scale(1.02); transition:transform .4s ease;
+}
+.featured-card:hover .featured-media{transform:scale(1.05)}
+
+.featured-ribbon{
+  position:absolute; top:14px; left:14px; z-index:2;
+  background:#ff3b2f; color:#fff; font-weight:800; letter-spacing:.2px;
+  padding:.45rem .8rem; border-radius:999px; box-shadow:0 8px 20px rgba(255,59,47,.35);
+}
+
+.featured-content{position:relative; z-index:1; padding:2.2rem 1.6rem 1.6rem; color:#fff}
+.featured-meta{display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.6rem}
+.pill{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+  padding:.25rem .55rem; border-radius:999px; font-size:.9rem; backdrop-filter: blur(2px)}
+.pill-live{background:#ff375f;border-color:#ff375f;font-weight:700}
+.featured-title{margin:0 0 .9rem;
