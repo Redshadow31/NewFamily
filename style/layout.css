@@ -36,16 +36,17 @@ header{
 }
 
 /* Logo optionnel au centre */
-.header-logo img{
-  width: min(240px, 36vw);
+.header-logo img {
+  width: clamp(120px, 18vw, 180px); /* ✅ max 180px, min 120px, s’adapte à la largeur */
   height: auto;
   margin-bottom: .6rem;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,.35));
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
   transition: transform .25s ease, filter .25s ease;
 }
-.header-logo img:hover{
-  transform: scale(1.06);
-  filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
+
+.header-logo img:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.45));
 }
 
 /* Titres et sous-titres */
