@@ -1617,3 +1617,89 @@ html.dark .live-chip{ border-color:#2a2148; background:#20173e; }
 html.dark .live-chip__name{ color:#fff; }
 html.dark .live-chip__game{ color:#cbb8ff; }
           
+/* === HERO/HEADER compact et responsive === */
+header{
+  /* garde ton fond actuel */
+  padding: clamp(1.2rem, 3.5vw, 2.2rem) 1rem;   /* ↓ padding */
+  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: 22px;
+}
+
+.header-content{
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+}
+
+.header-logo img{
+  width: clamp(120px, 14vw, 170px); /* ↓ logo */
+}
+
+.header-text{
+  text-align: center;
+  margin: 0 auto;
+}
+
+.header-text h1{
+  font-size: clamp(1.6rem, 3.3vw, 2.2rem); /* ↓ titre */
+  line-height: 1.15;
+  margin: .2rem 0 .4rem;
+}
+
+.header-text p{
+  font-size: clamp(.95rem, 1.6vw, 1.05rem);
+  margin: 0;
+}
+
+/* espace après le header un peu réduit */
+main{ margin-top: .6rem; }
+/* === Boutons unifiés === */
+:root{
+  --btn-primary: #e74c3c;
+  --btn-primary-hover: #d64537;
+  --btn-ghost-bg: #ffffffc7;
+  --btn-ghost-br: #ead9ff;
+}
+
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding: .62rem .95rem;
+  border-radius: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  line-height: 1;
+  box-shadow: 0 6px 16px rgba(0,0,0,.10);
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease, color .2s ease;
+  border:1px solid transparent;
+}
+.btn:hover{ transform: translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.12); }
+
+.btn--primary{ background: var(--btn-primary); color:#fff; }
+.btn--primary:hover{ background: var(--btn-primary-hover); color:#fff; }
+
+.btn--ghost{
+  background: var(--btn-ghost-bg);
+  border-color: var(--btn-ghost-br);
+  color:#2b1a5a;
+}
+.btn--ghost:hover{ background:#fff; }
+
+.btn--pill{ border-radius: 999px; }
+
+/* boutons rubriques (VIP, Événements, …) alignés */
+.actions-row{
+  display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center;
+}
+
+/* pills réseaux */
+.nf-socials{ display:flex; gap:.6rem; justify-content:center; margin-top:.6rem; flex-wrap:wrap; }
+.social-pill{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.55rem .9rem; border-radius:999px;
+  background:#ffffffc7; border:1px solid #ead9ff;
+  color:#2b1a5a; text-decoration:none; font-weight:800;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+}
+.social-pill:hover{ background:#fff; }
+.social-pill img{ width:18px; height:18px; display:block; }
+
