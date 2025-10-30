@@ -511,6 +511,31 @@ async function startLivePolling(intervalMs = 5 * 60 * 1000) {
   setTimeout(poll, 10_000);
   setInterval(poll, intervalMs);
 }
+// 11bis) Vérifie si un live "mise en avant" est en cours
+try {
+  const fRes = await fetch("featured.json");
+  if (fRes.ok) {
+    const list = await fRes.json();
+    const now = new Date();
+    for (const ev of list) {
+      const start = new Date(ev.date);
+      const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // +2h
+      if (now >= start && now <= end) {
+        const section = document.getElementById("featured-live");
+        const txt = document.getElementById("featured-text");
+        const link = document.getElementById("featured-link");
+        if (section && txt && link) {
+          section.style.display = "block";
+          txt.innerHTML = `<strong>${escapeHtml(ev.user)}</strong> est actuellement mis(e) en avant par la communauté New Family ! 🎉`;
+          link.href = ev.url;
+        }
+        break;
+      }
+    }
+  }
+} catch (e) {
+  console.warn("Erreur lecture featured.json", e);
+}
 
 /* ---- GO ---- */
 init();
