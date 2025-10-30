@@ -1359,3 +1359,10 @@ button.about-button:hover { background: #845ec2; transform: scale(1.05); }
   margin-top: auto;
   text-align: center;
 }
+#featured-live .highlight-card {
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+#featured-live .highlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
