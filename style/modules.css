@@ -458,486 +458,103 @@
   font-size: 0.7rem;
   padding: .15rem .4rem;
 }
-/* ==========================================
-   🧰 Correctifs visuels STAFF V2
-   ========================================== */
 
-/* 🔵 Avatars — vrais cercles indépendants du ratio parent */
-.avatar-box {
-  position: relative;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.avatar {
-  width: 90px !important;
-  height: 90px !important;
-  border-radius: 50% !important;      /* cercle parfait */
-  object-fit: cover !important;       /* image remplie sans déformation */
-  aspect-ratio: 1 / 1 !important;     /* force un ratio carré */
-  background: #fff;
-  border: 3px solid var(--ring, #f1c40f);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--ring,#f1c40f) 25%, transparent);
-}
+/* ===== Staff – actions & modal ===== */
 
-/* 🏷️ Badges rôle — lisibles, harmonisés */
-.badge {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #111;
-  font-weight: 800;
-  font-size: 0.75rem;
-  border-radius: 8px;
-  padding: .2rem .5rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  letter-spacing: 0.2px;
-  text-shadow: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,.12);
-  backdrop-filter: blur(3px);
-}
-.badge::first-letter { text-transform: uppercase; }
+/* Actions + search (si utilisés) */
+.staff-actions{max-width:1200px;margin:1rem auto .4rem;padding:0 1rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.tab{border:1px solid #ead9ff;background:#fff;border-radius:999px;padding:.42rem .7rem;font-weight:700;color:#4b0082;cursor:pointer}
+.tab.is-active{background:#e74c3c;color:#fff;border-color:transparent}
+.search input{min-width:260px;border:1px solid #ead9ff;border-radius:10px;padding:.5rem .7rem;outline:none}
 
-/* ♻️ Grille — jusqu’à 5 cartes par ligne sur PC */
-.staff-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-@media (min-width: 1150px) {
-  .staff-grid { grid-template-columns: repeat(5, 1fr); }
+/* Conteneurs */
+.staff-wrap{width:min(1200px,95%);margin:2rem auto 3rem;display:flex;flex-direction:column;gap:2rem}
+.staff-section{max-width:1100px;margin:0 auto;padding:0 1rem}
+.staff-section h2{display:flex;align-items:center;gap:.5rem;margin:.5rem 0 1.2rem;font-weight:900;color:#a24bff;text-shadow:0 0 6px rgba(0,0,0,.25)}
+.pole-desc{margin:-.25rem 0 1rem;color:#cfcfcf;font-size:.95rem}
+
+/* Grille – 4–5 cartes par ligne selon largeur */
+.staff-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+@media (min-width:1150px){.staff-grid{grid-template-columns:repeat(5,1fr)}}
+
+/* Cartes */
+.staff-card{background:#1a1123;border-radius:16px;box-shadow:0 6px 22px rgba(0,0,0,.18);transition:.25s transform,.25s box-shadow;padding:1rem;text-align:center;color:#fff}
+.staff-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.2)}
+
+/* Avatars – cercle parfait (spécifique pour battre cards.css) */
+.staff-card .avatar-box{position:relative;text-align:center;display:flex;justify-content:center;align-items:center}
+.staff-card img.avatar{
+  width:96px !important;
+  height:96px !important;
+  border-radius:50% !important;
+  aspect-ratio:1/1 !important;
+  object-fit:cover !important;
+  border:3px solid var(--ring,#a24bff);
+  box-shadow:0 0 12px rgba(162,75,255,.35);
+  background:#fff;
 }
 
-/* 🧱 Cartes */
-.staff-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
-  transition: transform .25s ease, box-shadow .25s ease;
+/* Badge RÔLE – lisible */
+.staff-card .badge{
+  position:absolute;top:6px;left:6px;
+  font-weight:800;font-size:.78rem;border-radius:8px;padding:.2rem .5rem;letter-spacing:.3px;
+  color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.3)
 }
-.staff-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-}
+.badge--referent{background:#e74c3c}
+.badge--adjoint-ref{background:#e67e22}
+.badge--mentor{background:#8e44ad}
+.badge--junior{background:#2ecc71}
+.badge--support{background:#16a085}
+.badge--tech{background:#2980b9}
 
-/* 👤 Nom + description : hiérarchie + contraste */
-.name {
-  font-weight: 800;
-  font-size: 1rem;
-  margin-top: .5rem;
-  color: #4b0082;
-  text-transform: capitalize;
-}
-.desc {
-  color: #333;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  min-height: 44px;
-  margin: .3rem 0 .6rem;
-}
+/* Texte carte */
+.name{font-weight:800;font-size:1rem;margin-top:.5rem;color:#b87aff}
+.desc{color:#d0c9e0;font-size:.95rem;line-height:1.4;min-height:44px;margin:.3rem 0 .6rem}
 
-/* 🔴 Live badge : plus petit et aligné */
-.live-dot {
-  top: 4px;
-  right: 6px;
-  font-size: .7rem;
-  padding: .15rem .4rem;
-  background: #ff375f;
-  border-radius: 999px;
-}
+/* Live badge (plus petit) */
+.live-dot{position:absolute;right:6px;top:4px;display:inline-flex;align-items:center;gap:.3rem;background:#ff375f;color:#fff;border-radius:999px;padding:.15rem .4rem;font-weight:800;font-size:.7rem}
 
-/* 🎨 Thèmes des rôles (légère teinte d’arrière-plan sur le ring) */
-.badge--referent   { background:#e74c3c; color:#fff; }
-.badge--adjoint-ref{ background:#e67e22; color:#fff; }
-.badge--mentor     { background:#8e44ad; color:#fff; }
-.badge--junior     { background:#2ecc71; color:#fff; }
-.badge--support    { background:#16a085; color:#fff; }
-.badge--tech       { background:#2980b9; color:#fff; }
+/* Boutons */
+.about-button{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border-radius:8px;font-weight:700;padding:.4rem .8rem;transition:.2s}
 
-/* 🧠 Section */
-.staff-section h2 {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  font-weight: 900;
-  color: var(--nf-red, #e74c3c);
-}
-.staff-section p {
-  margin-bottom: 1rem;
-  color: #ccc;
-}
+/* Bouton Twitch => icône */
+.about-button[href*="twitch.tv"]{background:transparent;border:1px solid #9146ff;color:#9146ff}
+.about-button[href*="twitch.tv"]::before{content:"";width:18px;height:18px;background:url("assets/twitch.png") no-repeat center/contain;display:inline-block}
+.about-button[href*="twitch.tv"]:hover{background:#9146ff;color:#fff}
 
-/* =======================================
-   🌈 Modernisation visuelle STAFF 2025
-   ======================================= */
+/* Bouton Plus – moderne */
+.about-button[data-more]{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;backdrop-filter:blur(3px)}
+.about-button[data-more]:hover{background:rgba(255,255,255,.15);border-color:#fff}
 
-/* Couleurs de texte + meilleure hiérarchie */
-.name {
-  color: #a24bff !important;           /* violet clair lisible */
-  text-shadow: 0 0 6px rgba(0,0,0,.2);
-}
-.desc {
-  color: #ddd !important;              /* gris clair */
-}
+/* =========================
+   Modale – verre dépoli
+   ========================= */
+.staff-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;padding:1rem;opacity:0;transition:opacity .4s ease}
+.staff-modal[aria-hidden="false"]{display:flex;opacity:1}
 
-/* Bouton Twitch (icône à la place du texte) */
-.about-button[href*="twitch.tv"] {
-  background: transparent;
-  border: 1px solid #9146ff;
-  border-radius: 8px;
-  padding: .4rem .8rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .4rem;
-  font-weight: 700;
-  color: #9146ff;
-  transition: .2s;
+.staff-modal .dialog{
+  width:min(850px,95vw);
+  background:rgba(255,255,255,.2);
+  backdrop-filter:blur(20px);
+  color:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.4);
+  display:grid;grid-template-columns:200px 1fr;gap:1.8rem;align-items:center;padding:2rem;
+  transform:scale(.95);animation:fadeZoom .4s ease forwards
 }
-.about-button[href*="twitch.tv"]::before {
-  content: "";
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  background: url("assets/twitch.png") no-repeat center / contain;
-}
-.about-button[href*="twitch.tv"]:hover {
-  background: #9146ff;
-  color: #fff;
-}
+@keyframes fadeZoom{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 
-/* Bouton "Plus" modernisé */
-.about-button[data-more] {
-  background: transparent;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: .4rem .8rem;
-  font-weight: 700;
-  color: #fff;
-  backdrop-filter: blur(3px);
-  transition: .2s;
-}
-.about-button[data-more]:hover {
-  background: rgba(255,255,255,.15);
-  border-color: #fff;
-}
+.staff-modal .dialog header{display:flex;flex-direction:column;align-items:center;text-align:center}
+.staff-modal .dialog img{width:120px;height:120px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 12px rgba(255,255,255,.5)}
+.staff-modal .dialog h3{font-size:1.4rem;margin:.6rem 0 0;color:#fff}
+.staff-modal .dialog small{opacity:.85}
+.staff-modal .dialog p{margin-top:.5rem;color:#f5f5f5;line-height:1.6;font-size:.95rem}
 
-/* Modale modernisée */
-.staff-modal .dialog {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  align-items: center;
-  background: linear-gradient(135deg, #6b0cff, #ff7ac7);
-  color: #fff;
-  border: none;
-  padding: 2rem;
-  gap: 1.5rem;
-}
-.staff-modal .dialog header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.staff-modal .dialog img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  box-shadow: 0 0 12px rgba(255,255,255,.5);
-}
-.staff-modal .dialog h3 {
-  font-size: 1.4rem;
-  margin: .5rem 0 0;
-  color: #fff;
-}
-.staff-modal .dialog small {
-  opacity: .85;
-}
-.staff-modal .dialog p {
-  margin-top: .5rem;
-  color: #fdfdfd;
-  line-height: 1.6;
-}
+/* Réseaux sociaux dans la modale */
+.staff-modal .links{margin-top:1rem;display:flex;gap:.8rem}
+.staff-modal .links a{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:inline-flex;align-items:center;justify-content:center;transition:.25s}
+.staff-modal .links a:hover{background:rgba(255,255,255,.45)}
+.staff-modal .links img{width:18px;height:18px}
 
-/* Liens sociaux dans la modale */
-.staff-modal .links {
-  margin-top: 1rem;
-  display: flex;
-  gap: .6rem;
-}
-.staff-modal .links a {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: .2s;
-}
-.staff-modal .links a:hover {
-  background: rgba(255,255,255,.4);
-}
-.staff-modal .links a img {
-  width: 18px;
-  height: 18px;
-}
-/* ==========================================
-   🎨 Twitch Entraide New Family – Modules
-   Version : STAFF 2025 "Glass Fade"
-   ========================================== */
-
-/* ===== Layout global ===== */
-.staff-wrap {
-  width: min(1200px, 95%);
-  margin: 2rem auto 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.staff-section h2 {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  font-weight: 900;
-  color: #a24bff;
-  text-shadow: 0 0 6px rgba(0,0,0,.25);
-}
-
-.staff-section p {
-  margin-bottom: 1rem;
-  color: #cfcfcf;
-  font-size: 0.95rem;
-}
-
-/* ===== Grille cartes staff ===== */
-.staff-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-@media (min-width: 1150px) {
-  .staff-grid { grid-template-columns: repeat(5, 1fr); }
-}
-
-/* ===== Cartes ===== */
-.staff-card {
-  background: #1a1123;
-  border-radius: 16px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.18);
-  transition: transform .25s ease, box-shadow .25s ease;
-  padding: 1rem;
-  text-align: center;
-  color: #fff;
-}
-.staff-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-}
-
-/* ===== Avatars ===== */
-.avatar-box {
-  position: relative;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  aspect-ratio: 1/1;
-  border: 3px solid var(--ring, #a24bff);
-  box-shadow: 0 0 12px rgba(162,75,255,.35);
-  background: #fff;
-}
-
-/* ===== Badges ===== */
-.badge {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  font-weight: 800;
-  font-size: 0.78rem;
-  border-radius: 8px;
-  padding: .2rem .5rem;
-  letter-spacing: .3px;
-  color: #fff;
-  text-shadow: 0 1px 4px rgba(0,0,0,.3);
-}
-.badge--referent   { background:#e74c3c; }
-.badge--adjoint-ref{ background:#e67e22; }
-.badge--mentor     { background:#8e44ad; }
-.badge--junior     { background:#2ecc71; }
-.badge--support    { background:#16a085; }
-.badge--tech       { background:#2980b9; }
-
-/* ===== Texte ===== */
-.name {
-  font-weight: 800;
-  font-size: 1rem;
-  margin-top: .5rem;
-  color: #b87aff;
-}
-.desc {
-  color: #d0c9e0;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  min-height: 44px;
-  margin: .3rem 0 .6rem;
-}
-
-/* ===== Boutons ===== */
-.about-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .4rem;
-  border-radius: 8px;
-  font-weight: 700;
-  padding: .4rem .8rem;
-  transition: .2s;
-}
-
-/* Bouton Twitch (icône) */
-.about-button[href*="twitch.tv"] {
-  background: transparent;
-  border: 1px solid #9146ff;
-  color: #9146ff;
-}
-.about-button[href*="twitch.tv"]::before {
-  content: "";
-  width: 18px;
-  height: 18px;
-  background: url("assets/twitch.png") no-repeat center/contain;
-  display: inline-block;
-}
-.about-button[href*="twitch.tv"]:hover {
-  background: #9146ff;
-  color: #fff;
-}
-
-/* Bouton “Plus” */
-.about-button[data-more] {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,.5);
-  color: #fff;
-  backdrop-filter: blur(3px);
-}
-.about-button[data-more]:hover {
-  background: rgba(255,255,255,.15);
-  border-color: #fff;
-}
-
-/* ===== Modale (verre dépoli) ===== */
-.staff-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 1rem;
-  opacity: 0;
-  transition: opacity .4s ease;
-}
-.staff-modal[aria-hidden="false"] {
-  display: flex;
-  opacity: 1;
-}
-.staff-modal .dialog {
-  width: min(850px, 95vw);
-  background: rgba(255,255,255,.2);
-  backdrop-filter: blur(20px);
-  color: #fff;
-  border-radius: 18px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.4);
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 1.8rem;
-  align-items: center;
-  padding: 2rem;
-  transform: scale(.95);
-  animation: fadeZoom .4s ease forwards;
-}
-@keyframes fadeZoom {
-  from { opacity: 0; transform: scale(.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-.staff-modal .dialog header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.staff-modal .dialog img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  box-shadow: 0 0 12px rgba(255,255,255,.5);
-}
-.staff-modal .dialog h3 {
-  font-size: 1.4rem;
-  margin: .6rem 0 0;
-  color: #fff;
-}
-.staff-modal .dialog small {
-  opacity: .85;
-}
-.staff-modal .dialog p {
-  margin-top: .5rem;
-  color: #f5f5f5;
-  line-height: 1.6;
-  font-size: .95rem;
-}
-
-/* Liens sociaux */
-.staff-modal .links {
-  margin-top: 1rem;
-  display: flex;
-  gap: .8rem;
-}
-.staff-modal .links a {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.25);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: .25s;
-}
-.staff-modal .links a:hover {
-  background: rgba(255,255,255,.45);
-}
-.staff-modal .links img {
-  width: 18px;
-  height: 18px;
-}
-
-.staff-modal .close {
-  position: absolute;
-  top: .8rem;
-  right: .8rem;
-  background: rgba(255,255,255,.3);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 700;
-  padding: .3rem .6rem;
-  cursor: pointer;
-  transition: .2s;
-}
-.staff-modal .close:hover {
-  background: rgba(255,255,255,.6);
-  color: #000;
-}
+/* Close */
+.staff-modal .close{position:absolute;top:.8rem;right:.8rem;background:rgba(255,255,255,.3);border:none;border-radius:8px;color:#fff;font-weight:700;padding:.3rem .6rem;cursor:pointer;transition:.2s}
+.staff-modal .close:hover{background:rgba(255,255,255,.6);color:#000}
