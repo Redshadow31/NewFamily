@@ -569,3 +569,119 @@
   color: #ccc;
 }
 
+/* =======================================
+   🌈 Modernisation visuelle STAFF 2025
+   ======================================= */
+
+/* Couleurs de texte + meilleure hiérarchie */
+.name {
+  color: #a24bff !important;           /* violet clair lisible */
+  text-shadow: 0 0 6px rgba(0,0,0,.2);
+}
+.desc {
+  color: #ddd !important;              /* gris clair */
+}
+
+/* Bouton Twitch (icône à la place du texte) */
+.about-button[href*="twitch.tv"] {
+  background: transparent;
+  border: 1px solid #9146ff;
+  border-radius: 8px;
+  padding: .4rem .8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  font-weight: 700;
+  color: #9146ff;
+  transition: .2s;
+}
+.about-button[href*="twitch.tv"]::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: url("assets/twitch.png") no-repeat center / contain;
+}
+.about-button[href*="twitch.tv"]:hover {
+  background: #9146ff;
+  color: #fff;
+}
+
+/* Bouton "Plus" modernisé */
+.about-button[data-more] {
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: .4rem .8rem;
+  font-weight: 700;
+  color: #fff;
+  backdrop-filter: blur(3px);
+  transition: .2s;
+}
+.about-button[data-more]:hover {
+  background: rgba(255,255,255,.15);
+  border-color: #fff;
+}
+
+/* Modale modernisée */
+.staff-modal .dialog {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  background: linear-gradient(135deg, #6b0cff, #ff7ac7);
+  color: #fff;
+  border: none;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+.staff-modal .dialog header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.staff-modal .dialog img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 12px rgba(255,255,255,.5);
+}
+.staff-modal .dialog h3 {
+  font-size: 1.4rem;
+  margin: .5rem 0 0;
+  color: #fff;
+}
+.staff-modal .dialog small {
+  opacity: .85;
+}
+.staff-modal .dialog p {
+  margin-top: .5rem;
+  color: #fdfdfd;
+  line-height: 1.6;
+}
+
+/* Liens sociaux dans la modale */
+.staff-modal .links {
+  margin-top: 1rem;
+  display: flex;
+  gap: .6rem;
+}
+.staff-modal .links a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: .2s;
+}
+.staff-modal .links a:hover {
+  background: rgba(255,255,255,.4);
+}
+.staff-modal .links a img {
+  width: 18px;
+  height: 18px;
+}
