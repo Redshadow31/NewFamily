@@ -381,29 +381,72 @@ function renderPole(container, pole, avatars){
   container.appendChild(section);
 }
 
-/* ========= Modale ========= */
-function openModal(member, avatar){
-  const modal = document.getElementById("staff-modal");
-  const dialog = modal.querySelector(".dialog");
-  dialog.innerHTML = `
-    <button class="close" id="staff-close">✖</button>
-    <header>
-      <img src="${avatar}" alt="${escapeHtml(member.name)}">
-      <h3>${escapeHtml(member.name)}</h3>
-      <small>${levelBadgeText(member.level)}</small>
-    </header>
-    <div>
-      <p>${escapeHtml(member.bio || member.desc || "")}</p>
-      <div class="links">
-        ${member.twitch ? `<a href="${member.twitch}" target="_blank"><img src="assets/twitch.png" alt="Twitch"></a>` : ""}
-        ${member.instagram ? `<a href="${member.instagram}" target="_blank"><img src="assets/instagram.webp" alt="Instagram"></a>` : ""}
-        ${member.tiktok ? `<a href="${member.tiktok}" target="_blank"><img src="assets/tiktok.webp" alt="TikTok"></a>` : ""}
-      </div>
-    </div>`;
+// --- OUVERTURE MODALE : bouton "Plus"
+const modal = document.getElementById("staff-modal");
+if (modal) {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-more]");
+    if (!btn) return;
 
-  modal.setAttribute("aria-hidden","false");
-  document.getElementById("staff-close").onclick = ()=>modal.setAttribute("aria-hidden","true");
-  modal.onclick = e => { if(e.target.id === "staff-modal") modal.setAttribute("aria-hidden","true"); };
+    const login = btn.getAttribute("data-more");
+    const level = btn.getAttribute("data-level");
+    const member = POLES.flatMap(p => p.members).find(m => m.login.toLowerCase() === login);
+    if (!member) return;
+
+    // Récup avatar
+    const avatarSrc = (window.__avatarMap?.[login]) ||
+                      "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+
+    // Champs bio
+    const roleBio      = (member.roleBio || member.desc || "").trim();
+    const personalBio  = (member.personalBio || member.bio || "").trim();
+
+    // Réseaux
+    const tw = (member.twitch    || `https://twitch.tv/${login}`).trim();
+    const ig = (member.instagram || "").trim();
+    const tk = (member.tiktok    || "").trim();
+
+    // Remplissage
+    document.getElementById("m-avatar").src = avatarSrc;
+    document.getElementById("m-avatar").alt = `Avatar de ${member.name}`;
+    document.getElementById("m-name").textContent = member.name;
+    document.getElementById("m-role").textContent = levelBadgeText(level);
+
+    // Sections bio
+    const roleWrap = document.getElementById("m-desc-role-wrap");
+    const roleEl   = document.getElementById("m-desc-role");
+    const persWrap = document.getElementById("m-desc-personal-wrap");
+    const persEl   = document.getElementById("m-desc-personal");
+
+    if (roleBio) {
+      roleEl.textContent = roleBio;
+      roleWrap.hidden = false;
+    } else {
+      roleWrap.hidden = true;
+      roleEl.textContent = "";
+    }
+
+    if (personalBio) {
+      persEl.textContent = personalBio;
+      persWrap.hidden = false;
+    } else {
+      persWrap.hidden = true;
+      persEl.textContent = "";
+    }
+
+    // Liens réseaux
+    const links = [];
+    if (tw) links.push(`<a href="${tw}" target="_blank" rel="noopener"><img src="assets/twitch.png" alt="Twitch"></a>`);
+    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener"><img src="assets/instagram.png" alt="Instagram"></a>`);
+    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener"><img src="assets/tiktok.png" alt="TikTok"></a>`);
+    document.getElementById("m-links").innerHTML = links.join("");
+
+    modal.setAttribute("aria-hidden", "false");
+  });
+
+  document.getElementById("staff-close")?.addEventListener("click", () => modal.setAttribute("aria-hidden","true"));
+  modal.addEventListener("click", (e) => { if (e.target.id === "staff-modal") modal.setAttribute("aria-hidden","true"); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.setAttribute("aria-hidden","true"); });
 }
 
 /* ========= Initialisation ========= */
