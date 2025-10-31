@@ -448,8 +448,8 @@ if (modal) {
     // Liens réseaux
     const links = [];
     if (tw) links.push(`<a href="${tw}" target="_blank" rel="noopener"><img src="assets/twitch.png" alt="Twitch"></a>`);
-    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener"><img src="assets/instagram.png" alt="Instagram"></a>`);
-    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener"><img src="assets/tiktok.png" alt="TikTok"></a>`);
+    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener"><img src="assets/instagram.webp" alt="Instagram"></a>`);
+    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener"><img src="assets/tiktok.webp" alt="TikTok"></a>`);
     document.getElementById("m-links").innerHTML = links.join("");
 
     modal.setAttribute("aria-hidden", "false");
