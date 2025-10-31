@@ -169,8 +169,8 @@ const POLES = [
         desc: "Référent — identité visuelle, réseaux, ligne graphique.",
         bio: "Pilote de l’identité visuelle : cohérence, templates et habillages pour une image forte.",
         twitch: "https://twitch.tv/nexou31",
-        instagram: "",
-        tiktok: ""
+        instagram: "https://www.instagram.com/nexou_31",
+        tiktok: "https://www.tiktok.com/@nexou31"
       },
       {
         login: "selena_akemi",
@@ -267,8 +267,8 @@ const POLES = [
         desc: "Référent technique — intégrations, automatisations et qualité.",
         bio: "Lead technique : intègre les outils, automatise et veille à la qualité globale.",
         twitch: "https://twitch.tv/nexou31",
-        instagram: "",
-        tiktok: ""
+        instagram: "https://www.instagram.com/nexou_31",
+        tiktok: "https://www.tiktok.com/@nexou31"
       },
       {
         login: "nangel89",
@@ -287,8 +287,8 @@ const POLES = [
         desc: "Lead dev — référent technique pour arbitrages et décisions.",
         bio: "Garant technique : tranchage des choix techniques, CI/CD et qualité du code.",
         twitch: "https://twitch.tv/nexou31",
-        instagram: "",
-        tiktok: ""
+        instagram: "https://www.instagram.com/nexou_31",
+        tiktok: "https://www.tiktok.com/@nexou31"
       },
       {
         login: "red_shadow_31",
