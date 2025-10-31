@@ -53,21 +53,36 @@
 <!-- Conteneur rendu par staff.js -->
 <main class="staff-wrap" id="staff-root"></main>
 
-<!-- Modale (pour le bouton “Plus”) -->
-<div class="staff-modal" id="staff-modal" aria-hidden="true" role="dialog" aria-modal="true">
+<!-- MODALE STAFF -->
+<div id="staff-modal" class="staff-modal" aria-hidden="true">
   <div class="dialog">
-    <button class="close" id="staff-close" aria-label="Fermer">✖</button>
+    <button id="staff-close" class="close" aria-label="Fermer">×</button>
+
     <header>
-      <img id="m-avatar" alt="" />
-      <div>
-        <h3 id="m-name"></h3>
-        <small id="m-role"></small>
-      </div>
+      <img id="m-avatar" src="" alt="">
+      <h3 id="m-name"></h3>
+      <small id="m-role"></small>
+
+      <!-- Icônes réseaux -->
+      <div class="links" id="m-links"></div>
     </header>
-    <p id="m-desc"></p>
-    <div class="links" id="m-links"></div>
+
+    <div class="content">
+      <!-- Bloc 1 : rôle au sein de TENF -->
+      <div class="bio-block" id="m-desc-role-wrap" hidden>
+        <h4>Rôle au sein de TENF</h4>
+        <p id="m-desc-role"></p>
+      </div>
+
+      <!-- Bloc 2 : bio personnelle de chaîne -->
+      <div class="bio-block" id="m-desc-personal-wrap" hidden>
+        <h4>Bio de chaîne</h4>
+        <p id="m-desc-personal"></p>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <!-- Script -->
 <script src="staff.js" defer></script>
