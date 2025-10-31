@@ -350,3 +350,34 @@
 }
 /* Sécurité largeur */
 .vip-card, .vip-user{ width: 100%; }
+/* Texte carte — plus lisible */
+.name {
+  color: #dcaeff !important; /* violet plus clair */
+  font-weight: 900;
+  text-shadow: 0 0 6px rgba(255,255,255,.2);
+}
+
+.desc {
+  color: #e7e1f4 !important; /* gris clair légèrement bleuté */
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+/* Grille — 5 cartes centrées */
+.staff-grid {
+  display: grid;
+  justify-content: center; /* centre la grille */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.2rem;
+  max-width: 1150px;
+  margin-inline: auto;
+}
+@media (min-width: 1150px) {
+  .staff-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.staff-card {
+  background: #241236; /* plus lumineux que #1a1123 */
+  box-shadow: 0 8px 26px rgba(0,0,0,.25);
+}
