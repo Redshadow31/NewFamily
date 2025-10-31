@@ -24,12 +24,11 @@ const POLES = [
         // court texte sous la carte
         desc: "Coordination générale de l’accueil, cadre et rituels d’intégration.",
         // textes modale
-        roleBio:
-          "Fondateur de la New Family et garant du cadre bienveillant. Red veille à la cohésion de la communauté et accompagne les équipes. Référent direct des pôles Accueil & Intégration ainsi que Coordination & Formation interne.",
-        personalBio:
-          "Streamer multi-gaming, avec une grosse base Les Sims 4 (mode vie & constructions). Aussi des jeux de gestion et un rendez-vous communautaire hebdo (Fortnite) dans une ambiance chill, sans prise de tête.",
-        // réseaux
-        twitch: "https://twitch.tv/red_shadow_31",
+         roleBio:
+    "Fondateur de la New Family, Red agit souvent dans l’ombre… et ce n’est pas pour rien qu’on l’appelle *Shadow*. Véritable pilier du serveur, il veille au cadre bienveillant, à la modération et à la cohésion de la communauté. Toujours à la manœuvre en coulisse, il s’occupe aussi du développement du site et de la coordination globale des équipes.",
+  personalBio:
+    "Streamer multi-gaming au sang-froid légendaire 🔥 — surtout quand Les Sims 4 décident de partir en vrille ! Entre vie de couple virtuelle, constructions improbables et fous rires communautaires sur Fortnite, Red mêle humour, bienveillance et chaos organisé pour des soirées aussi chill que pleines d’énergie.",
+  twitch: "https://twitch.tv/red_shadow_31",
         instagram: "",
         tiktok: ""
       },
@@ -237,8 +236,10 @@ const POLES = [
         level: "referent",
         desc: "Référent — process, standards et coordination des formations.",
         roleBio:
-          "Référent : process, standards et coordination de la formation interne.",
-        personalBio: "",
+    "Fondateur de la New Family, Red agit souvent dans l’ombre… et ce n’est pas pour rien qu’on l’appelle *Shadow*. Véritable pilier du serveur, il veille au cadre bienveillant, à la modération et à la cohésion de la communauté. Toujours à la manœuvre en coulisse, il s’occupe aussi du développement du site et de la coordination globale des équipes.",
+  personalBio:
+    "Streamer multi-gaming au sang-froid légendaire 🔥 — surtout quand Les Sims 4 décident de partir en vrille ! Entre vie de couple virtuelle, constructions improbables et fous rires communautaires sur Fortnite, Red mêle humour, bienveillance et chaos organisé pour des soirées aussi chill que pleines d’énergie.",
+  twitch: "https://twitch.tv/red_shadow_31",
         twitch: "https://twitch.tv/red_shadow_31",
         instagram: "",
         tiktok: ""
@@ -282,10 +283,11 @@ const POLES = [
         name: "Red",
         level: "tech",
         desc: "Lead dev — référent technique pour le site.",
-        roleBio:
-          "Lead dev : référent technique pour le site.",
-        personalBio: "",
-        twitch: "https://twitch.tv/red_shadow_31",
+         roleBio:
+    "Fondateur de la New Family, Red agit souvent dans l’ombre… et ce n’est pas pour rien qu’on l’appelle *Shadow*. Véritable pilier du serveur, il veille au cadre bienveillant, à la modération et à la cohésion de la communauté. Toujours à la manœuvre en coulisse, il s’occupe aussi du développement du site et de la coordination globale des équipes.",
+  personalBio:
+    "Streamer multi-gaming au sang-froid légendaire 🔥 — surtout quand Les Sims 4 décident de partir en vrille ! Entre vie de couple virtuelle, constructions improbables et fous rires communautaires sur Fortnite, Red mêle humour, bienveillance et chaos organisé pour des soirées aussi chill que pleines d’énergie.",
+  twitch: "https://twitch.tv/red_shadow_31",
         instagram: "",
         tiktok: ""
       }
