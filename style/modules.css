@@ -381,3 +381,49 @@
   background: #241236; /* plus lumineux que #1a1123 */
   box-shadow: 0 8px 26px rgba(0,0,0,.25);
 }
+/* === Staff modal — icônes réseaux plus grandes === */
+.staff-modal .links {
+  margin-top: 1rem;
+  display: flex;
+  gap: .9rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.staff-modal .links a {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: .25s;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+.staff-modal .links a:hover {
+  background: rgba(255,255,255,.45);
+  transform: translateY(-2px);
+}
+.staff-modal .links img {
+  width: 22px;
+  height: 22px;
+}
+
+/* === Staff modal — contenu texte en 2 blocs === */
+.staff-modal .content {
+  display: grid;
+  gap: 1.2rem;
+}
+.staff-modal .bio-block h4 {
+  margin: 0 0 .3rem;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 6px rgba(0,0,0,.25);
+}
+.staff-modal .bio-block p {
+  margin: 0;
+  color: #f3f0f9;
+  line-height: 1.6;
+  font-size: .98rem;
+}
