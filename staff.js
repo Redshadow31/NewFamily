@@ -66,7 +66,7 @@ const STAFF = [
         desc: "Call of, une tuerie mais pas dans vos mp" },
       { login: "mmesigurdson64", name: "Mme Sigur",
        desc: "de Call of à la cuisine, une vrai régal" },
-       { login: "Zylkao", name: "Mme Sigur",
+       { login: "Zylkao", name: "Zylkao",
        desc: "joueur multi" },
     ]
   },
