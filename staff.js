@@ -15,15 +15,26 @@ const POLES = [
     desc: "Accueil des nouveaux, réunions d’intégration, accompagnement et bonnes pratiques sur le serveur.",
     members: [
       {
-        login: "red_shadow_31",
-        name: "Red",
-        level: "referent",
-        desc: "Coordination générale de l’accueil, cadre et rituels d’intégration.",
-        bio: "Référent accueil : anime les réunions d’intégration, pose le cadre et veille à la bonne cohésion des nouveaux.",
-        twitch: "https://twitch.tv/red_shadow_31",
-        instagram: "",
-        tiktok: ""
-      },
+  login: "red_shadow_31",
+  name: "Red",
+  level: "referent",
+
+  // Texte court sur la carte
+  desc: "Fondateur de la New Family, pilier du cadre bienveillant et référent des pôles Accueil & Formation.",
+
+  // Bloc “Rôle au sein de TENF”
+  roleBio:
+    "Fondateur de la New Family et garant du cadre bienveillant. Red veille à la cohésion de la communauté et accompagne les équipes au quotidien. Référent direct des pôles Accueil & Intégration ainsi que Coordination & Formation interne.",
+
+  // Bloc “Bio de chaîne”
+  personalBio:
+    "Streamer multi-gaming, passionné par Les Sims 4 — que ce soit en mode vie ou en architecture. Red partage aussi des jeux de gestion et des sessions communautaires (Fortnite, jeux funs) dans une ambiance chill et sans prise de tête.",
+
+  twitch: "https://twitch.tv/red_shadow_31",
+  instagram: "",
+  tiktok: "https://www.tiktok.com/@re_shadow_3143"
+},
+
       {
         login: "tabs_up",
         name: "Tab’s",
