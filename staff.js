@@ -1,13 +1,14 @@
-/* ======================================================
-   🌈 New Family – Staff JS modernisé 2025 (Glass Fade)
-   ====================================================== */
+// ==========================
+// STAFF PAGE – Pôles TENF
+// ==========================
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
-let AVATARS = {};   // cache global des avatars Twitch (login -> url)
 
+// Caches globaux accessibles partout (modale comprise)
+let AVATARS = {};          // login (lowercase) -> url d'avatar
+let LIVESET = new Set();   // logins en live
 
-/* ========= Données par pôles ========= */
 // ========== Données structurées par PÔLES ==========
 const POLES = [
   {
@@ -17,32 +18,29 @@ const POLES = [
     desc: "Accueil des nouveaux, réunions d’intégration, accompagnement et bonnes pratiques sur le serveur.",
     members: [
       {
-  login: "red_shadow_31",
-  name: "Red",
-  level: "referent",
-
-  // Texte court sur la carte
-  desc: "Fondateur de la New Family, pilier du cadre bienveillant et référent des pôles Accueil & Formation.",
-
-  // Bloc “Rôle au sein de TENF”
-  roleBio:
-    "Fondateur de la New Family et garant du cadre bienveillant. Red veille à la cohésion de la communauté et accompagne les équipes au quotidien. Référent direct des pôles Accueil & Intégration ainsi que Coordination & Formation interne.",
-
-  // Bloc “Bio de chaîne”
-  personalBio:
-    "Streamer multi-gaming, passionné par Les Sims 4 — que ce soit en mode vie ou en architecture. Red partage aussi des jeux de gestion et des sessions communautaires (Fortnite, jeux funs) dans une ambiance chill et sans prise de tête.",
-
-  twitch: "https://twitch.tv/red_shadow_31",
-  instagram: "",
-  tiktok: "https://www.tiktok.com/@re_shadow_3143"
-},
-
+        login: "red_shadow_31",
+        name: "Red",
+        level: "referent",
+        // court texte sous la carte
+        desc: "Coordination générale de l’accueil, cadre et rituels d’intégration.",
+        // textes modale
+        roleBio:
+          "Fondateur de la New Family et garant du cadre bienveillant. Red veille à la cohésion de la communauté et accompagne les équipes. Référent direct des pôles Accueil & Intégration ainsi que Coordination & Formation interne.",
+        personalBio:
+          "Streamer multi-gaming, avec une grosse base Les Sims 4 (mode vie & constructions). Aussi des jeux de gestion et un rendez-vous communautaire hebdo (Fortnite) dans une ambiance chill, sans prise de tête.",
+        // réseaux
+        twitch: "https://twitch.tv/red_shadow_31",
+        instagram: "",
+        tiktok: ""
+      },
       {
         login: "tabs_up",
         name: "Tab’s",
         level: "adjoint-ref",
         desc: "Adjoint référent — relais des intégrations et organisation pratique.",
-        bio: "Bras droit du pôle : fluidifie l’organisation et assure la continuité quand les fondateurs ne sont pas dispo.",
+        roleBio:
+          "Adjoint référent : coordination des intégrations, suivi des tâches et organisation.",
+        personalBio: "",
         twitch: "https://twitch.tv/tabs_up",
         instagram: "",
         tiktok: ""
@@ -52,7 +50,9 @@ const POLES = [
         name: "Saiko",
         level: "mentor",
         desc: "Mentor (tickets) — accueil des tickets et pédagogie.",
-        bio: "Point d’entrée sur les tickets : calme, pédagogue, accompagne les membres dans les cas sensibles.",
+        roleBio:
+          "Mentor : accueil des demandes (tickets), accompagnement et pédagogie.",
+        personalBio: "",
         twitch: "https://twitch.tv/saikossama",
         instagram: "",
         tiktok: ""
@@ -62,7 +62,8 @@ const POLES = [
         name: "Gilbert",
         level: "mentor",
         desc: "Mentor — présence et énergie sur le terrain.",
-        bio: "Mentore présente sur le terrain : bienveillance, sécurité et énergie communicative.",
+        roleBio: "Mentor terrain, soutien et énergie positive au quotidien.",
+        personalBio: "",
         twitch: "https://twitch.tv/gilbert_hime",
         instagram: "",
         tiktok: ""
@@ -72,7 +73,8 @@ const POLES = [
         name: "Yaya",
         level: "mentor",
         desc: "Mentor — dynamisme et bonne humeur.",
-        bio: "Relais accueil & ambiance : dynamise les premiers pas et rassure les nouveaux.",
+        roleBio: "Mentor : relais communication et énergie sur les lives.",
+        personalBio: "",
         twitch: "https://twitch.tv/yaya_romali",
         instagram: "",
         tiktok: ""
@@ -82,7 +84,9 @@ const POLES = [
         name: "Rubby",
         level: "mentor",
         desc: "Mentor — créativité et soutien à l’intégration.",
-        bio: "Apporte une touche créative et des idées concrètes pour rendre l’intégration agréable et claire.",
+        roleBio:
+          "Mentor : idées créatives, animations et soutien aux intégrations.",
+        personalBio: "",
         twitch: "https://twitch.tv/rubbycrea",
         instagram: "",
         tiktok: ""
@@ -92,7 +96,9 @@ const POLES = [
         name: "Spydy",
         level: "junior",
         desc: "Junior — apprentissage de la modération et des rituels d’accueil.",
-        bio: "En formation : met en pratique les rituels d’accueil et gagne en autonomie à chaque session.",
+        roleBio:
+          "Junior : progression en modération et participation aux rituels d’accueil.",
+        personalBio: "",
         twitch: "https://twitch.tv/lespydyverse",
         instagram: "",
         tiktok: ""
@@ -104,14 +110,16 @@ const POLES = [
     id: "green",
     emoji: "🩷",
     title: "Planification, Animation & Événements",
-    desc: "Calendrier des événements communautaires, animations, soirées spéciales et coordination inter-pôles.",
+    desc: "Calendrier communautaire, animations et coordination inter-pôles.",
     members: [
       {
         login: "clarastonewall",
         name: "Clara",
         level: "referent",
         desc: "Référente — planification, organisation et animation des événements.",
-        bio: "Chef d’orchestre des events : structure, anime et veille à l’inclusion de tous les membres.",
+        roleBio:
+          "Référente événements : planification, organisation et coordination.",
+        personalBio: "",
         twitch: "https://twitch.tv/clarastonewall",
         instagram: "",
         tiktok: ""
@@ -121,18 +129,10 @@ const POLES = [
         name: "Jenny",
         level: "adjoint-ref",
         desc: "Adjointe référente — suivi des projets et rigueur logistique.",
-        bio: "Main sûre du pôle : rigueur logistique, suivi des plannings et coordination fine des équipes.",
+        roleBio:
+          "Adjointe référente : suivi des projets et logistique soignée.",
+        personalBio: "",
         twitch: "https://twitch.tv/jenny31200",
-        instagram: "",
-        tiktok: ""
-      },
-      {
-        login: "rubbycrea",
-        name: "Rubby",
-        level: "mentor",
-        desc: "Mentor — soutien animation & idées créatives.",
-        bio: "Apporte idées et formats originaux, booste l’engagement lors des soirées spéciales.",
-        twitch: "https://twitch.tv/rubbycrea",
         instagram: "",
         tiktok: ""
       },
@@ -141,7 +141,9 @@ const POLES = [
         name: "Dark",
         level: "mentor",
         desc: "Mentor — expérience, rétro & cartes (Pokémon / Yu-Gi-Oh).",
-        bio: "Référent rétro & cartes : expertise jeux de cartes, culture événementielle et vibes old school.",
+        roleBio:
+          "Mentor : expérience rétro & cartes (Pokémon / Yu-Gi-Oh).",
+        personalBio: "",
         twitch: "https://twitch.tv/thedark_sand",
         instagram: "",
         tiktok: ""
@@ -151,7 +153,9 @@ const POLES = [
         name: "Zylkao",
         level: "junior",
         desc: "Junior — mise en place opérationnelle et soutien sur les events.",
-        bio: "Aide opérationnelle : préparation technique, relais chat et mise en place des activités.",
+        roleBio:
+          "Junior : mise en place opérationnelle et soutien des événements.",
+        personalBio: "",
         twitch: "https://twitch.tv/zylkao",
         instagram: "",
         tiktok: ""
@@ -161,7 +165,8 @@ const POLES = [
         name: "Sigur",
         level: "junior",
         desc: "Junior — relais du soutien des événements.",
-        bio: "Support terrain : aide à la logistique live et au bon déroulé des animations.",
+        roleBio: "Junior : relais et logistique sur les événements.",
+        personalBio: "",
         twitch: "https://twitch.tv/sigurdson64",
         instagram: "",
         tiktok: ""
@@ -173,35 +178,29 @@ const POLES = [
     id: "blue",
     emoji: "🟦",
     title: "Communication & Visuels",
-    desc: "Identité visuelle, réseaux sociaux, supports graphiques des projets et valorisation des membres.",
+    desc: "Identité visuelle, réseaux sociaux et supports graphiques des projets.",
     members: [
       {
         login: "nexou31",
         name: "Nexou",
         level: "referent",
         desc: "Référent — identité visuelle, réseaux, ligne graphique.",
-        bio: "Pilote de l’identité visuelle : cohérence, templates et habillages pour une image forte.",
+        roleBio:
+          "Référent com/visuels : identité visuelle, réseaux et ligne graphique.",
+        personalBio: "",
         twitch: "https://twitch.tv/nexou31",
-        instagram: "https://www.instagram.com/nexou_31",
-        tiktok: "https://www.tiktok.com/@nexou31"
+        instagram: "",
+        tiktok: ""
       },
       {
         login: "selena_akemi",
         name: "Selena",
         level: "adjoint-ref",
         desc: "Adjointe référente — coordination créative et diffusion.",
-        bio: "Coordonne la prod’ visuelle, harmonise les posts et assure une diffusion régulière.",
+        roleBio:
+          "Adjointe référente : coordination créative et diffusion.",
+        personalBio: "",
         twitch: "https://twitch.tv/selena_akemi",
-        instagram: "",
-        tiktok: ""
-      },
-      {
-        login: "yaya_romali",
-        name: "Yaya",
-        level: "mentor",
-        desc: "Mentor — relais communication et énergie sur les lives.",
-        bio: "Relais social : booste la visibilité des créateurs et anime la présence sur les réseaux.",
-        twitch: "https://twitch.tv/yaya_romali",
         instagram: "",
         tiktok: ""
       },
@@ -210,8 +209,9 @@ const POLES = [
         name: "Mme Sigur",
         level: "support",
         desc: "Support visuel — aide sur les visuels & assets.",
-        bio: "Soutien graphique : retouches simples, exports, petites aides visuelles au quotidien.",
-        twitch: "",
+        roleBio: "Support visuel : aide sur les visuels & assets.",
+        personalBio: "",
+        twitch: "https://twitch.tv/mmesigurdson64",
         instagram: "",
         tiktok: ""
       }
@@ -222,14 +222,16 @@ const POLES = [
     id: "yellow",
     emoji: "🟨",
     title: "Coordination & Formation interne",
-    desc: "Organisation des process, passation d’informations, formation des modérateurs et transmission des savoir-faire.",
+    desc: "Organisation des process et formation des modérateurs.",
     members: [
       {
         login: "red_shadow_31",
         name: "Red",
         level: "referent",
         desc: "Référent — process, standards et coordination des formations.",
-        bio: "Structure les process, définit les standards et anime les ateliers de formation.",
+        roleBio:
+          "Référent : process, standards et coordination de la formation interne.",
+        personalBio: "",
         twitch: "https://twitch.tv/red_shadow_31",
         instagram: "",
         tiktok: ""
@@ -238,29 +240,11 @@ const POLES = [
         login: "nangel89",
         name: "Nangel",
         level: "adjoint-ref",
-        desc: "Adjoint référent — suivi des Boost Live Team & accompagnement.",
-        bio: "Suivi de la Boost Live Team : mentoring de groupe, feedbacks et coaching pratique.",
+        desc: "Adjoint référent — suivi Boost Live Team & accompagnement.",
+        roleBio:
+          "Adjoint référent : suivi Boost Live Team & accompagnement.",
+        personalBio: "",
         twitch: "https://twitch.tv/nangel89",
-        instagram: "",
-        tiktok: ""
-      },
-      {
-        login: "yaya_romali",
-        name: "Yaya",
-        level: "mentor",
-        desc: "Mentor — entraide, posture et bonnes pratiques live.",
-        bio: "Transmet les bonnes pratiques live : posture, accueil et gestion des situations.",
-        twitch: "https://twitch.tv/yaya_romali",
-        instagram: "",
-        tiktok: ""
-      },
-      {
-        login: "sigurdson64",
-        name: "Sigur",
-        level: "junior",
-        desc: "Junior — progression continue et participation aux ateliers.",
-        bio: "En montée en compétences : applique les process et participe aux ateliers.",
-        twitch: "https://twitch.tv/sigurdson64",
         instagram: "",
         tiktok: ""
       }
@@ -271,44 +255,28 @@ const POLES = [
     id: "purple",
     emoji: "🟪",
     title: "Technique & Automatisation",
-    desc: "Site, intégrations, automatisations, outils internes et support technique aux membres.",
+    desc: "Site, intégrations, automatisations, outils internes et support technique.",
     members: [
-      {
-        login: "nexou31",
-        name: "Nexou",
-        level: "referent",
-        desc: "Référent technique — intégrations, automatisations et qualité.",
-        bio: "Lead technique : intègre les outils, automatise et veille à la qualité globale.",
-        twitch: "https://twitch.tv/nexou31",
-        instagram: "https://www.instagram.com/nexou_31",
-        tiktok: "https://www.tiktok.com/@nexou31"
-      },
-      {
-        login: "nangel89",
-        name: "Nangel",
-        level: "adjoint-ref",
-        desc: "Adjoint en soutien — aide technique et exploitation outils.",
-        bio: "Support technique : tests, mises à jour, aide à l’exploitation des outils.",
-        twitch: "https://twitch.tv/nangel89",
-        instagram: "",
-        tiktok: ""
-      },
       {
         login: "nexou31",
         name: "Nexou",
         level: "tech",
         desc: "Lead dev — référent technique pour arbitrages et décisions.",
-        bio: "Garant technique : tranchage des choix techniques, CI/CD et qualité du code.",
+        roleBio:
+          "Lead dev : intégrations, automatisations et qualité.",
+        personalBio: "",
         twitch: "https://twitch.tv/nexou31",
-        instagram: "https://www.instagram.com/nexou_31",
-        tiktok: "https://www.tiktok.com/@nexou31"
+        instagram: "",
+        tiktok: ""
       },
       {
         login: "red_shadow_31",
         name: "Red",
         level: "tech",
-        desc: "Lead dev — référent technique pour ce site.",
-        bio: "Dev Web : front, intégration et suivi des fonctionnalités du site TENF.",
+        desc: "Lead dev — référent technique pour le site.",
+        roleBio:
+          "Lead dev : référent technique pour le site.",
+        personalBio: "",
         twitch: "https://twitch.tv/red_shadow_31",
         instagram: "",
         tiktok: ""
@@ -317,144 +285,275 @@ const POLES = [
   }
 ];
 
+// ========== Utils ==========
+const escapeHtml = (s) =>
+  String(s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 
-/* ========= Outils internes ========= */
-const escapeHtml = s => String(s)
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
-
+function levelBadgeClass(level){
+  switch(level){
+    case "referent":    return "badge--referent";
+    case "adjoint-ref": return "badge--adjoint-ref";
+    case "mentor":      return "badge--mentor";
+    case "junior":      return "badge--junior";
+    case "support":     return "badge--support";
+    case "tech":        return "badge--tech";
+    default:            return "";
+  }
+}
 function levelBadgeText(level){
-  const map = {
-    "referent":"Référent",
-    "adjoint-ref":"Adjoint réf.",
-    "mentor":"Mentor",
-    "junior":"Junior",
-    "support":"Support",
-    "tech":"Tech"
-  };
-  return map[level] || "Staff";
+  switch(level){
+    case "referent":    return "Référent";
+    case "adjoint-ref": return "Adjoint réf.";
+    case "mentor":      return "Mentor";
+    case "junior":      return "Junior";
+    case "support":     return "Support";
+    case "tech":        return "Tech";
+    default:            return "Staff";
+  }
 }
 
-/* ========= Rendu Staff ========= */
+// ========== Token & Fetch ==========
 async function getToken(){
-  try {
+  try{
     const res = await fetch("/.netlify/functions/getTwitchData");
-    if(res.ok){ const data = await res.json(); token = data.access_token || ""; }
-  } catch(e){ console.warn("Token Twitch non récupéré", e); }
+    if(res.ok){
+      const data = await res.json();
+      token = data.access_token || "";
+    }
+  }catch(e){
+    console.warn("Token Twitch indisponible:", e);
+  }
 }
-
 async function getUsersByLogin(logins){
   if(!token) return {};
-  const map = {};
-  const res = await fetch(`https://api.twitch.tv/helix/users?${logins.map(l=>`login=${l}`).join("&")}`,
-    { headers:{ "Client-ID": clientId, Authorization:"Bearer "+token } });
-  if(res.ok){
-    const json = await res.json();
-    (json.data||[]).forEach(u=>{
-      map[u.login.toLowerCase()] = u.profile_image_url;
+  const out = {};
+  for(let i=0;i<logins.length;i+=90){
+    const chunk = logins.slice(i,i+90);
+    const query = chunk.map(l=>`login=${encodeURIComponent(l)}`).join("&");
+    const url = `https://api.twitch.tv/helix/users?${query}`;
+    const res = await fetch(url, {
+      headers:{ "Client-ID": clientId, Authorization:"Bearer "+token }
     });
+    if(res.ok){
+      const json = await res.json();
+      (json.data||[]).forEach(u=>{
+        out[(u.login||"").toLowerCase()] = u.profile_image_url;
+      });
+    }
   }
-  return map;
+  return out;
+}
+async function getLiveStatus(logins){
+  if(!token) return new Set();
+  const set = new Set();
+  for(let i=0;i<logins.length;i+=100){
+    const chunk = logins.slice(i,i+100);
+    const query = chunk.map(l=>`user_login=${encodeURIComponent(l)}`).join("&");
+    const url = `https://api.twitch.tv/helix/streams?${query}`;
+    const res = await fetch(url, {
+      headers:{ "Client-ID": clientId, Authorization:"Bearer "+token }
+    });
+    if(res.ok){
+      const json = await res.json();
+      (json.data||[]).forEach(s=> set.add((s.user_login||"").toLowerCase()));
+    }
+  }
+  return set;
 }
 
-function renderPole(container, pole, avatars){
+// ========== Rendu ==========
+function renderPole(container, pole, avatarMap, liveSet, q=""){
   const section = document.createElement("section");
-  section.className = "staff-section";
-  section.innerHTML = `
-    <h2>${pole.emoji} ${pole.title}</h2>
-    <p>${pole.desc}</p>
-    <div class="staff-grid"></div>`;
-  const grid = section.querySelector(".staff-grid");
+  section.className = `staff-section reveal pole-${pole.id}`;
 
-  pole.members.forEach(m=>{
-    const login = m.login.toLowerCase();
-    const imgSrc = avatars?.[login] || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+  const h2 = document.createElement("h2");
+  h2.textContent = `${pole.emoji} ${pole.title}`;
+  section.appendChild(h2);
 
-    const card = document.createElement("article");
-    card.className = "staff-card";
-    card.innerHTML = `
-      <div class="avatar-box">
-        <img class="avatar" src="${imgSrc}" alt="${escapeHtml(m.name)}">
-        <span class="badge badge--${m.level}">${levelBadgeText(m.level)}</span>
-      </div>
-      <div class="body">
-        <h3 class="name">${escapeHtml(m.name)}</h3>
-        <p class="desc">${escapeHtml(m.desc)}</p>
-        <div class="btns">
-          <a href="${m.twitch}" target="_blank" rel="noopener" class="about-button">Twitch</a>
-          <button class="about-button" data-more="${login}">Plus</button>
+  if(pole.desc){
+    const p = document.createElement("p");
+    p.className = "pole-desc";
+    p.textContent = pole.desc;
+    section.appendChild(p);
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "staff-grid";
+
+  pole.members
+    .filter(m => {
+      const s = q.trim().toLowerCase();
+      if(!s) return true;
+      return (
+        m.name.toLowerCase().includes(s) ||
+        m.login.toLowerCase().includes(s) ||
+        (m.desc||"").toLowerCase().includes(s) ||
+        (m.roleBio||"").toLowerCase().includes(s) ||
+        (m.personalBio||"").toLowerCase().includes(s)
+      );
+    })
+    .forEach(m => {
+      const loginLc = m.login.toLowerCase();
+      const imgSrc = avatarMap[loginLc] || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+      const isLive = liveSet?.has(loginLc);
+
+      const card = document.createElement("article");
+      card.className = "staff-card";
+      card.innerHTML = `
+        <div class="avatar-box">
+          ${isLive ? `<span class="live-dot">LIVE</span>` : ""}
+          <img class="avatar" loading="lazy" decoding="async" src="${imgSrc}" alt="Avatar de ${escapeHtml(m.name)}">
+          <span class="badge ${levelBadgeClass(m.level)}">${levelBadgeText(m.level)}</span>
         </div>
-      </div>`;
-    grid.appendChild(card);
-  });
+        <div class="body">
+          <h3 class="name">${escapeHtml(m.name)}</h3>
+          <p class="desc">${escapeHtml(m.desc || "")}</p>
+          <div class="btns" style="margin-top:.4rem;display:flex;gap:.4rem;justify-content:center">
+            <a class="about-button" href="https://twitch.tv/${loginLc}" target="_blank" rel="noopener">Twitch</a>
+            <button class="about-button" data-more="${loginLc}" data-level="${m.level}">Plus</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
 
+  section.appendChild(grid);
   container.appendChild(section);
 }
 
-// --- OUVERTURE MODALE : bouton "Plus"
+function showSkeletons(){
+  const root = document.getElementById("staff-root");
+  root.innerHTML = "";
+  const sk = document.createElement("section");
+  sk.className = "staff-section";
+  const grid = document.createElement("div");
+  grid.className = "staff-grid";
+  for (let i=0;i<8;i++){
+    const card = document.createElement("div");
+    card.className = "skel";
+    card.innerHTML = `<div class="ph big"></div><div class="ph" style="width:60%;margin:.4rem auto"></div><div class="ph" style="width:80%;margin:.3rem auto"></div>`;
+    grid.appendChild(card);
+  }
+  sk.appendChild(grid);
+  root.appendChild(sk);
+}
+function setupReveal(){
+  const els = document.querySelectorAll('.reveal');
+  if(!els.length) return;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.15});
+  els.forEach(el=>io.observe(el));
+}
+
+// ========== INIT ==========
+async function initStaff(){
+  showSkeletons();
+  await getToken();
+
+  const root = document.getElementById("staff-root");
+  const allLogins = POLES.flatMap(p => p.members.map(m => m.login.toLowerCase()));
+
+  // Récup avatars + live, puis expose en global
+  const [avatars, liveSet] = await Promise.all([
+    getUsersByLogin(allLogins),
+    getLiveStatus(allLogins)
+  ]);
+  AVATARS = avatars;
+  LIVESET = liveSet;
+
+  let activePole = "all";
+  let query = "";
+
+  function renderAll(){
+    root.innerHTML = "";
+    const groups = activePole === "all" ? POLES : POLES.filter(p => p.id === activePole);
+    groups.forEach(pole => renderPole(root, pole, avatars, liveSet, query));
+    setupReveal();
+  }
+  renderAll();
+
+  // Tabs
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab").forEach(x=>x.classList.remove("is-active"));
+      t.classList.add("is-active");
+      activePole = t.dataset.pole || "all";
+      renderAll();
+    });
+  });
+
+  // Recherche
+  const input = document.getElementById("staff-search");
+  if(input){
+    input.addEventListener("input", ()=>{
+      query = input.value.trim();
+      renderAll();
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initStaff);
+
+// ========== MODALE (unique listener global) ==========
 const modal = document.getElementById("staff-modal");
 if (modal) {
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-more]");
     if (!btn) return;
 
-    const login = btn.getAttribute("data-more");
+    const login = (btn.getAttribute("data-more") || "").toLowerCase();
     const level = btn.getAttribute("data-level");
-    const member = POLES.flatMap(p => p.members).find(m => m.login.toLowerCase() === login);
-    if (!member) return;
+    const member = POLES.flatMap(p=>p.members).find(m=>m.login.toLowerCase()===login);
+    if(!member) return;
 
-    // Récup avatar
- const key = (login || "").toLowerCase();
-const avatarSrc = AVATARS[key] 
-  || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+    // Avatar depuis le cache global
+    const avatarSrc =
+      AVATARS[login] ||
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
 
-
-    // Champs bio
-    const roleBio      = (member.roleBio || member.desc || "").trim();
-    const personalBio  = (member.personalBio || member.bio || "").trim();
+    // Bios
+    const roleBio     = (member.roleBio || member.desc || "").trim();
+    const personalBio = (member.personalBio || member.bio || "").trim();
 
     // Réseaux
     const tw = (member.twitch    || `https://twitch.tv/${login}`).trim();
     const ig = (member.instagram || "").trim();
     const tk = (member.tiktok    || "").trim();
 
-    // Remplissage
-    document.getElementById("m-avatar").src = avatarSrc;
-    document.getElementById("m-avatar").alt = `Avatar de ${member.name}`;
-    document.getElementById("m-name").textContent = member.name;
-    document.getElementById("m-role").textContent = levelBadgeText(level);
+    // Remplissage UI
+    const $ = (id)=>document.getElementById(id);
+    $("m-avatar").src = avatarSrc;
+    $("m-avatar").alt = `Avatar de ${member.name}`;
+    $("m-name").textContent = member.name;
+    $("m-role").textContent = levelBadgeText(level);
 
-    // Sections bio
-    const roleWrap = document.getElementById("m-desc-role-wrap");
-    const roleEl   = document.getElementById("m-desc-role");
-    const persWrap = document.getElementById("m-desc-personal-wrap");
-    const persEl   = document.getElementById("m-desc-personal");
-
+    // Rôle TENF
     if (roleBio) {
-      roleEl.textContent = roleBio;
-      roleWrap.hidden = false;
+      $("m-desc-role").textContent = roleBio;
+      $("m-desc-role-wrap").hidden = false;
     } else {
-      roleWrap.hidden = true;
-      roleEl.textContent = "";
+      $("m-desc-role").textContent = "";
+      $("m-desc-role-wrap").hidden = true;
     }
 
+    // Bio de chaîne
     if (personalBio) {
-      persEl.textContent = personalBio;
-      persWrap.hidden = false;
+      $("m-desc-personal").textContent = personalBio;
+      $("m-desc-personal-wrap").hidden = false;
     } else {
-      persWrap.hidden = true;
-      persEl.textContent = "";
+      $("m-desc-personal").textContent = "";
+      $("m-desc-personal-wrap").hidden = true;
     }
 
-    // Liens réseaux
+    // Icônes sociaux (affichage conditionnel)
     const links = [];
-    if (tw) links.push(`<a href="${tw}" target="_blank" rel="noopener"><img src="assets/twitch.png" alt="Twitch"></a>`);
-    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener"><img src="assets/instagram.webp" alt="Instagram"></a>`);
-    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener"><img src="assets/tiktok.webp" alt="TikTok"></a>`);
-    document.getElementById("m-links").innerHTML = links.join("");
+    if (tw) links.push(`<a href="${tw}" target="_blank" rel="noopener" aria-label="Twitch"><img src="assets/twitch.png" alt=""></a>`);
+    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/instagram.png" alt=""></a>`);
+    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/tiktok.png" alt=""></a>`);
+    $("m-links").innerHTML = links.join("");
 
     modal.setAttribute("aria-hidden", "false");
   });
@@ -463,23 +562,3 @@ const avatarSrc = AVATARS[key]
   modal.addEventListener("click", (e) => { if (e.target.id === "staff-modal") modal.setAttribute("aria-hidden","true"); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.setAttribute("aria-hidden","true"); });
 }
-
-/* ========= Initialisation ========= */
-async function initStaff(){
-  const root = document.getElementById("staff-root");
-  await getToken();
-  const allLogins = POLES.flatMap(p=>p.members.map(m=>m.login.toLowerCase()));
-  const avatars = await getUsersByLogin(allLogins);
-  POLES.forEach(pole => renderPole(root, pole, avatars));
-
-  document.addEventListener("click", e=>{
-    const btn = e.target.closest("[data-more]");
-    if(!btn) return;
-    const login = btn.getAttribute("data-more");
-    const member = POLES.flatMap(p=>p.members).find(m=>m.login.toLowerCase()===login);
-    if(!member) return;
-    const avatar = avatars?.[login] || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
-    openModal(member, avatar);
-  });
-}
-document.addEventListener("DOMContentLoaded", initStaff);
