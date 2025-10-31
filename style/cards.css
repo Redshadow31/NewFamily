@@ -75,3 +75,49 @@
 }
 .live-dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.8);animation:pulse 1.8s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}70%{box-shadow:0 0 0 8px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+/* ===============================
+   ✅ Correctif STAFF – priorité finale
+   =============================== */
+
+/* Avatars ronds et stables */
+.staff-card .avatar-box {
+  background: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: .5rem 0 !important;
+}
+.staff-card img.avatar {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  aspect-ratio: 1 / 1 !important;
+  border: 3px solid var(--ring, #f1c40f);
+  box-shadow: 0 0 6px rgba(0,0,0,.25);
+  background: #fff;
+}
+
+/* Badges lisibles selon rôle */
+.staff-card .badge {
+  background: rgba(255,255,255,0.95) !important;
+  color: #111 !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  border-radius: 8px !important;
+  padding: .18rem .46rem !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  backdrop-filter: blur(3px) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,.12) !important;
+}
+
+/* Rôles colorés */
+.badge--referent   { background:#e74c3c !important; color:#fff !important; }
+.badge--adjoint-ref{ background:#e67e22 !important; color:#fff !important; }
+.badge--mentor     { background:#8e44ad !important; color:#fff !important; }
+.badge--junior     { background:#2ecc71 !important; color:#fff !important; }
+.badge--support    { background:#16a085 !important; color:#fff !important; }
+.badge--tech       { background:#2980b9 !important; color:#fff !important; }
+
+/* Grille plus dense */
+.staff-grid {
