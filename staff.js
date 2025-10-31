@@ -186,18 +186,19 @@ const POLES = [
     title: "Communication & Visuels",
     desc: "Identité visuelle, réseaux sociaux et supports graphiques des projets.",
     members: [
-      {
-        login: "nexou31",
-        name: "Nexou",
-        level: "referent",
-        desc: "Référent — identité visuelle, réseaux, ligne graphique.",
-        roleBio:
-          "Référent com/visuels : identité visuelle, réseaux et ligne graphique.",
-        personalBio: "",
-        twitch: "https://twitch.tv/nexou31",
-        instagram: "",
-        tiktok: ""
-      },
+          {
+  login: "nexou31",
+  name: "Nexou",
+  level: "founder",
+  desc: "Fondateur — cœur tendre & architecte visuel de la New Family.",
+  roleBio:
+    "Fondateur de la New Family, Nexou est un grand cœur au service de la communauté. Toujours à l’écoute, il imagine et réalise les plus belles mises en avant visuelles, que ce soit pour le serveur ou pour vos lives gagnants. Derrière son côté doux et bienveillant se cache aussi un esprit méticuleux : lorsqu’il s’agit de paramétrer les rôles ou les bots du serveur, il devient d’un sérieux exemplaire !",
+  personalBio:
+    "Streamer venu d’un autre espace-temps 🎮 — du rétro au moderne, il n’a qu’une règle d’or : *est-ce que ce jeu est un jeu Nintendo ?* Que ce soit en solo pour faire découvrir des pépites ou en communauté pour des fous rires garantis, venez partager un moment fun avec ce petit clown… enfin, pas trop fan des clowns quand même ! 🤡",
+  twitch: "https://twitch.tv/nexou31",
+  instagram: "https://www.instagram.com/nexou_31",
+  tiktok: "https://www.tiktok.com/@nexou31"
+},
       {
         login: "selena_akemi",
         name: "Selena",
@@ -263,18 +264,19 @@ const POLES = [
     title: "Technique & Automatisation",
     desc: "Site, intégrations, automatisations, outils internes et support technique.",
     members: [
-      {
-        login: "nexou31",
-        name: "Nexou",
-        level: "tech",
-        desc: "Lead dev — référent technique pour arbitrages et décisions.",
-        roleBio:
-          "Lead dev : intégrations, automatisations et qualité.",
-        personalBio: "",
-        twitch: "https://twitch.tv/nexou31",
-        instagram: "",
-        tiktok: ""
-      },
+     {
+  login: "nexou31",
+  name: "Nexou",
+  level: "founder",
+  desc: "Fondateur — cœur tendre & architecte visuel de la New Family.",
+  roleBio:
+    "Fondateur de la New Family, Nexou est un grand cœur au service de la communauté. Toujours à l’écoute, il imagine et réalise les plus belles mises en avant visuelles, que ce soit pour le serveur ou pour vos lives gagnants. Derrière son côté doux et bienveillant se cache aussi un esprit méticuleux : lorsqu’il s’agit de paramétrer les rôles ou les bots du serveur, il devient d’un sérieux exemplaire !",
+  personalBio:
+    "Streamer venu d’un autre espace-temps 🎮 — du rétro au moderne, il n’a qu’une règle d’or : *est-ce que ce jeu est un jeu Nintendo ?* Que ce soit en solo pour faire découvrir des pépites ou en communauté pour des fous rires garantis, venez partager un moment fun avec ce petit clown… enfin, pas trop fan des clowns quand même ! 🤡",
+  twitch: "https://twitch.tv/nexou31",
+  instagram: "https://www.instagram.com/nexou_31",
+  tiktok: "https://www.tiktok.com/@nexou31"
+},
       {
         login: "red_shadow_31",
         name: "Red",
