@@ -458,3 +458,114 @@
   font-size: 0.7rem;
   padding: .15rem .4rem;
 }
+/* ==========================================
+   🧰 Correctifs visuels STAFF V2
+   ========================================== */
+
+/* 🔵 Avatars — vrais cercles indépendants du ratio parent */
+.avatar-box {
+  position: relative;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.avatar {
+  width: 90px !important;
+  height: 90px !important;
+  border-radius: 50% !important;      /* cercle parfait */
+  object-fit: cover !important;       /* image remplie sans déformation */
+  aspect-ratio: 1 / 1 !important;     /* force un ratio carré */
+  background: #fff;
+  border: 3px solid var(--ring, #f1c40f);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--ring,#f1c40f) 25%, transparent);
+}
+
+/* 🏷️ Badges rôle — lisibles, harmonisés */
+.badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #111;
+  font-weight: 800;
+  font-size: 0.75rem;
+  border-radius: 8px;
+  padding: .2rem .5rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.2px;
+  text-shadow: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,.12);
+  backdrop-filter: blur(3px);
+}
+.badge::first-letter { text-transform: uppercase; }
+
+/* ♻️ Grille — jusqu’à 5 cartes par ligne sur PC */
+.staff-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+@media (min-width: 1150px) {
+  .staff-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* 🧱 Cartes */
+.staff-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.staff-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* 👤 Nom + description : hiérarchie + contraste */
+.name {
+  font-weight: 800;
+  font-size: 1rem;
+  margin-top: .5rem;
+  color: #4b0082;
+  text-transform: capitalize;
+}
+.desc {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  min-height: 44px;
+  margin: .3rem 0 .6rem;
+}
+
+/* 🔴 Live badge : plus petit et aligné */
+.live-dot {
+  top: 4px;
+  right: 6px;
+  font-size: .7rem;
+  padding: .15rem .4rem;
+  background: #ff375f;
+  border-radius: 999px;
+}
+
+/* 🎨 Thèmes des rôles (légère teinte d’arrière-plan sur le ring) */
+.badge--referent   { background:#e74c3c; color:#fff; }
+.badge--adjoint-ref{ background:#e67e22; color:#fff; }
+.badge--mentor     { background:#8e44ad; color:#fff; }
+.badge--junior     { background:#2ecc71; color:#fff; }
+.badge--support    { background:#16a085; color:#fff; }
+.badge--tech       { background:#2980b9; color:#fff; }
+
+/* 🧠 Section */
+.staff-section h2 {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 900;
+  color: var(--nf-red, #e74c3c);
+}
+.staff-section p {
+  margin-bottom: 1rem;
+  color: #ccc;
+}
+
