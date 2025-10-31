@@ -112,18 +112,24 @@ const POLES = [
     title: "Planification, Animation & Événements",
     desc: "Calendrier communautaire, animations et coordination inter-pôles.",
     members: [
-      {
-        login: "clarastonewall",
-        name: "Clara",
-        level: "referent",
-        desc: "Référente — planification, organisation et animation des événements.",
-        roleBio:
-          "Référente événements : planification, organisation et coordination.",
-        personalBio: "",
-        twitch: "https://twitch.tv/clarastonewall",
-        instagram: "",
-        tiktok: ""
-      },
+     {
+  login: "clarastonewall",
+  name: "Clara",
+  level: "referent",
+  // Sous-titre sur la carte
+  desc: "Référente — cheffe d’orchestre des plannings & événements.",
+  // Bio rôle TENF (modale)
+  roleBio:
+    "Fondatrice émérite de la New Family, Clara pilote le planning de A à Z : rien ne se lance sans son feu vert. Elle conçoit les agendas, valide, coordonne et participe à chaque événement. Planificatrice hors pair, elle gère aussi la paperasse pour que tout roule, côté coulisses comme à l’écran.",
+  // Bio de chaîne (modale)
+  personalBio:
+    "Joueuse invétérée des Sims 4 — attention, ça peut vite prendre feu… dans le jeu comme dans l’ambiance ! 🔥 Viens pour un moment fun & chill sur Les Sims 4 et d’autres jeux de simulation/gestion.",
+  // Réseaux
+  twitch: "https://twitch.tv/clarastonewall",
+  instagram: "",
+  tiktok: ""
+}
+
       {
         login: "jenny31200",
         name: "Jenny",
