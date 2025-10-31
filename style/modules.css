@@ -158,3 +158,113 @@
   content: "🔴";
   font-size: .9em;
 }
+/* Conteneur du carrousel */
+.vip-carousel {
+  position: relative;
+  max-width: 1200px;
+  margin-inline: auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Chaque slide (Swiper/Glide/Splide: adaptez la classe si besoin) */
+.vip-carousel .slide,
+.vip-carousel .swiper-slide {
+  position: relative;
+}
+
+/* Image du slide : hauteur contrôlée + recadrage propre */
+.vip-carousel .slide img,
+.vip-carousel .swiper-slide img {
+  width: 100%;
+  height: clamp(220px, 48vh, 480px); /* ⇦ réduit fortement sur petits écrans */
+  object-fit: cover;                 /* évite la pixellisation et les déformations */
+  display: block;
+}
+
+/* Voile dégradé pour lisibilité du texte */
+.vip-carousel .slide::after,
+.vip-carousel .swiper-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+  pointer-events: none;
+}
+
+/* Légende / texte par-dessus l’image */
+.vip-carousel .caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 16px 20px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.35;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+  /* Option 2 si besoin d’encore + de contraste : */
+  /* background: rgba(10,10,22,.45); backdrop-filter: blur(4px); border-top-left-radius: 12px; border-top-right-radius: 12px; */
+}
+
+/* Badge/CTA dans la légende : éviter d'être trop collé aux bords */
+.vip-carousel .caption a,
+.vip-carousel .caption .btn {
+  display: inline-block;
+  margin-top: 8px;
+}
+/* Conteneur de la grille */
+.vip-list {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* ⇦ plusieurs par ligne automatiquement */
+  gap: 18px;
+}
+
+/* Carte VIP */
+.vip-card {
+  background: var(--card-bg, #fff);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0,0,0,.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.vip-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0,0,0,.16);
+}
+
+/* Image de la carte : ratio propre et taille maîtrisée */
+.vip-card img {
+  width: 100%;
+  height: clamp(150px, 22vw, 220px);
+  object-fit: cover;
+  display: block;
+}
+
+/* Contenu de la carte */
+.vip-card .content {
+  padding: 14px 16px;
+}
+
+/* Titre + bio : limiter la largeur et éviter les pavés illisibles */
+.vip-card .title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.vip-card .bio {
+  font-size: .95rem;
+  color: var(--muted, #666);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;   /* ⇦ coupe la bio trop longue proprement */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Bouton "Voir la chaîne" */
+.vip-card .actions {
+  padding: 10px 16px 16px;
+}
