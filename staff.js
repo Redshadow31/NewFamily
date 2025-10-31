@@ -32,7 +32,7 @@ const STAFF = [
         desc: "Multigaming (LoL, No Man’s Sky…). Porte-parole des réunions d’intégration." },
       { login: "jenny31200", name: "Jenny",
         desc: "Call of Duty & Fortnite. Secrétaire en chef : rigueur et suivi des projets." },
-    ]
+           ]
   },
 
   // 🎓 Mentors
@@ -66,6 +66,8 @@ const STAFF = [
         desc: "Call of, une tuerie mais pas dans vos mp" },
       { login: "mmesigurdson64", name: "Mme Sigur",
        desc: "de Call of à la cuisine, une vrai régal" },
+       { login: "Zylkao", name: "Mme Sigur",
+       desc: "joueur multi" },
     ]
   },
 ];
