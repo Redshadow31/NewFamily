@@ -128,7 +128,7 @@ const POLES = [
   twitch: "https://twitch.tv/clarastonewall",
   instagram: "",
   tiktok: ""
-}
+},
 
       {
         login: "jenny31200",
