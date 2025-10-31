@@ -355,3 +355,36 @@
 /* Évite qu'une règle ancienne étire les cartes sur toute la largeur */
 .vip-card,
 .vip-user{ width: 100%; }
+/* ==========================================
+   🔧 Correctifs visuels page STAFF
+   ========================================== */
+
+/* 1️⃣ Avatars — forme circulaire propre et ratio stable */
+.avatar-box {
+  position: relative;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%; /* cercle parfait */
+  object-fit: cover;
+  border: 3px solid var(--ring, #f1c40f);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ring,#f1c40f) 30%, transparent);
+  background: #fff;
+}
+
+/* 2️⃣ Badges — fond semi-transparent + texte foncé lisible */
+.badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(255,255,255,0.9);
+  color: #111;
+  font-weight: 800;
+  font-size: 0.78rem;
+  border-radius: 8px;
+  padding: .18rem .46rem;
+  border: 1px solid r
