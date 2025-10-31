@@ -388,3 +388,32 @@
   border-radius: 8px;
   padding: .18rem .46rem;
   border: 1px solid r
+/* === Correctif avatars + badges staff === */
+.avatar {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 3px solid var(--ring, #f1c40f) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ring,#f1c40f) 30%, transparent) !important;
+  background: #fff !important;
+}
+
+.badge {
+  background: rgba(255,255,255,0.9) !important;
+  color: #111 !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  backdrop-filter: blur(3px) !important;
+}
+
+/* Grille 4–5 cartes par ligne */
+.staff-grid {
+  display: grid !important;
+  gap: 1rem !important;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+}
+@media (min-width: 1100px) {
+  .staff-grid {
+    grid-template-columns: repeat(5, 1fr) !important;
+  }
+}
