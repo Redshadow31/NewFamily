@@ -4,6 +4,8 @@
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
+let AVATARS = {};   // cache global des avatars Twitch (login -> url)
+
 
 /* ========= Données par pôles ========= */
 // ========== Données structurées par PÔLES ==========
@@ -405,8 +407,10 @@ if (modal) {
     if (!member) return;
 
     // Récup avatar
-    const avatarSrc = (window.__avatarMap?.[login]) ||
-                      "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+ const key = (login || "").toLowerCase();
+const avatarSrc = AVATARS[key] 
+  || "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_600x600.png";
+
 
     // Champs bio
     const roleBio      = (member.roleBio || member.desc || "").trim();
