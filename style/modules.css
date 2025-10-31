@@ -268,3 +268,90 @@
 .vip-card .actions {
   padding: 10px 16px 16px;
 }
+/* ===========================
+   VIP — Carrousel lisible
+   =========================== */
+.vip-slide .vip-media { position: relative; }
+.vip-slide .vip-media img{
+  width: 100%;
+  height: clamp(180px, 32vh, 320px); /* limite la hauteur */
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay pour améliorer le contraste du texte */
+.vip-slide .vip-media::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+
+/* Bio du slide : 3 lignes max */
+.vip-slide .vip-bio{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===========================
+   VIP — Mur (grille responsive)
+   =========================== */
+
+/* Conteneur du mur VIP : 5–8 colonnes selon la largeur */
+#vip-users{
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+  display: grid;
+  gap: 18px;
+}
+
+/* Colonnes par breakpoint (vise 5–8 par ligne sur grands écrans) */
+@media (min-width: 420px)  { #vip-users{ grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 640px)  { #vip-users{ grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 840px)  { #vip-users{ grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { #vip-users{ grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 1280px) { #vip-users{ grid-template-columns: repeat(6, 1fr); } }
+@media (min-width: 1440px) { #vip-users{ grid-template-columns: repeat(7, 1fr); } }
+@media (min-width: 1680px) { #vip-users{ grid-template-columns: repeat(8, 1fr); } }
+
+/* Carte VIP (sécurise le rendu en grille) */
+.vip-card{
+  background: var(--card-bg, #fff);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0,0,0,.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.vip-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0,0,0,.16);
+}
+
+/* Image carte : taille maîtrisée */
+.vip-card img{
+  width: 100%;
+  height: clamp(120px, 18vw, 180px);
+  object-fit: cover;
+  display: block;
+}
+
+/* Corps de carte */
+.vip-card .vip-body{ padding: 12px 14px; }
+.vip-card .vip-title{ font-weight: 700; margin-bottom: 6px; }
+
+/* Bio carte : 4 lignes max */
+.vip-card .vip-bio{
+  color: var(--muted, #7a7a7a);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Évite qu'une règle ancienne étire les cartes sur toute la largeur */
+.vip-card,
+.vip-user{ width: 100%; }
