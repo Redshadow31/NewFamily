@@ -214,3 +214,139 @@
 /* Close */
 .staff-modal .close{position:absolute;top:.8rem;right:.8rem;background:rgba(255,255,255,.3);border:none;border-radius:8px;color:#fff;font-weight:700;padding:.3rem .6rem;cursor:pointer;transition:.2s}
 .staff-modal .close:hover{background:rgba(255,255,255,.6);color:#000}
+/* ===== Skeletons (générique, non-staff) ===== */
+#nf-skeletons{max-width:1100px;margin:1.5rem auto 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:0 1rem}
+.skel{background:#fff;border-radius:1rem;padding:1rem;box-shadow:0 10px 20px rgba(0,0,0,.08)}
+.skel .ph{height:14px;border-radius:6px;background:linear-gradient(90deg,#eee,#f5f5f5,#eee);background-size:200% 100%;animation:nf-shimmer 1.2s linear infinite}
+.skel .ph.big{height:120px;border-radius:.8rem;margin-bottom:.8rem}
+.skel .ph.w60{width:60%}.skel .ph.w80{width:80%}.skel .ph.w40{width:40%}
+@keyframes nf-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* === Correctif pastille "Live" – cartes événements (non-staff) === */
+.badge--live,
+.badge.live,
+.event-card .badge.live {
+  background: linear-gradient(135deg, #9146ff, #772ce8);
+  color: #fff !important;
+  border: none;
+  font-weight: 800;
+  padding: .25rem .6rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  box-shadow: 0 4px 10px rgba(145,70,255,.25);
+}
+.badge--live::before { content: "🔴"; font-size: .9em; }
+
+/* ===== VIP – Carousel ===== */
+.vip-carousel {
+  position: relative;
+  max-width: 1200px;
+  margin-inline: auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.vip-carousel .slide,
+.vip-carousel .swiper-slide { position: relative; }
+.vip-carousel .slide img,
+.vip-carousel .swiper-slide img {
+  width: 100%;
+  height: clamp(220px, 48vh, 480px);
+  object-fit: cover;
+  display: block;
+}
+/* Voile lisibilité texte */
+.vip-carousel .slide::after,
+.vip-carousel .swiper-slide::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+  pointer-events: none;
+}
+/* Légende */
+.vip-carousel .caption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 16px 20px; color: #fff; font-weight: 600; line-height: 1.35;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+.vip-carousel .caption a,
+.vip-carousel .caption .btn { display:inline-block; margin-top:8px; }
+
+/* ===== VIP – Liste (cartes) ===== */
+.vip-list {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+.vip-card {
+  background: var(--card-bg, #fff);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0,0,0,.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.vip-card:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.16); }
+.vip-card img {
+  width: 100%;
+  height: clamp(150px, 22vw, 220px);
+  object-fit: cover;
+  display: block;
+}
+.vip-card .content { padding: 14px 16px; }
+.vip-card .title { font-weight: 700; margin-bottom: 6px; }
+.vip-card .bio {
+  font-size: .95rem; color: var(--muted, #666); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
+.vip-card .actions { padding: 10px 16px 16px; }
+
+/* ===== VIP – Slides compacts ===== */
+.vip-slide .vip-media { position: relative; }
+.vip-slide .vip-media img {
+  width: 100%;
+  height: clamp(180px, 32vh, 320px);
+  object-fit: cover;
+  display: block;
+}
+.vip-slide .vip-media::after {
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+.vip-slide .vip-bio{
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* ===== VIP – Mur (grille responsive) ===== */
+#vip-users{
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+  display: grid;
+  gap: 18px;
+}
+@media (min-width: 420px)  { #vip-users{ grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 640px)  { #vip-users{ grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 840px)  { #vip-users{ grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { #vip-users{ grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 1280px) { #vip-users{ grid-template-columns: repeat(6, 1fr); } }
+@media (min-width: 1440px) { #vip-users{ grid-template-columns: repeat(7, 1fr); } }
+@media (min-width: 1680px) { #vip-users{ grid-template-columns: repeat(8, 1fr); } }
+
+/* VIP – cartes du mur */
+.vip-card{ background: var(--card-bg, #fff); border-radius:16px; overflow:hidden;
+  box-shadow:0 6px 22px rgba(0,0,0,.12); transition: transform .2s ease, box-shadow .2s ease; }
+.vip-card:hover{ transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.16); }
+.vip-card img{ width:100%; height: clamp(120px, 18vw, 180px); object-fit:cover; display:block; }
+.vip-card .vip-body{ padding: 12px 14px; }
+.vip-card .vip-title{ font-weight: 700; margin-bottom: 6px; }
+.vip-card .vip-bio{
+  color: var(--muted, #7a7a7a); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
+/* Sécurité largeur */
+.vip-card, .vip-user{ width: 100%; }
