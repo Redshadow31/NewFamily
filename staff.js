@@ -561,8 +561,8 @@ if (modal) {
     // Icônes sociaux (affichage conditionnel)
     const links = [];
     if (tw) links.push(`<a href="${tw}" target="_blank" rel="noopener" aria-label="Twitch"><img src="assets/twitch.png" alt=""></a>`);
-    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/instagram.png" alt=""></a>`);
-    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/tiktok.png" alt=""></a>`);
+    if (ig) links.push(`<a href="${ig}" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/instagram.webp" alt=""></a>`);
+    if (tk) links.push(`<a href="${tk}" target="_blank" rel="noopener" aria-label="TikTok"><img src="assets/tiktok.webp" alt=""></a>`);
     $("m-links").innerHTML = links.join("");
 
     modal.setAttribute("aria-hidden", "false");
