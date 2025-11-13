@@ -520,6 +520,8 @@ async function init() {
     console.error("❌ Conteneurs de cartes manquants.");
     return;
   }
+  // Rendu initial des cartes
+  applyFiltersAndRender();
 
   // Barre live
   renderLiveStrip(onlineUsers, usersInfo);
@@ -530,8 +532,6 @@ async function init() {
   // Conseils communautaires TENF
   initTipsRotator();
 }
-
-
 
 
 /* -------------------------------------------------------
