@@ -1,8 +1,7 @@
+// netlify/functions/stats.js
 const fetch = require("node-fetch");
-const { getStore } = require("@netlify/blobs");
 
 const CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
-// À définir dans Netlify → Site settings → Environment variables
 const CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET || "";
 
 /**
@@ -31,23 +30,28 @@ async function readJSON(fileName) {
 }
 
 /**
- * Token Twitch
+ * Token Twitch (client_credentials)
  */
 async function getTwitchToken() {
   if (!CLIENT_SECRET) {
-    console.warn("⚠ Pas de TWITCH_CLIENT_SECRET défini → liveNow restera à 0");
+    console.warn("⚠ Pas de TWITCH_CLIENT_SECRET défini → liveNow = 0");
     return null;
   }
 
   const url = `https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`;
 
-  const res = await fetch(url, { method: "POST" });
-  if (!res.ok) {
-    console.warn("⚠ Erreur token Twitch:", res.status);
+  try {
+    const res = await fetch(url, { method: "POST" });
+    if (!res.ok) {
+      console.warn("⚠ Erreur token Twitch:", res.status);
+      return null;
+    }
+    const data = await res.json();
+    return data.access_token;
+  } catch (err) {
+    console.error("❌ Erreur getTwitchToken:", err.message);
     return null;
   }
-  const data = await res.json();
-  return data.access_token;
 }
 
 /**
@@ -73,9 +77,9 @@ async function fetchStreams(logins, token) {
   return data.data || [];
 }
 
-exports.handler = async function (event, context) {
+exports.handler = async function () {
   try {
-    // 1️⃣ Charger les membres + les events
+    // 1️⃣ Membres + events
     const [u1, u2, u3, eventsRaw] = await Promise.all([
       readJSON("users1.json"),
       readJSON("users2.json"),
@@ -97,7 +101,7 @@ exports.handler = async function (event, context) {
       [];
     const eventsCount = events.length;
 
-    // 2️⃣ Compter les lives en cours
+    // 2️⃣ Lives en cours + actifs
     const token = await getTwitchToken();
     let liveNow = 0;
     const activeLogins = new Set();
@@ -115,41 +119,11 @@ exports.handler = async function (event, context) {
 
     const active = activeLogins.size;
 
-    // 3️⃣ Historique sur 14 jours avec Netlify Blobs
-    const store = getStore("live-stats-tenf");
-    const key = "history.json";
+    // 3️⃣ "liveAvg" simplifié (pour l'instant = liveNow)
+    // On pourra plus tard brancher un vrai historique.
+    const liveAvg = liveNow;
 
-    let history = [];
-    try {
-      const text = await store.get(key, { type: "text" });
-      if (text) history = JSON.parse(text);
-    } catch {
-      history = [];
-    }
-
-    const now = Date.now();
-    history.push({ t: now, c: liveNow });
-
-    const cutoff = now - 14 * 24 * 60 * 60 * 1000;
-    history = history.filter((h) => h.t >= cutoff);
-
-    await store.set(key, JSON.stringify(history), {
-      metadata: { updatedAt: new Date().toISOString() },
-    });
-
-    // 4️⃣ Moyenne de lives / jour (max par jour)
-    const perDay = {};
-    for (const h of history) {
-      const d = new Date(h.t).toISOString().slice(0, 10);
-      perDay[d] = Math.max(perDay[d] || 0, h.c);
-    }
-    const days = Object.keys(perDay);
-    const liveAvg =
-      days.length === 0
-        ? 0
-        : Math.round(days.reduce((sum, d) => sum + perDay[d], 0) / days.length);
-
-    // 5️⃣ Réponse JSON pour le front
+    // 4️⃣ Réponse JSON pour le front
     return {
       statusCode: 200,
       headers: {
