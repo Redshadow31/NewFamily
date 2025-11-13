@@ -7,13 +7,13 @@ const TWITCH_CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET; 
 const SNAPSHOT_FILE = "/tmp/live_snapshots.json";
 
-function readJSON(file) {
-  try {
-    return JSON.parse(fs.readFileSync(path.resolve("public", file), "utf8"));
-  } catch {
-    return [];
-  }
+async function readJSON(file) {
+  const base = process.env.URL || process.env.DEPLOY_URL;
+  const res = await fetch(`${base}/${file}`);
+  if (!res.ok) return [];
+  return res.json();
 }
+
 
 async function getTwitchToken() {
   const url = `https://id.twitch.tv/oauth2/token?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
