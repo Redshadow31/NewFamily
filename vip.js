@@ -216,31 +216,6 @@ function updateStats(vips) {
   $("#vip-count").innerHTML = `👏 <strong>${totalApplause}</strong> applaudissements pour <strong>${totalVip}</strong> VIP (${currentMonth})`;
 }
 
-// ---------- Carrousel (simplifié identique) ----------
-function slideHTML(v) {
-  const img = v.avatar || v.banner;
-  return `
-  <div class="vip-slide">
-    <div class="vip-media">
-      ${liveDotHTML(v.isLive)}
-      <img src="${img}" alt="${escapeHtml(v.display_name)}">
-    </div>
-    <div class="vip-body">
-      <a class="username" href="https://twitch.tv/${v.login}" target="_blank">${escapeHtml(v.display_name)}</a>
-    </div>
-  </div>`;
-}
-
-function renderCarousel(vips) {
-  const root = $("#vip-carousel");
-  if (!vips.length) {
-    root.innerHTML = "";
-    return;
-  }
-
-  root.innerHTML = vips.slice(0, 10).map(slideHTML).join("");
-}
-
 // ---------- Tri ----------
 function sortVips(vips, mode) {
   if (mode === "applause") {
@@ -276,7 +251,6 @@ async function loadMonth(month, metaMap) {
 
   vips = sortVips(vips, "live");
 
-  renderCarousel(vips);
   renderWall(vips);
   updateStats(vips);
 }
