@@ -391,52 +391,75 @@ function renderLiveStrip(onlineUsers, usersInfo) {
 }
 
 /* -------------------------------------------------------
-   FEATURED LIVE (mise en avant)
+   ⭐ Mise en avant basée sur featured.json uniquement
 -------------------------------------------------------- */
-function renderFeaturedLive(onlineUsers, usersInfo) {
+async function renderFeaturedLive(onlineUsers, usersInfo) {
   const featuredSection = document.getElementById("featured-live");
   if (!featuredSection) return;
 
-  if (!onlineUsers.length) {
+  // 1) Charger le planning des mises en avant
+  let featuredData = [];
+  try {
+    const res = await fetch("featured.json", { cache: "no-store" });
+    if (res.ok) featuredData = await res.json();
+  } catch {}
+
+  if (!featuredData.length) {
     featuredSection.style.display = "none";
     return;
   }
 
-  const top = [...onlineUsers].sort((a, b) => b.viewer_count - a.viewer_count)[0];
-  const login = top.user_login.toLowerCase();
+  // 2) Trouver la mise en avant du jour
+  const today = new Date().toISOString().slice(0, 10); // format YYYY-MM-DD
+  const todayFeatured = featuredData.find(f => f.date.slice(0, 10) === today);
 
+  if (!todayFeatured) {
+    // Personne prévu aujourd’hui → pas de mise en avant
+    featuredSection.style.display = "none";
+    return;
+  }
+
+  // 3) Vérifier si ce streamer est en live
+  const login = todayFeatured.user.toLowerCase();
+  const stream = onlineUsers.find(s => s.user_login.toLowerCase() === login);
+
+  if (!stream) {
+    // programmé mais PAS live → on n'affiche rien
+    featuredSection.style.display = "none";
+    return;
+  }
+
+  // 4) On récupère les infos du streamer
   const info = usersInfo.find(u => u.login.toLowerCase() === login);
-  const userDisplay = info?.display_name || top.user_name || login;
+  const display = info?.display_name || login;
 
-  document.getElementById("featured-user").textContent = "@" + userDisplay;
-  document.getElementById("featured-stream-title").textContent = top.title;
-  document.getElementById("featured-game").textContent = top.game_name || "-";
-  document.getElementById("featured-viewers").textContent = "👁️ " + top.viewer_count;
+  // 5) Remplissage UI
+  document.getElementById("featured-user").textContent = "@" + display;
+  document.getElementById("featured-stream-title").textContent = stream.title;
+  document.getElementById("featured-game").textContent = stream.game_name || "-";
+  document.getElementById("featured-viewers").textContent = "👁️ " + stream.viewer_count;
 
   const link = document.getElementById("featured-link");
   link.href = `https://twitch.tv/${login}`;
 
-  // Thumbnail
-  const thumb = top.thumbnail_url
+  const thumb = stream.thumbnail_url
     .replace("{width}", "1280")
     .replace("{height}", "720");
   document.getElementById("featured-bg").style.backgroundImage = `url("${thumb}")`;
 
-  // Player
+  // 6) player
   const player = document.getElementById("featured-player");
-  player.style.display = "block";
   player.innerHTML = "";
   const iframe = document.createElement("iframe");
-  iframe.src = makeIframeSrc(login);
-  iframe.style.cssText = `
-    width:100%;
-    height:100%;
-    border:0;
-  `;
+  iframe.src = `https://player.twitch.tv/?channel=${login}&parent=${window.location.hostname}&muted=true`;
+  iframe.allow = "autoplay; picture-in-picture";
+  iframe.style.cssText = "width:100%;height:100%;border:0;";
   player.appendChild(iframe);
+  player.style.display = "block";
 
   featuredSection.style.display = "block";
 }
+
 
 /* -------------------------------------------------------
    CALCUL DES STATS DISCORD / LIVES
@@ -507,7 +530,8 @@ async function init() {
   renderLiveStrip(onlineUsers, usersInfo);
 
   // Mise en avant
-  renderFeaturedLive(onlineUsers, usersInfo);
+  await renderFeaturedLive(onlineUsers, usersInfo);
+
 
   // Hover players
   setupHoverPreviews();
