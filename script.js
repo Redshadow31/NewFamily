@@ -512,15 +512,12 @@ async function init() {
     await Promise.all(chunks.map(c => fetchStreams(c)))
   ).flatMap(res => res.data || []);
 
-  // Mise en place des conteneurs
-  NF_LIVE_CONTAINER = document.getElementById("live-users");
-  NF_OFFLINE_CONTAINER = document.getElementById("offline-users");
+ if (!NF_LIVE_CONTAINER || !NF_OFFLINE_CONTAINER) {
+  console.error("❌ Conteneurs de cartes manquants.");
+  return;
+}
 
-  if (!NF_LIVE_CONTAINER || !NF_OFFLINE_CONTAINER) {
-    console.error("❌ Conteneurs de cartes manquants.");
-    return;
-  
-  // Rendu initial des cartes
+    // Rendu initial des cartes
   applyFiltersAndRender();
 
   // Barre live
