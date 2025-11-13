@@ -536,6 +536,15 @@ async function init() {
   // Hover players
   setupHoverPreviews();
 }
+  // Barre live
+  renderLiveStrip(onlineUsers, usersInfo);
+
+  // Hover players
+  setupHoverPreviews();
+
+  // Conseils communautaires TENF
+  initTipsRotator();
+}
 
 /* -------------------------------------------------------
    GO !
