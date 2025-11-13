@@ -101,6 +101,35 @@ async function getToken() {
     console.error("❌ Impossible d'obtenir le token Twitch.");
   }
 }
+const NF_TIPS = [
+  "Le live gagnant TENF n’est pas un boost de statistiques, c’est une vitrine pour présenter ta chaîne, ton univers et ta personnalité à toute la communauté.",
+  "Chaque soutien compte : un simple lurk, un passage rapide ou un petit coucou, c’est déjà beaucoup pour montrer que tu es là pour les autres.",
+  "Discuter sur Discord, réagir et prendre des nouvelles, c’est déjà faire connaître ton stream. Plus on te voit ici, plus on a envie de te découvrir en live.",
+  "À TENF, nous sommes des collègues de stream avant d’être des viewers. Le jeu est secondaire : l’important, c’est de se soutenir et de progresser ensemble.",
+  "Un serveur d’entraide n’est pas une baguette magique. Ta progression se construit avec le temps, la régularité et les liens que tu crées avec les autres.",
+  "Nous avons dépassé les 400 membres, mais seuls les actifs dans l’entraide sont mis en avant. Les autres restent de la famille, sans pression ni obligation.",
+  "Bienveillance et entraide : se tourner vers les autres, c’est aussi se donner à soi-même plus de chances de grandir… même en plein live."
+];
+/* -------------------------------------------------------
+   🔁 Rotation des conseils communautaires
+-------------------------------------------------------- */
+function initTipsRotator() {
+  const el = document.querySelector(".nf-tips-text");
+  if (!el || !NF_TIPS.length) return;
+
+  let index = 0;
+  el.textContent = NF_TIPS[index];
+
+  setInterval(() => {
+    index = (index + 1) % NF_TIPS.length;
+
+    el.classList.add("is-fading");
+    setTimeout(() => {
+      el.textContent = NF_TIPS[index];
+      el.classList.remove("is-fading");
+    }, 300);
+  }, 9000); // change toutes les 9 secondes
+}
 
 /* -------------------------------------------------------
    Chargement liste users
