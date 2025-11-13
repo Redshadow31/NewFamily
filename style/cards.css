@@ -119,5 +119,22 @@
 .badge--support    { background:#16a085 !important; color:#fff !important; }
 .badge--tech       { background:#2980b9 !important; color:#fff !important; }
 
-/* Grille plus dense */
-.staff-grid {
+/* ===== Badge VIP (bottom right) ===== */
+.vip-chip {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #4b2900;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: .30rem .55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.18);
+  box-shadow: 0 4px 10px rgba(0,0,0,.20);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
