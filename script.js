@@ -512,12 +512,19 @@ async function init() {
     await Promise.all(chunks.map(c => fetchStreams(c)))
   ).flatMap(res => res.data || []);
 
- if (!NF_LIVE_CONTAINER || !NF_OFFLINE_CONTAINER) {
-  console.error("❌ Conteneurs de cartes manquants.");
-  return;
-}
+  // 🟩 AFFECTATION DES CONTENEURS (important !)
+  NF_LIVE_CONTAINER = document.getElementById("live-users");
+  NF_OFFLINE_CONTAINER = document.getElementById("offline-users");
 
-    // Rendu initial des cartes
+  // Vérification
+  if (!NF_LIVE_CONTAINER || !NF_OFFLINE_CONTAINER) {
+    console.error("❌ Conteneurs de cartes manquants.");
+    return;
+  }
+
+  // Rendu initial des cartes
+  buildCardData(allUsers, onlineUsers, usersInfo, vipList);
+  setupLiveFilters(onlineUsers);
   applyFiltersAndRender();
 
   // Barre live
@@ -534,4 +541,5 @@ async function init() {
 /* -------------------------------------------------------
    GO !
 -------------------------------------------------------- */
-init();
+document.addEventListener("DOMContentLoaded", init);
+
