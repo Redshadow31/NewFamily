@@ -134,10 +134,33 @@
     <div id="nf-skeletons" aria-hidden="true"></div>
 
     <!-- ===== Grilles membres ===== -->
-    <section id="online" aria-label="Membres actuellement en live">
-      <h2>🎥 Actuellement en direct</h2>
-      <div id="live-users" class="users-grid"></div>
-    </section>
+ <section id="online" aria-label="Membres actuellement en live">
+  <h2>🎥 Actuellement en direct</h2>
+
+  <!-- 🔎 Outils de recherche & filtre -->
+  <div class="live-tools">
+    <div class="live-tools-group">
+      <label for="search-member" class="sr-only">Rechercher un membre</label>
+      <input
+        id="search-member"
+        type="search"
+        placeholder="🔍 Rechercher un membre…"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="live-tools-group">
+      <label for="filter-game" class="sr-only">Filtrer par jeu</label>
+      <select id="filter-game">
+        <option value="all">🎮 Tous les jeux</option>
+        <!-- options jeux ajoutées en JS -->
+      </select>
+    </div>
+  </div>
+
+  <div id="live-users" class="users-grid"></div>
+</section>
+
 
     <section id="offline" aria-label="Membres hors ligne">
       <h2>👀 À découvrir bientôt</h2>
