@@ -519,7 +519,7 @@ async function init() {
   if (!NF_LIVE_CONTAINER || !NF_OFFLINE_CONTAINER) {
     console.error("❌ Conteneurs de cartes manquants.");
     return;
-  }
+  
   // Rendu initial des cartes
   applyFiltersAndRender();
 
