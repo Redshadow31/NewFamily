@@ -137,4 +137,34 @@
   align-items: center;
   gap: 4px;
 }
+@keyframes badgePulse {
+  0%   { transform: scale(1);   opacity: 1; }
+  50%  { transform: scale(1.15); opacity: 0.85; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.badge::before,
+.vip-chip::before {
+  content: "⭐";
+  font-size: .78rem;
+  display: inline-block;
+  animation: badgePulse 1.8s infinite ease-in-out;
+}
 
+/* ===== Badge VIP animé (bottom right) ===== */
+.vip-chip {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: #4b2900;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: .30rem .55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.18);
+  box-shadow: 0 4px 10px rgba(0,0,0,.20);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
