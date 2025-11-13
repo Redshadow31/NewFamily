@@ -113,23 +113,50 @@ const NF_TIPS = [
 /* -------------------------------------------------------
    🔁 Rotation des conseils communautaires
 -------------------------------------------------------- */
+/* -------------------------------------------------------
+   🎤 Typing effect façon Twitch — Conseils TENF
+-------------------------------------------------------- */
 function initTipsRotator() {
   const el = document.querySelector(".nf-tips-text");
   if (!el || !NF_TIPS.length) return;
 
-  let index = 0;
-  el.textContent = NF_TIPS[index];
+  let index = 0;       // index du message
+  let charIndex = 0;   // index du caractère
+  let deleting = false;
 
-  setInterval(() => {
-    index = (index + 1) % NF_TIPS.length;
+  function type() {
+    const text = NF_TIPS[index];
 
-    el.classList.add("is-fading");
-    setTimeout(() => {
-      el.textContent = NF_TIPS[index];
-      el.classList.remove("is-fading");
-    }, 300);
-  }, 9000); // change toutes les 9 secondes
+    if (!deleting) {
+      // écriture
+      el.textContent = text.substring(0, charIndex + 1);
+      charIndex++;
+
+      // fin de mot → pause → commencer à effacer
+      if (charIndex === text.length) {
+        setTimeout(() => { deleting = true; }, 1200);
+      }
+
+    } else {
+      // effacement
+      el.textContent = text.substring(0, charIndex - 1);
+      charIndex--;
+
+      // texte effacé → prochain message
+      if (charIndex === 0) {
+        deleting = false;
+        index = (index + 1) % NF_TIPS.length;
+      }
+    }
+
+    // vitesse typing / delete
+    const speed = deleting ? 40 : 55;
+    setTimeout(type, speed);
+  }
+
+  type();
 }
+
 
 /* -------------------------------------------------------
    Chargement liste users
