@@ -1,118 +1,174 @@
-import fetch from "node-fetch";
-import fs from "fs";
-import path from "path";
+const fetch = require("node-fetch");
+const { getStore } = require("@netlify/blobs");
 
-// 🔧 Paramètres
-const TWITCH_CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
-const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET; 
-const SNAPSHOT_FILE = "/tmp/live_snapshots.json";
+const CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
+// À définir dans Netlify → Site settings → Environment variables
+const CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET || "";
 
-async function readJSON(file) {
-  const base = process.env.URL || process.env.DEPLOY_URL;
-  const res = await fetch(`${base}/${file}`);
-  if (!res.ok) return [];
-  return res.json();
+/**
+ * Récupère un JSON public du site (users1.json, events.json, etc.)
+ */
+async function readJSON(fileName) {
+  const base =
+    process.env.URL ||
+    process.env.DEPLOY_URL ||
+    process.env.DEPLOY_PRIME_URL ||
+    "https://newfamily.netlify.app";
+
+  try {
+    const res = await fetch(`${base.replace(/\/$/, "")}/${fileName}`, {
+      headers: { "User-Agent": "newfamily-stats-fn" },
+    });
+    if (!res.ok) {
+      console.warn("⚠ readJSON:", fileName, "->", res.status);
+      return [];
+    }
+    return await res.json();
+  } catch (err) {
+    console.error("❌ Erreur readJSON:", fileName, err.message);
+    return [];
+  }
 }
 
-
+/**
+ * Token Twitch
+ */
 async function getTwitchToken() {
-  const url = `https://id.twitch.tv/oauth2/token?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+  if (!CLIENT_SECRET) {
+    console.warn("⚠ Pas de TWITCH_CLIENT_SECRET défini → liveNow restera à 0");
+    return null;
+  }
+
+  const url = `https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`;
 
   const res = await fetch(url, { method: "POST" });
-  return (await res.json()).access_token;
+  if (!res.ok) {
+    console.warn("⚠ Erreur token Twitch:", res.status);
+    return null;
+  }
+  const data = await res.json();
+  return data.access_token;
 }
 
+/**
+ * Récupère les streams en cours pour un chunk de logins
+ */
 async function fetchStreams(logins, token) {
-  if (!logins.length) return [];
-  const query = logins.map(l => `user_login=${l}`).join("&");
+  if (!token || !logins.length) return [];
+  const query = logins.map((l) => `user_login=${encodeURIComponent(l)}`).join("&");
 
   const res = await fetch(`https://api.twitch.tv/helix/streams?${query}`, {
     headers: {
-      "Client-ID": TWITCH_CLIENT_ID,
-      Authorization: `Bearer ${token}`
-    }
+      "Client-ID": CLIENT_ID,
+      Authorization: "Bearer " + token,
+    },
   });
+
+  if (!res.ok) {
+    console.warn("⚠ Erreur Twitch streams:", res.status);
+    return [];
+  }
 
   const data = await res.json();
   return data.data || [];
 }
 
-export async function handler() {
+exports.handler = async function (event, context) {
   try {
-    // 1️⃣ Charger les membres
-    const users1 = readJSON("users1.json");
-    const users2 = readJSON("users2.json");
-    const users3 = readJSON("users3.json");
-    const members = [...new Set([...users1, ...users2, ...users3])];
+    // 1️⃣ Charger les membres + les events
+    const [u1, u2, u3, eventsRaw] = await Promise.all([
+      readJSON("users1.json"),
+      readJSON("users2.json"),
+      readJSON("users3.json"),
+      readJSON("events.json"),
+    ]);
 
-    // 2️⃣ Charger les évènements
-    const events = readJSON("events.json");
-    const eventsCount = events.filter(e => e.category !== "integration").length;
+    const membersSet = new Set();
+    [...u1, ...u2, ...u3].forEach((login) => {
+      if (typeof login === "string" && login.trim()) {
+        membersSet.add(login.toLowerCase());
+      }
+    });
+    const members = Array.from(membersSet);
 
-    // 3️⃣ Token Twitch
+    const events =
+      Array.isArray(eventsRaw) ?
+      eventsRaw.filter((e) => e.category !== "integration") :
+      [];
+    const eventsCount = events.length;
+
+    // 2️⃣ Compter les lives en cours
     const token = await getTwitchToken();
-
-    // 4️⃣ Streams en cours
-    const chunks = [];
-    for (let i = 0; i < members.length; i += 100) {
-      chunks.push(members.slice(i, i + 100));
-    }
-
     let liveNow = 0;
-    for (const c of chunks) {
-      const streams = await fetchStreams(c, token);
-      liveNow += streams.length;
+    const activeLogins = new Set();
+
+    if (token && members.length) {
+      for (let i = 0; i < members.length; i += 100) {
+        const chunk = members.slice(i, i + 100);
+        const streams = await fetchStreams(chunk, token);
+        liveNow += streams.length;
+        streams.forEach((s) =>
+          activeLogins.add((s.user_login || s.user_name || "").toLowerCase())
+        );
+      }
     }
-    // 📌 5️⃣ Snapshot des lives (pour moyenne 14 jours)
-    let snaps = [];
+
+    const active = activeLogins.size;
+
+    // 3️⃣ Historique sur 14 jours avec Netlify Blobs
+    const store = getStore("live-stats-tenf");
+    const key = "history.json";
+
+    let history = [];
     try {
-      snaps = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, "utf8"));
+      const text = await store.get(key, { type: "text" });
+      if (text) history = JSON.parse(text);
     } catch {
-      snaps = [];
+      history = [];
     }
 
     const now = Date.now();
-    snaps.push({ t: now, c: liveNow });
+    history.push({ t: now, c: liveNow });
 
-    // garder 14 jours
-    const min = now - 14 * 86400000;
-    snaps = snaps.filter(s => s.t >= min);
+    const cutoff = now - 14 * 24 * 60 * 60 * 1000;
+    history = history.filter((h) => h.t >= cutoff);
 
-    // enregistrer
-    fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify(snaps));
+    await store.set(key, JSON.stringify(history), {
+      metadata: { updatedAt: new Date().toISOString() },
+    });
 
-    // 6️⃣ Calcul de la moyenne
-    const byDay = {};
-    for (const s of snaps) {
-      const d = new Date(s.t);
-      const key = d.toISOString().slice(0,10);
-      byDay[key] = Math.max(byDay[key] || 0, s.c);
+    // 4️⃣ Moyenne de lives / jour (max par jour)
+    const perDay = {};
+    for (const h of history) {
+      const d = new Date(h.t).toISOString().slice(0, 10);
+      perDay[d] = Math.max(perDay[d] || 0, h.c);
     }
+    const days = Object.keys(perDay);
+    const liveAvg =
+      days.length === 0
+        ? 0
+        : Math.round(days.reduce((sum, d) => sum + perDay[d], 0) / days.length);
 
-    const days = Object.keys(byDay);
-    const liveAvg = days.length === 0 ? 0 : days.reduce((a, d) => a + byDay[d], 0) / days.length;
-
-    // 7️⃣ Déterminer les actifs (entraide) → exemple simple :
-    //            un membre est "actif" s'il a streamé au moins 1 fois
-    //            dans les dernières 72h
-    const active = members.filter(m => {
-      const latest = snaps.filter(s => s.c > 0);
-      return latest.length > 0;
-    }).length;
-
-    // 8️⃣ Retour API
+    // 5️⃣ Réponse JSON pour le front
     return {
       statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
       body: JSON.stringify({
         members: members.length,
         active,
         liveNow,
-        liveAvg: Math.round(liveAvg),
-        events: eventsCount
-      })
+        liveAvg,
+        events: eventsCount,
+      }),
     };
-
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    console.error("❌ Stats function error:", err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "stats-failed", details: err.message }),
+    };
   }
-}
+};
