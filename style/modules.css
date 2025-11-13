@@ -462,3 +462,34 @@ html.dark .live-tools select{
   color:#fff;
   border:1px solid var(--border);
 }
+/* ===== Bloc conseils communautaires TENF ===== */
+.nf-tips-card{
+  grid-column: 1 / -1;                 /* prend toute la ligne */
+  margin-top: .4rem;
+  background: var(--surface);
+  border-radius: 1rem;
+  padding: 1rem 1.2rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.nf-tips-card h3{
+  margin: 0 0 .3rem;
+  font-weight: 900;
+  color: #a24bff;
+}
+
+.nf-tips-text{
+  margin: 0;
+  font-size: .98rem;
+  line-height: 1.6;
+  color: var(--muted);
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+.nf-tips-text.is-fading{
+  opacity: 0;
+  transform: translateY(-4px);
+}
