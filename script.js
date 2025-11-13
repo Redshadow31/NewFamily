@@ -344,22 +344,7 @@ function setupLiveFilters(onlineUsers) {
     });
   }
 }
-  const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
-  const sortedUsers = [...allUsers].sort((a, b) => {
-    const aIsVip = vipList.includes(a.toLowerCase());
-    const bIsVip = vipList.includes(b.toLowerCase());
-    return aIsVip === bIsVip ? 0 : aIsVip ? -1 : 1;
-  });
-
-  for (const user of sortedUsers) {
-    const lower = user.toLowerCase();
-    const isOnline = onlineLogins.includes(lower);
-    const streamData = isOnline ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower) : null;
-    const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
-    const isVip = vipList.includes(lower);
-    const card = createUserCard({ user, isOnline, streamData, userInfo, isVip });
-    (isOnline ? liveContainer : offlineContainer).appendChild(card);
-  }
+ 
 
 /* -------------------------------------------------------
    📊 Stats dynamiques
@@ -690,7 +675,23 @@ async function init() {
     console.warn("Erreur lecture events.json", e);
   }
 
-  // Rendu cartes
+  //   // Rendu cartes + filtres
+  const liveContainer = document.getElementById("live-users");
+  const offlineContainer = document.getElementById("offline-users");
+  if (!liveContainer || !offlineContainer) {
+    hideSkeletons();
+    return;
+  }
+
+  NF_LIVE_CONTAINER = liveContainer;
+  NF_OFFLINE_CONTAINER = offlineContainer;
+
+  // On construit la data pour toutes les cartes,
+  // puis on branche les filtres et on affiche.
+  buildCardData(allUsers, onlineUsers, usersInfo, vipList);
+  setupLiveFilters(onlineUsers);
+  applyFiltersAndRender();
+ cartes
   const liveContainer = document.getElementById("live-users");
   const offlineContainer = document.getElementById("offline-users");
   if (!liveContainer || !offlineContainer) {
