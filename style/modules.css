@@ -427,3 +427,38 @@
   line-height: 1.6;
   font-size: .98rem;
 }
+/* ===== Outils de filtre "Actuellement en direct" ===== */
+.live-tools{
+  max-width:1100px;
+  margin:.4rem auto .2rem;
+  padding:0 1rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.live-tools-group{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+}
+
+.live-tools input,
+.live-tools select{
+  min-width:180px;
+  padding:.42rem .75rem;
+  border-radius:999px;
+  border:1px solid #ead9ff;
+  background:#fff;
+  font-size:.9rem;
+}
+
+/* mode sombre : inputs lisibles */
+html.dark .live-tools input,
+html.dark .live-tools select{
+  background:#1F1133;
+  color:#fff;
+  border:1px solid var(--border);
+}
