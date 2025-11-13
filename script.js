@@ -6,6 +6,9 @@
    - Mini lecteur vidéo sur les cartes "en ligne" au survol (lazy)
    - Barre horizontale des lives (avatar + nom + jeu)
 ========================================================= */
+/* === Mois courant (pour VIP filtrés) === */
+const CURRENT_MONTH = new Date().toISOString().slice(0, 7); 
+// exemple : "2025-11"
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
@@ -145,18 +148,33 @@ async function fetchUsersInfo(allUsers) {
   return results;
 }
 
+/* -------------------------------------------------------
+   🔥 Récupération DES VIP DU MOIS COURANT UNIQUEMENT
+-------------------------------------------------------- */
 async function fetchVIPList() {
   try {
-    const response = await fetch("vip.json");
+    const response = await fetch("vip.json", { cache: "no-store" });
     if (!response.ok) return [];
+
     const data = await response.json();
-    return data.map(item =>
-      typeof item === "string" ? item.toLowerCase() : String(item.login || "").toLowerCase()
-    );
-  } catch {
+    if (!Array.isArray(data)) return [];
+
+    // 📌 On filtre uniquement les VIP du mois en cours
+    const monthVip = data.filter(item => {
+      if (typeof item === "string") return false; // pas de mois → ignoré
+      const m = item.month || "";
+      return m === CURRENT_MONTH;
+    });
+
+    // 📌 On retourne uniquement les logins
+    return monthVip.map(item => String(item.login || item.name || "").toLowerCase());
+
+  } catch (e) {
+    console.warn("Erreur lecture VIP :", e);
     return [];
   }
 }
+
 
 /* -------------------------------------------------------
    🏷️ Badges de rôle
