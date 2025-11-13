@@ -521,21 +521,6 @@ async function init() {
     return;
   }
 
-  // Construction données
-  buildCardData(allUsers, onlineUsers, usersInfo, vipList);
-
-  // Setup filtres recherche + jeu
-  setupLiveFilters(onlineUsers);
-
-  // Rendu initial des cartes
-  applyFiltersAndRender();
-
-  // Barre live
-  renderLiveStrip(onlineUsers, usersInfo);
-
-  // Hover players
-  setupHoverPreviews();
-}
   // Barre live
   renderLiveStrip(onlineUsers, usersInfo);
 
@@ -545,6 +530,9 @@ async function init() {
   // Conseils communautaires TENF
   initTipsRotator();
 }
+
+
+
 
 /* -------------------------------------------------------
    GO !
