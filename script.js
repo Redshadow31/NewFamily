@@ -464,14 +464,35 @@ async function renderFeaturedLive(onlineUsers, usersInfo) {
 /* -------------------------------------------------------
    CALCUL DES STATS DISCORD / LIVES
 -------------------------------------------------------- */
-const stats = await fetch("/.netlify/functions/stats").then(r=>r.json());
+async function loadStats() {
+  try {
+    const res = await fetch("/.netlify/functions/stats", { cache: "no-store" });
+    if (!res.ok) {
+      console.warn("⚠ Impossible de charger /stats :", res.status);
+      return;
+    }
+    const stats = await res.json();
 
-setStatValue("stat-members", stats.members);
-setStatValue("stat-actifs", stats.active);
-setStatValue("stat-lives", stats.liveAvg);
-setStatValue("stat-events", stats.events);
+    setStatValue("stat-members", stats.members ?? 0);
+    setStatValue("stat-actifs", stats.active ?? 0);
+    setStatValue("stat-lives", stats.liveAvg ?? 0);
+    setStatValue("stat-events", stats.events ?? 0);
 
-document.getElementById("live-count").textContent = stats.liveNow;
+    const liveCountEl = document.getElementById("nf-live-count");
+    const liveTextEl = document.getElementById("live-count");
+    if (liveCountEl) liveCountEl.textContent = stats.liveNow ?? 0;
+    if (liveTextEl) liveTextEl.textContent = "live(s) en cours";
+  } catch (err) {
+    console.error("❌ Erreur lors du chargement des stats :", err);
+  }
+}
+
+function setStatValue(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = value;
+}
+
 
 
 /* -------------------------------------------------------
