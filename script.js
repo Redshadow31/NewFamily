@@ -464,31 +464,15 @@ async function renderFeaturedLive(onlineUsers, usersInfo) {
 /* -------------------------------------------------------
    CALCUL DES STATS DISCORD / LIVES
 -------------------------------------------------------- */
-async function loadStats() {
-  try {
-    const res = await fetch("stats.json", { cache: "no-store" });
-    if (!res.ok) return;
-    const data = await res.json();
+const stats = await fetch("/.netlify/functions/stats").then(r=>r.json());
 
-    // Stats descriptives
-    setStatValue("stat-members", data.members || 0);
-    setStatValue("stat-actifs", data.active || 0);
+setStatValue("stat-members", stats.members);
+setStatValue("stat-actifs", stats.active);
+setStatValue("stat-lives", stats.liveAvg);
+setStatValue("stat-events", stats.events);
 
-    // Moyenne des lives / 14 jours
-    const liveAvg = Math.round((data.liveHistory || []).reduce((a, b) => a + b, 0) / 14);
-    setStatValue("stat-lives", liveAvg);
-    setStatValue("stat-events", data.events || 0);
+document.getElementById("live-count").textContent = stats.liveNow;
 
-  } catch (err) {
-    console.warn("⚠ Impossible de charger stats.json");
-  }
-}
-
-function setStatValue(id, value) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = value;
-}
 
 /* -------------------------------------------------------
    INIT PRINCIPALE
