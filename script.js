@@ -12,6 +12,10 @@ const CURRENT_MONTH = new Date().toISOString().slice(0, 7);
 
 const clientId = "rr75kdousbzbp8qfjy0xtppwpljuke";
 let token = "";
+let NF_CARD_DATA = [];
+let NF_FILTER = { search: "", game: "all" };
+let NF_LIVE_CONTAINER = null;
+let NF_OFFLINE_CONTAINER = null;
 
 /* -------------------------------------------------------
    THEME
@@ -245,6 +249,117 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+/* -------------------------------------------------------
+   🧩 Cartes + filtres (recherche / jeu)
+-------------------------------------------------------- */
+function buildCardData(allUsers, onlineUsers, usersInfo, vipList) {
+  const onlineLogins = onlineUsers.map(u => (u.user_login || "").toLowerCase());
+
+  const uiMap = new Map();
+  (usersInfo || []).forEach(u => {
+    uiMap.set((u.login || "").toLowerCase(), u);
+  });
+
+  const streamMap = new Map();
+  (onlineUsers || []).forEach(s => {
+    streamMap.set((s.user_login || "").toLowerCase(), s);
+  });
+
+  const sortedUsers = [...allUsers].sort((a, b) => {
+    const aIsVip = vipList.includes(a.toLowerCase());
+    const bIsVip = vipList.includes(b.toLowerCase());
+    return aIsVip === bIsVip ? 0 : aIsVip ? -1 : 1;
+  });
+
+  NF_CARD_DATA = sortedUsers.map(user => {
+    const lower = user.toLowerCase();
+    const isOnline = onlineLogins.includes(lower);
+    const streamData = streamMap.get(lower) || null;
+    const userInfo = uiMap.get(lower) || null;
+    const isVip = vipList.includes(lower);
+    const gameName = streamData?.game_name || "";
+    return { user, lower, isOnline, streamData, userInfo, isVip, gameName };
+  });
+}
+
+function applyFiltersAndRender() {
+  if (!NF_LIVE_CONTAINER || !NF_OFFLINE_CONTAINER) return;
+  NF_LIVE_CONTAINER.innerHTML = "";
+  NF_OFFLINE_CONTAINER.innerHTML = "";
+
+  const search = (NF_FILTER.search || "").trim().toLowerCase();
+  const game = (NF_FILTER.game || "all").toLowerCase();
+
+  for (const data of NF_CARD_DATA) {
+    if (search && !data.lower.includes(search)) continue;
+
+    if (data.isOnline && game !== "all") {
+      if (!data.gameName || data.gameName.toLowerCase() !== game) continue;
+    }
+
+    const card = createUserCard({
+      user: data.user,
+      isOnline: data.isOnline,
+      streamData: data.streamData,
+      userInfo: data.userInfo,
+      isVip: data.isVip
+    });
+
+    (data.isOnline ? NF_LIVE_CONTAINER : NF_OFFLINE_CONTAINER).appendChild(card);
+  }
+
+  // Rebranche les mini-lecteurs de survol sur les nouvelles cartes
+  setupHoverPreviews();
+}
+
+function setupLiveFilters(onlineUsers) {
+  const searchInput = document.getElementById("search-member");
+  const gameSelect = document.getElementById("filter-game");
+
+  if (gameSelect) {
+    const games = Array.from(
+      new Set(
+        (onlineUsers || [])
+          .map(u => (u.game_name || "").trim())
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b));
+
+    gameSelect.innerHTML =
+      '<option value="all">🎮 Tous les jeux</option>' +
+      games.map(g => `<option value="${g.toLowerCase()}">${g}</option>`).join("");
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      NF_FILTER.search = e.target.value || "";
+      applyFiltersAndRender();
+    });
+  }
+
+  if (gameSelect) {
+    gameSelect.addEventListener("change", (e) => {
+      NF_FILTER.game = e.target.value || "all";
+      applyFiltersAndRender();
+    });
+  }
+}
+  const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
+  const sortedUsers = [...allUsers].sort((a, b) => {
+    const aIsVip = vipList.includes(a.toLowerCase());
+    const bIsVip = vipList.includes(b.toLowerCase());
+    return aIsVip === bIsVip ? 0 : aIsVip ? -1 : 1;
+  });
+
+  for (const user of sortedUsers) {
+    const lower = user.toLowerCase();
+    const isOnline = onlineLogins.includes(lower);
+    const streamData = isOnline ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower) : null;
+    const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
+    const isVip = vipList.includes(lower);
+    const card = createUserCard({ user, isOnline, streamData, userInfo, isVip });
+    (isOnline ? liveContainer : offlineContainer).appendChild(card);
+  }
 
 /* -------------------------------------------------------
    📊 Stats dynamiques
