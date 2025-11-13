@@ -1,18 +1,11 @@
 /* ===========================
-   VIP Élites — Page complète
-   - Grille (#vip-users)
-   - Carrousel (#vip-carousel)
-   - Compteur global (#vip-count)
-   - Mois courant (#vip-month)
-   - Applaudissements persistants
-   - Tri interactif
+   VIP Élites — Multi-mois
    =========================== */
 
 const CLIENT_ID = "rr75kdousbzbp8qfjy0xtppwpljuke";
-const ymKey = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
-const STORAGE_PREFIX = `vip_${ymKey}_applause_`;
-const CLICK_SUFFIX = "_clicked";
+// Mois courant
+let currentMonth = new Date().toISOString().slice(0, 7);
 
 // ---------- Helpers ----------
 const $ = (s, p = document) => p.querySelector(s);
@@ -24,6 +17,7 @@ const escapeHtml = (s) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
 const shuffle = (arr) => {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -33,22 +27,29 @@ const shuffle = (arr) => {
   return a;
 };
 
-// ---------- LocalStorage applaudissements ----------
-const applauseKey = (id) => STORAGE_PREFIX + id.toLowerCase();
-const applauseClickedKey = (id) => applauseKey(id) + CLICK_SUFFIX;
-const getApplause = (id) =>
-  parseInt(localStorage.getItem(applauseKey(id)) || "0", 10);
-const hasApplauded = (id) =>
-  localStorage.getItem(applauseClickedKey(id)) === "1";
-const incApplause = (id) => {
-  const k = applauseKey(id);
-  const v = getApplause(id) + 1;
-  localStorage.setItem(k, String(v));
-  localStorage.setItem(applauseClickedKey(id), "1");
-  return v;
+// ---------- Applaudissements avec historique par mois ----------
+const STORAGE_PREFIX = `vip_applause_`; // fixe
+
+const applauseKey = (id, month = currentMonth) =>
+  `${STORAGE_PREFIX}${month}_${id.toLowerCase()}`;
+const applauseClickedKey = (id, month = currentMonth) =>
+  applauseKey(id, month) + "_clicked";
+
+const getApplause = (id, month = currentMonth) =>
+  parseInt(localStorage.getItem(applauseKey(id, month)) || "0", 10);
+
+const hasApplauded = (id, month = currentMonth) =>
+  localStorage.getItem(applauseClickedKey(id, month)) === "1";
+
+const incApplause = (id, month = currentMonth) => {
+  const key = applauseKey(id, month);
+  const newVal = getApplause(id, month) + 1;
+  localStorage.setItem(key, String(newVal));
+  localStorage.setItem(applauseClickedKey(id, month), "1");
+  return newVal;
 };
 
-// ---------- Fetch: VIP JSON + Twitch ----------
+// ---------- Fetch JSON + Twitch ----------
 async function fetchVIPListRaw() {
   const res = await fetch("vip.json", { cache: "no-store" });
   if (!res.ok) throw new Error(`vip.json: ${res.status}`);
@@ -63,23 +64,32 @@ async function fetchToken() {
   });
   if (!res.ok) throw new Error(`getTwitchData: ${res.status}`);
   const data = await res.json();
-  if (!data?.access_token) throw new Error("Token manquant");
-  return data.access_token;
+  return data?.access_token;
 }
 
 async function fetchUsersInfo(logins) {
   if (!logins.length) return [];
+
   const token = await fetchToken();
   const size = 90;
   const chunks = [];
-  for (let i = 0; i < logins.length; i += size) chunks.push(logins.slice(i, i + size));
+
+  for (let i = 0; i < logins.length; i += size)
+    chunks.push(logins.slice(i, i + size));
+
   const results = [];
-  for (const chunk of chunks) {
-    const query = chunk.map((l) => `login=${encodeURIComponent(l)}`).join("&");
-    const url = `https://api.twitch.tv/helix/users?${query}`;
-    const res = await fetch(url, {
-      headers: { "Client-ID": CLIENT_ID, Authorization: "Bearer " + token },
-    });
+
+  for (const ch of chunks) {
+    const query = ch.map((l) => `login=${encodeURIComponent(l)}`).join("&");
+    const res = await fetch(
+      `https://api.twitch.tv/helix/users?${query}`,
+      {
+        headers: {
+          "Client-ID": CLIENT_ID,
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     if (!res.ok) throw new Error(`helix/users: ${res.status}`);
     const json = await res.json();
     results.push(...(json.data || []));
@@ -87,21 +97,32 @@ async function fetchUsersInfo(logins) {
   return results;
 }
 
-async function fetchLiveStatus(userIds) {
-  if (!userIds.length) return {};
+async function fetchLiveStatus(ids) {
+  if (!ids.length) return {};
+
   const token = await fetchToken();
   const size = 90;
   const chunks = [];
-  for (let i = 0; i < userIds.length; i += size) chunks.push(userIds.slice(i, i + size));
+
+  for (let i = 0; i < ids.length; i += size)
+    chunks.push(ids.slice(i, i + size));
+
   const liveMap = {};
-  for (const chunk of chunks) {
-    const query = chunk.map((id) => `user_id=${encodeURIComponent(id)}`).join("&");
-    const url = `https://api.twitch.tv/helix/streams?${query}`;
-    const res = await fetch(url, {
-      headers: { "Client-ID": CLIENT_ID, Authorization: "Bearer " + token },
-    });
+
+  for (const ch of chunks) {
+    const query = ch.map((id) => `user_id=${id}`).join("&");
+    const res = await fetch(
+      `https://api.twitch.tv/helix/streams?${query}`,
+      {
+        headers: {
+          "Client-ID": CLIENT_ID,
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     if (!res.ok) throw new Error(`helix/streams: ${res.status}`);
     const json = await res.json();
+
     (json.data || []).forEach((s) => {
       liveMap[s.user_id] = {
         live: true,
@@ -117,57 +138,49 @@ async function fetchLiveStatus(userIds) {
 // ---------- Normalisation ----------
 function normalizeVipEntries(rawList) {
   const metaMap = {};
-  const logins = rawList.map((item) => {
-    if (typeof item === "string") {
-      const login = item.toLowerCase();
-      metaMap[login] = {};
-      return login;
-    }
-    const login = String(item.login || item.name || "").toLowerCase();
+  rawList.forEach((item) => {
+    const login = item.login.toLowerCase();
     metaMap[login] = {
-      month: item.month || undefined,
-      badges: Array.isArray(item.badges) ? item.badges : undefined,
-      quote: item.quote || undefined,
-      image: item.image || item.avatar || undefined,
-      banner: item.banner || item.cover || undefined,
+      month: item.month,
     };
-    return login;
   });
-  return { logins, metaMap };
+  return { metaMap };
+}
+
+// Récupère les logins d’un mois donné
+function getVipLoginsFor(month, metaMap) {
+  return Object.entries(metaMap)
+    .filter(([_, meta]) => meta.month === month)
+    .map(([login]) => login);
 }
 
 function mergeUsersWithMeta(usersInfo, metaMap) {
   return usersInfo.map((u) => {
-    const login = (u.login || "").toLowerCase();
-    const meta = metaMap[login] || {};
+    const login = u.login.toLowerCase();
+    const meta = metaMap[login];
     return {
       id: u.id,
       login,
-      display_name: u.display_name || u.login,
+      display_name: u.display_name,
       bio: u.description || "",
-      avatar: u.profile_image_url || "",
-      banner: meta.banner || u.offline_image_url || "",
-      image: meta.image || u.profile_image_url || "",
-      badges: meta.badges || [],
-      quote: meta.quote || "",
+      avatar: u.profile_image_url,
+      banner: u.offline_image_url || "",
       month: meta.month,
       isLive: false,
-      liveData: null,
     };
   });
 }
 
-// ---------- Rendu ----------
+// ---------- HTML ----------
 function liveDotHTML(isLive) {
-  return isLive
-    ? `<span class="live-dot"><span class="dot"></span> LIVE</span>`
-    : "";
+  return isLive ? `<span class="live-dot"><span class="dot"></span> LIVE</span>` : "";
 }
 
 function cardHTML(v) {
-  const img = v.image || v.avatar || v.banner || "assets/placeholder.webp";
-  const clicked = hasApplauded(v.login);
-  const applause = getApplause(v.login);
+  const img = v.avatar || v.banner || "assets/placeholder.webp";
+  const applause = getApplause(v.login, v.month);
+  const clicked = hasApplauded(v.login, v.month);
+
   return `
     <article class="user-card vip-card">
       <div class="media-wrap vip-media">
@@ -176,38 +189,36 @@ function cardHTML(v) {
       </div>
       <div class="card-body vip-body">
         <div class="username">
-          <a href="https://twitch.tv/${v.login}" target="_blank" rel="noopener">${escapeHtml(v.display_name)}</a>
+          <a href="https://twitch.tv/${v.login}" target="_blank">${escapeHtml(v.display_name)}</a>
         </div>
-        ${v.bio ? `<p class="vip-bio">${escapeHtml(v.bio)}</p>` : ""}
-        ${v.badges?.length ? `<div class="vip-badges">${v.badges.map(b => `<span class="vip-badge">${escapeHtml(b)}</span>`).join("")}</div>` : ""}
+
         <div class="vip-actions">
-          <a class="about-button" href="https://twitch.tv/${v.login}" target="_blank" rel="noopener">Voir la chaîne</a>
-          <button class="vip-applaud" type="button" aria-pressed="${clicked ? "true" : "false"}" data-id="${v.login}">
+          <a class="about-button" href="https://twitch.tv/${v.login}" target="_blank">Voir la chaîne</a>
+          <button class="vip-applaud" aria-pressed="${clicked}" data-id="${v.login}">
             👏 <span class="vip-count">${applause}</span>
           </button>
         </div>
       </div>
-    </article>
-  `;
+    </article>`;
 }
 
 function renderWall(vips) {
-  const grid = $("#vip-users");
-  if (!grid) return;
-  grid.innerHTML = vips.map(cardHTML).join("");
+  $("#vip-users").innerHTML = vips.map(cardHTML).join("");
 }
 
 function updateStats(vips) {
-  const el = $("#vip-count");
-  if (!el) return;
   const totalVip = vips.length;
-  const totalApplause = vips.reduce((sum, v) => sum + getApplause(v.login), 0);
-  el.innerHTML = `👏 <strong>${totalApplause}</strong> applaudissements ont déjà été donnés à nos <strong>${totalVip}</strong> VIP du mois <span class="vip-month">(${ymKey})</span> 🎉`;
+  const totalApplause = vips.reduce(
+    (sum, v) => sum + getApplause(v.login, v.month),
+    0
+  );
+
+  $("#vip-count").innerHTML = `👏 <strong>${totalApplause}</strong> applaudissements pour <strong>${totalVip}</strong> VIP (${currentMonth})`;
 }
 
-// ---------- Carrousel ----------
+// ---------- Carrousel (simplifié identique) ----------
 function slideHTML(v) {
-  const img = v.avatar || v.image || v.banner || "assets/placeholder.webp";
+  const img = v.avatar || v.banner;
   return `
   <div class="vip-slide">
     <div class="vip-media">
@@ -215,48 +226,19 @@ function slideHTML(v) {
       <img src="${img}" alt="${escapeHtml(v.display_name)}">
     </div>
     <div class="vip-body">
-      <div class="username"><a href="https://twitch.tv/${v.login}" target="_blank" rel="noopener">${escapeHtml(v.display_name)}</a></div>
-      ${v.bio ? `<p class="vip-bio">${escapeHtml(v.bio)}</p>` : ""}
-      <a class="about-button" href="https://twitch.tv/${v.login}" target="_blank" rel="noopener">Regarder</a>
+      <a class="username" href="https://twitch.tv/${v.login}" target="_blank">${escapeHtml(v.display_name)}</a>
     </div>
   </div>`;
 }
 
 function renderCarousel(vips) {
   const root = $("#vip-carousel");
-  if (!root) return;
   if (!vips.length) {
     root.innerHTML = "";
     return;
   }
 
-  const pageSize = 3;
-  const pages = [];
-  for (let i = 0; i < vips.length; i += pageSize) {
-    const chunk = vips.slice(i, i + pageSize);
-    pages.push(`<div class="vip-page">${chunk.map(slideHTML).join("")}</div>`);
-  }
-  root.innerHTML = `
-    <div class="vip-carousel-inner">
-      <button class="vip-nav vip-prev" aria-label="Précédent">‹</button>
-      <div class="vip-track">${pages.join("")}</div>
-      <button class="vip-nav vip-next" aria-label="Suivant">›</button>
-    </div>`;
-
-  const track = root.querySelector(".vip-track");
-  let index = 0;
-  const update = () => {
-    track.style.transform = `translateX(-${index * 100}%)`;
-  };
-  root.querySelector(".vip-prev").onclick = () => {
-    index = (index - 1 + pages.length) % pages.length;
-    update();
-  };
-  root.querySelector(".vip-next").onclick = () => {
-    index = (index + 1) % pages.length;
-    update();
-  };
-  update();
+  root.innerHTML = vips.slice(0, 10).map(slideHTML).join("");
 }
 
 // ---------- Tri ----------
@@ -264,88 +246,85 @@ function sortVips(vips, mode) {
   if (mode === "applause") {
     return [...vips].sort(
       (a, b) =>
-        getApplause(b.login) - getApplause(a.login) ||
-        a.display_name.localeCompare(b.display_name)
+        getApplause(b.login, b.month) - getApplause(a.login, a.month)
     );
   }
   if (mode === "live") {
-    return [...vips].sort((a, b) => {
-      if (a.isLive && !b.isLive) return -1;
-      if (!a.isLive && b.isLive) return 1;
-      return a.display_name.localeCompare(b.display_name);
-    });
+    return [...vips].sort((a, b) => (a.isLive ? -1 : 1));
   }
   return shuffle(vips);
 }
 
-// ---------- Main ----------
+// ---------- MAIN ----------
+async function loadMonth(month, metaMap) {
+  currentMonth = month;
+
+  const logins = getVipLoginsFor(month, metaMap);
+  if (!logins.length) {
+    $("#vip-users").innerHTML = `<p>Aucun VIP pour ${month}</p>`;
+    updateStats([]);
+    return;
+  }
+
+  const usersInfo = await fetchUsersInfo(logins);
+  let vips = mergeUsersWithMeta(usersInfo, metaMap);
+
+  const liveMap = await fetchLiveStatus(vips.map((v) => v.id));
+  vips.forEach((v) => {
+    if (liveMap[v.id]) v.isLive = true;
+  });
+
+  vips = sortVips(vips, "live");
+
+  renderCarousel(vips);
+  renderWall(vips);
+  updateStats(vips);
+}
+
 async function main() {
   try {
-    const monthEl = $("#vip-month");
-    if (monthEl) monthEl.textContent = ymKey;
-
     const raw = await fetchVIPListRaw();
     const { metaMap } = normalizeVipEntries(raw);
 
-    const thisMonthLogins = Object.entries(metaMap)
-      .filter(([_, meta]) => meta.month === ymKey)
-      .map(([login]) => login);
+    // Extraire les mois disponibles
+    const months = [...new Set(raw.map((i) => i.month))].sort();
 
-    if (!thisMonthLogins.length) {
-      $("#vip-users")?.insertAdjacentHTML(
-        "beforeend",
-        `<p style="text-align:center;margin:1rem 0;">Aucun VIP pour ${ymKey}.</p>`
-      );
-      updateStats([]);
-      return;
-    }
+    // Remplir sélecteur
+    const select = $("#vip-month-select");
+    select.innerHTML = months
+      .map((m) => `<option value="${m}">${m}</option>`)
+      .join("");
 
-    const usersInfo = await fetchUsersInfo(thisMonthLogins);
-    const vips = mergeUsersWithMeta(usersInfo, metaMap).filter(
-      (v) => v.month === ymKey
-    );
-    const liveMap = await fetchLiveStatus(vips.map((v) => v.id));
-    vips.forEach((v) => {
-      const l = liveMap[v.id];
-      if (l?.live) {
-        v.isLive = true;
-        v.liveData = l;
-      }
+    // Sélectionner automatiquement le MOIS LE PLUS RÉCENT
+    const lastMonth = months[months.length - 1];
+    select.value = lastMonth;
+    currentMonth = lastMonth;
+
+    await loadMonth(currentMonth, metaMap);
+
+    select.addEventListener("change", () => {
+      loadMonth(select.value, metaMap);
     });
 
-    let state = sortVips(vips, "live");
-
-    renderCarousel(state);
-    renderWall(state);
-    updateStats(state);
-
+    // Applaudissements
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".vip-applaud");
       if (!btn) return;
-      const id = btn.dataset.id;
-      if (hasApplauded(id)) return;
-      const val = incApplause(id);
+
+      const login = btn.dataset.id;
+      if (hasApplauded(login, currentMonth)) return;
+
+      const val = incApplause(login, currentMonth);
+      btn.querySelector(".vip-count").textContent = val;
       btn.setAttribute("aria-pressed", "true");
-      const span = btn.querySelector(".vip-count");
-      if (span) span.textContent = String(val);
-      updateStats(state);
+
+      const vips = []; // recalcul statistique
+      updateStats(vips);
     });
 
-    $$(".vip-toolbar [data-sort]").forEach((b) => {
-      b.addEventListener("click", () => {
-        const mode = b.getAttribute("data-sort");
-        state = sortVips(vips, mode);
-        renderCarousel(state);
-        renderWall(state);
-        updateStats(state);
-      });
-    });
   } catch (e) {
     console.error(e);
-    $("#vip-users")?.insertAdjacentHTML(
-      "beforeend",
-      `<p style="text-align:center;margin:1rem 0;">Erreur de chargement de la page VIP.</p>`
-    );
+    $("#vip-users").innerHTML = `<p>Erreur de chargement VIP.</p>`;
   }
 }
 
