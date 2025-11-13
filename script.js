@@ -698,22 +698,13 @@ async function init() {
     return;
   }
 
-  const onlineLogins = onlineUsers.map((u) => (u.user_login || "").toLowerCase());
-  const sortedUsers = [...allUsers].sort((a, b) => {
-    const aIsVip = vipList.includes(a.toLowerCase());
-    const bIsVip = vipList.includes(b.toLowerCase());
-    return aIsVip === bIsVip ? 0 : aIsVip ? -1 : 1;
-  });
+NF_LIVE_CONTAINER = liveContainer;
+NF_OFFLINE_CONTAINER = offlineContainer;
 
-  for (const user of sortedUsers) {
-    const lower = user.toLowerCase();
-    const isOnline = onlineLogins.includes(lower);
-    const streamData = isOnline ? onlineUsers.find((u) => (u.user_login || "").toLowerCase() === lower) : null;
-    const userInfo = usersInfo.find((u) => (u.login || "").toLowerCase() === lower);
-    const isVip = vipList.includes(lower);
-    const card = createUserCard({ user, isOnline, streamData, userInfo, isVip });
-    (isOnline ? liveContainer : offlineContainer).appendChild(card);
-  }
+buildCardData(allUsers, onlineUsers, usersInfo, vipList);
+setupLiveFilters(onlineUsers);
+applyFiltersAndRender();
+
 
   // Texte barre
   const liveCountElement = document.getElementById("live-count");
