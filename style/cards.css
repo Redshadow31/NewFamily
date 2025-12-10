@@ -1,0 +1,280 @@
+/* Base commune carte */
+.card,.user-card,.staff-card,.vip-card{
+  background:var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius:var(--radius-base);
+  box-shadow:var(--shadow-card);
+  overflow:hidden;
+  transition:transform var(--transition-base), box-shadow var(--transition-base);
+}
+.card:hover,.user-card:hover,.staff-card:hover,.vip-card:hover{
+  transform:scale(1.02);
+  box-shadow:var(--shadow-hover);
+}
+
+/* Grilles utilisateurs TENF-V2 */
+.users-grid{
+  max-width:1280px;
+  margin:1rem auto;
+  padding:0 1rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1rem;
+}
+
+@media (min-width:640px) {
+  .users-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+@media (min-width:768px) {
+  .users-grid {
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+@media (min-width:1024px) {
+  .users-grid {
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+
+/* User card */
+.user-card{display:flex;flex-direction:column; position:relative}
+.user-card .media-wrap{position:relative;overflow:hidden}
+.user-card .card-thumb,
+.user-card img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;border:0;transition:transform .35s ease}
+.user-card:hover .media-wrap img{transform:scale(1.04)}
+.card-body{padding:.9rem .95rem .95rem;border-top:1px solid var(--color-border);background:var(--color-card);display:flex;flex-direction:column;gap:.35rem;flex:1}
+.username{font-weight:700; color:var(--color-text)}
+.title{color:var(--color-text-secondary)}
+.card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.card-footer a{
+  background:var(--color-primary);
+  padding:.45rem .7rem;
+  border-radius:var(--radius-base);
+  text-decoration:none;
+  font-weight:600;
+  color:#fff;
+  transition:var(--transition-colors);
+}
+.card-footer a:hover{
+  background:var(--color-primary-dark);
+}
+.user-card.offline{opacity:1;filter:none}
+.user-card.offline .media-wrap img{filter:grayscale(.85) brightness(.5)}
+
+/* Badges génériques TENF-V2 */
+.badge{
+  display:inline-flex;align-items:center;gap:6px; font-size:.8rem;font-weight:600;
+  border-radius:var(--radius-base); padding:.25rem .65rem; backdrop-filter:blur(4px); letter-spacing:.2px; white-space:nowrap;
+}
+.user-card .badge{
+  position:absolute; top:10px; left:10px;
+  background:var(--color-primary);
+  color:#fff;
+  border:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.35);
+}
+
+/* Badges selon rôles TENF-V2 */
+.badge--staff,
+.badge--founder,
+.badge--referent {
+  background:var(--color-primary);
+  color:#fff;
+  border:none;
+}
+
+.badge--dev,
+.badge--tech,
+.badge--adjoint,
+.badge--adjoint-ref,
+.badge--support {
+  background:var(--color-primary-dark);
+  color:#fff;
+  border:none;
+}
+
+.badge--junior,
+.badge--affilie {
+  background:rgba(145, 70, 255, 0.2);
+  color:var(--color-primary);
+  border:1px solid rgba(145, 70, 255, 0.3);
+}
+
+.badge--mentor {
+  background:#6b7280;
+  color:#fff;
+  border:none;
+}
+
+/* Staff */
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,260px));gap:22px;justify-content:center}
+.staff-card{max-width:260px;text-align:center;background:var(--color-card);border:1px solid var(--color-border)}
+.staff-card .avatar-box{position:relative;background:transparent}
+.staff-card img.avatar{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+
+/* Avatar avec fallback gradient TENF-V2 */
+.avatar-fallback,
+.staff-card .avatar-fallback {
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:700;
+  font-size:1.5rem;
+  border:3px solid var(--color-primary);
+  box-shadow:0 0 12px rgba(145,70,255,.35);
+}
+
+.staff-card .badge{position:absolute;top:10px;left:10px;color:#fff;border:none;box-shadow:0 4px 10px rgba(0,0,0,.35)}
+.badge--founder{ background: var(--color-primary); }
+.badge--adjoint{ background: var(--color-primary-dark); }
+.badge--mentor{  background: #6b7280; }
+.badge--junior{  background: rgba(145, 70, 255, 0.2); color: var(--color-primary); border: 1px solid rgba(145, 70, 255, 0.3); }
+.body{padding:.6rem .3rem 0;text-align:center}
+.name{margin:.35rem 0 .15rem; color:var(--color-text); font-weight:700}
+.desc{color:var(--color-text-secondary);font-size:.95rem;line-height:1.35}
+.body .btns{display:flex;gap:.5rem;justify-content:center;margin-top:.5rem}
+
+/* VIP card (réutilise user-card) TENF-V2 */
+.vip-card{position:relative}
+.vip-card::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  border-radius:50%;
+  background:radial-gradient(closest-side, rgba(145, 70, 255, 0.2), rgba(145, 70, 255, 0));
+  transform:scale(.6);
+  opacity:0;
+  transition:opacity .25s ease, transform .25s ease;
+  z-index:0;
+}
+.vip-card:hover::before{
+  opacity:1;
+  transform:scale(1);
+}
+.vip-card .card-body,.vip-card .media-wrap,.vip-card .vip-badges{position:relative;z-index:1}
+
+/* Gradient violet TENF-V2 */
+.gradient-violet {
+  background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+}
+.gradient-violet-light {
+  background:linear-gradient(135deg, rgba(145, 70, 255, 0.2), rgba(90, 50, 180, 0.2));
+}
+
+/* LIVE pill overlay TENF-V2 */
+.live-dot,
+.badge--live,
+.badge.live {
+  position:absolute;
+  left:10px;
+  top:10px;
+  display:inline-flex;
+  align-items:center;
+  gap:.3rem;
+  background:#dc2626;
+  color:#fff;
+  border-radius:var(--radius-base);
+  padding:.25rem .6rem;
+  font-weight:700;
+  font-size:.75rem;
+  box-shadow:0 2px 8px rgba(220, 38, 38, 0.4);
+  border:none;
+}
+.live-dot::before,
+.badge--live::before {
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 0 0 rgba(255,255,255,.8);
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}
+  70%{box-shadow:0 0 0 8px rgba(255,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
+}
+/* ===============================
+   ✅ Correctif STAFF – priorité finale
+   =============================== */
+
+/* Avatars ronds et stables */
+.staff-card .avatar-box {
+  background: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: .5rem 0 !important;
+}
+.staff-card img.avatar {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  aspect-ratio: 1 / 1 !important;
+  border: 3px solid var(--color-primary);
+  box-shadow: 0 0 12px rgba(145, 70, 255, 0.35);
+  background: var(--color-card);
+}
+
+/* Badges lisibles selon rôle */
+.staff-card .badge {
+  background: var(--color-primary) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 0.78rem !important;
+  border-radius: var(--radius-base) !important;
+  padding: .18rem .46rem !important;
+  border: none !important;
+  backdrop-filter: blur(3px) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,.35) !important;
+}
+
+/* Rôles colorés */
+.badge--referent   { background:var(--color-primary) !important; color:#fff !important; }
+.badge--adjoint-ref{ background:var(--color-primary-dark) !important; color:#fff !important; }
+.badge--mentor     { background:#6b7280 !important; color:#fff !important; }
+.badge--junior     { background:rgba(145, 70, 255, 0.2) !important; color:var(--color-primary) !important; border: 1px solid rgba(145, 70, 255, 0.3) !important; }
+.badge--support    { background:var(--color-primary-dark) !important; color:#fff !important; }
+.badge--tech       { background:var(--color-primary) !important; color:#fff !important; }
+
+/* ===== Badge VIP (bottom right) TENF-V2 ===== */
+.vip-chip {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: .25rem .5rem;
+  border-radius: 999px;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,.35);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+@keyframes badgePulse {
+  0%   { transform: scale(1);   opacity: 1; }
+  50%  { transform: scale(1.15); opacity: 0.85; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.badge::before,
+.vip-chip::before {
+  content: "⭐";
+  font-size: .78rem;
+  display: inline-block;
+  animation: badgePulse 1.8s infinite ease-in-out;
+}
+
+/* Badge VIP animé - déjà défini ci-dessus */

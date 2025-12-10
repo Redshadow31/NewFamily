@@ -1,0 +1,63 @@
+/* Dark mode TENF-V2 - Toujours actif */
+:root{
+  /* Le design TENF-V2 est toujours en mode sombre */
+  --bg: var(--color-bg);
+  --surface: var(--color-card);
+  --surface-2: #252529;
+  --text: var(--color-text);
+  --muted: var(--color-text-secondary);
+  --border: var(--color-border);
+  --accent: var(--color-primary);
+  --accent-2: #ff4757;
+  --shadow: var(--shadow-card);
+}
+
+html, body, html.dark, body.dark, [data-theme="dark"]{
+  background-color:var(--color-bg) !important; 
+  color:var(--color-text) !important;
+}
+
+/* Cartes & éléments - toujours en mode sombre TENF-V2 */
+.card, .user-card, .staff-card, .vip-card,
+html.dark .card, html.dark .user-card, html.dark .staff-card, html.dark .vip-card,
+[data-theme="dark"] .card, [data-theme="dark"] .user-card, [data-theme="dark"] .staff-card, [data-theme="dark"] .vip-card{
+  background:var(--color-card); 
+  box-shadow:var(--shadow-card); 
+  border:1px solid var(--color-border);
+}
+.card-body, html.dark .card-body, [data-theme="dark"] .card-body{ 
+  background:var(--color-card); 
+  border-top:1px solid var(--color-border) 
+}
+.username, .title, .card-footer, 
+html.dark .username, html.dark .title, html.dark .card-footer, 
+[data-theme="dark"] .username, [data-theme="dark"] .title, [data-theme="dark"] .card-footer{ 
+  color:var(--color-text) 
+}
+.card-footer a, html.dark .card-footer a, [data-theme="dark"] .card-footer a{ 
+  background:var(--color-primary); 
+  color:#fff; 
+  border:none;
+  transition:var(--transition-colors);
+}
+.card-footer a:hover, html.dark .card-footer a:hover, [data-theme="dark"] .card-footer a:hover{ 
+  background:var(--color-primary-dark);
+}
+
+/* Inputs - toujours en mode sombre */
+input, select, textarea,
+html.dark input, html.dark select, html.dark textarea,
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea{
+  background:var(--color-card); 
+  color:var(--color-text); 
+  border:1px solid var(--color-border);
+}
+
+/* Liens */
+a, html.dark a, [data-theme="dark"] a{ 
+  color:var(--color-text);
+  transition:var(--transition-colors);
+}
+a:hover, html.dark a:hover, [data-theme="dark"] a:hover{ 
+  color:var(--color-primary);
+}

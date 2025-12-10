@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>📰 Actualités – New Family</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/main.css">
+
+</head>
+<body>
+  <!-- Header identique -->
+  <header>
+    <div class="header-content">
+      <div class="header-logo">
+        <img src="assets/logo.webp" alt="Logo New Family" />
+      </div>
+      <div class="header-text">
+        <h1>📰 Actualités de la New Family</h1>
+        <p>Les annonces et moments forts de la communauté</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Bouton retour comme dans a-propos -->
+  <div class="header-button-wrapper">
+    <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+  </div>
+
+  <main>
+    <!-- Filtres -->
+    <section class="blog-toolbar">
+      <input id="search" type="search" placeholder="Rechercher un article..." />
+      <select id="tagFilter">
+        <option value="">Tous les tags</option>
+      </select>
+    </section>
+
+    <!-- Grille de vignettes -->
+    <section id="blog-grid" class="blog-grid"></section>
+  </main>
+
+  <script src="blog.js"></script>
+</body>
+</html>
+

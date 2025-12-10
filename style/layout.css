@@ -1,0 +1,296 @@
+/* ===========================
+   LAYOUT (header, socials, live strip, backbar)
+   =========================== */
+
+/* ===== HEADER — version moderne TENF-V2 ===== */
+header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  min-height: clamp(300px, 48vh, 540px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+
+  /* Fond sombre avec gradient violet subtil */
+  background:
+    radial-gradient(1200px 600px at 20% -20%, rgba(145, 70, 255, 0.15), transparent 60%),
+    radial-gradient(1200px 600px at 110% 10%, rgba(145, 70, 255, 0.1), transparent 60%),
+    var(--color-bg);
+
+  color: var(--color-text);
+  padding: clamp(1.2rem, 3.5vw, 2.2rem) 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  background-color: rgba(14, 14, 16, 0.95);
+  overflow: hidden;
+}
+
+/* Header compact pour pages secondaires */
+header.compact,
+header.hero {
+  min-height: clamp(180px, 28vh, 320px) !important;
+  padding: clamp(.8rem, 2.5vw, 1.4rem) 1rem !important;
+}
+
+.header-content{
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+/* Logo optionnel au centre */
+
+
+.header-logo img:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.45));
+}
+
+/* Titres et sous-titres */
+.header-text h1{
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: .4rem 0;
+  color: var(--color-text);
+}
+.header-text p{
+  opacity: .9;
+  margin: .2rem 0 1rem;
+  color: var(--color-text-secondary);
+}
+
+/* Rangée de boutons sous le titre */
+.header-button-wrapper{
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: .8rem 0 1.2rem;
+}
+
+/* Bouton de switch thème (optionnel) */
+.theme-toggle{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-text);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  transition: var(--transition-colors);
+}
+.theme-toggle:hover{
+  border-color: var(--color-border-hover);
+  background: var(--color-card);
+}
+
+/* Header toujours en mode sombre (TENF-V2) */
+html.dark header,
+[data-theme="dark"] header,
+header{
+  background:
+    radial-gradient(1200px 600px at 20% -20%, rgba(145, 70, 255, 0.15), transparent 60%),
+    radial-gradient(1200px 600px at 110% 10%, rgba(145, 70, 255, 0.1), transparent 60%),
+    var(--color-bg);
+  background-color: rgba(14, 14, 16, 0.95);
+}
+html.dark .header-text h1,
+[data-theme="dark"] .header-text h1,
+.header-text h1{ color:var(--color-text) }
+html.dark .header-text p,
+[data-theme="dark"] .header-text p,
+.header-text p{ color:var(--color-text-secondary) }
+
+/* ===== Socials (header/footer) ===== */
+.socials{
+  display:flex;
+  gap:.6rem;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.socials__item{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.45rem .7rem;
+  border-radius:999px;
+  background:var(--color-card);
+  border:1px solid var(--color-border);
+  color:var(--color-text);
+  text-decoration:none;
+  transition:var(--transition-colors);
+}
+.socials__item:hover{
+  border-color:var(--color-border-hover);
+  color:var(--color-primary);
+}
+.socials__item img{ display:block }
+
+.site-footer{
+  max-width:1100px;
+  margin:2rem auto 2.4rem;
+  padding:0 1rem;
+  text-align:center;
+  color: var(--color-text-secondary);
+}
+.socials--footer{ justify-content:center; margin-top:.4rem }
+
+/* ===== Back bar (ex: bouton retour sur clips.html) ===== */
+.backbar{
+  position:relative;
+  max-width:1100px;
+  margin:1rem auto 0;
+  padding:0 1rem;
+  display:flex;
+  justify-content:center;
+}
+.backbar .btn{
+  position:static;
+  top:auto;
+  transform:none;
+}
+
+/* ===== Live strip (liste horizontale des lives) ===== */
+#live-strip,
+.live-strip{
+  max-width:1100px;
+  margin: .8rem auto 0;
+  padding: .6rem .75rem;
+  border-radius: var(--radius-base);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.live-strip__inner {
+  display: flex;
+  gap: .75rem;
+  overflow-x: auto;
+  scrollbar-width: thin;               /* barre fine (Firefox) */
+  scroll-snap-type: x proximity;       /* effet d’ancrage fluide */
+  -webkit-overflow-scrolling: touch;   /* défilement fluide sur mobile */
+}
+
+
+
+.live-chip{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  padding:.5rem .7rem;
+  border:1px solid var(--color-border);
+  background: var(--color-card);
+  border-radius: 999px;
+  scroll-snap-align:center;
+  box-shadow:0 3px 10px rgba(0,0,0,.25);
+  transition: var(--transition-colors), transform var(--transition-base);
+}
+.live-chip:hover{
+  transform: translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.35);
+  border-color:var(--color-border-hover);
+}
+
+.live-chip__avatar{
+  width:34px; height:34px; border-radius:50%;
+  object-fit:cover; display:block;
+}
+.live-chip__texts{ display:flex; flex-direction:column; line-height:1.1 }
+.live-chip__name{ font-weight:600; font-size:.92rem; color:var(--color-text) }
+.live-chip__game{ font-size:.78rem; opacity:.8; color:var(--color-text-secondary) }
+
+/* dot animé "LIVE" */
+.live-chip__dot{
+  width:8px; height:8px; border-radius:50%;
+  background:#ff4757; margin-left:.2rem;
+  box-shadow:0 0 0 0 rgba(255,71,87,.8);
+  animation: stripPulse 1.6s infinite;
+}
+@keyframes stripPulse{
+  0%  { box-shadow:0 0 0 0 rgba(255,71,87,.6) }
+  70% { box-shadow:0 0 0 7px rgba(255,71,87,0) }
+  100%{ box-shadow:0 0 0 0 rgba(255,71,87,0) }
+}
+
+/* Live strip — toujours en mode sombre (TENF-V2) */
+#live-strip,
+.live-strip{
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+}
+.live-chip{
+  border-color: var(--color-border);
+  background: var(--color-card);
+}
+.live-chip__name{ color:var(--color-text) }
+.live-chip__game{ color:var(--color-text-secondary) }
+/* ==== PATCH INDEX & STAFF ==== */
+
+/* 1) Header compact commun (index + staff) - appliqué via classe .hero ou .compact */
+header.hero,
+header.compact {
+  min-height: clamp(180px, 28vh, 320px) !important;
+  padding: clamp(.8rem, 2.5vw, 1.4rem) 1rem !important;
+  background:
+    radial-gradient(900px 420px at 20% -20%, rgba(145, 70, 255, 0.15), transparent 60%),
+    radial-gradient(900px 420px at 110% 10%, rgba(145, 70, 255, 0.1), transparent 60%),
+    var(--color-bg) !important;
+  background-color: rgba(14, 14, 16, 0.95) !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+}
+
+/* 2) INDEX — logo + overlay + blocs de boutons */
+.hero__logo{               /* <img class="hero__logo" ...> */
+  width: clamp(100px, 12vw, 150px);
+  height: auto;
+  display: block;
+  margin: 0 auto .4rem;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
+}
+.hero__overlay{ display:none; } /* si un overlay poussait le header */
+
+.button-container{         /* 1ère rangée de boutons */
+  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
+  margin:.6rem 0 .8rem;
+}
+
+.actions-row{              /* 2e rangée : VIP / Événements / Clips / ... */
+  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
+  margin:.8rem auto 0; padding:0 1rem; max-width:1100px;
+}
+
+/* 3) STAFF — logo dans la structure header-logo si présent */
+.header-logo img{
+  width: clamp(100px, 12vw, 150px);
+  height:auto;
+  margin-bottom:.4rem;
+}
+
+/* 4) Titres un peu plus compacts partout */
+.header-text h1{ 
+  font-size: clamp(1.4rem, 3.2vw, 2.2rem) !important; 
+  margin:.2rem 0 .2rem !important; 
+  font-weight: 700 !important;
+  color: var(--color-text) !important;
+}
+.header-text p { 
+  font-size: clamp(.9rem, 1.5vw, 1rem) !important;  
+  margin:0 0 .6rem !important; 
+  opacity:.9;
+  color: var(--color-text-secondary) !important;
+}

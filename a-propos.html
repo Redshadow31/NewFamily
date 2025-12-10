@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>À propos — Twitch Entraide New Family</title>
+ <link rel="stylesheet" href="style/main.css">
+
+  <style>
+    :root{
+      --nf-violet:#4b0082; --nf-rose:#e74c3c; --nf-or:#f1c40f; --nf-bg:#f5f5f5; --nf-card:#fff;
+    }
+    body{margin:0;background:var(--nf-bg);color:var(--nf-violet)}
+
+    /* ==== HERO PARALLAX + KINETIC TEXT ==== */
+    .hero{position:relative;min-height:68vh;display:grid;place-items:center;overflow:hidden;isolation:isolate}
+    .hero::before{content:"";position:absolute;inset:-10% -10% 0 -10%;background:
+      radial-gradient(1200px 500px at 10% -10%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1200px 500px at 90% 110%, rgba(255,255,255,.6), transparent),
+      linear-gradient(135deg,#fff 0%,#f7f1ff 55%,#fff0f3 100%);
+      transform:translateZ(0);z-index:-2}
+    .hero .parallax{position:absolute;inset:0;background:url('assets/dragon-parallax.webp') center/cover no-repeat;opacity:.10;transform:translateY(var(--offset,0px));z-index:-1;}
+    .hero .content{max-width:1000px;padding:2rem 1rem;text-align:center}
+    .hero h1{font-size:clamp(2rem,5vw,3rem);margin:.2rem 0 .4rem}
+    .kinetic{display:inline-block;white-space:nowrap;overflow:hidden;border-right:3px solid rgba(0,0,0,.15);animation:typing 5s steps(40,end) 1 forwards}
+    @keyframes typing{from{width:0}to{width:100%}}
+    .hero p{margin:.2rem 0 1rem;opacity:.9}
+    .hero .cta{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+    .hero .cta .btn{background:#fff;border:1px solid #ead9ff;border-radius:12px;padding:.6rem .9rem;text-decoration:none;color:var(--nf-violet);font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.06)}
+    .hero .cta .btn.primary{background:var(--nf-rose);border-color:transparent;color:#fff}
+
+    /* ==== REVEAL ==== */
+    .reveal{opacity:0;transform:translateY(14px);transition:.6s ease}
+    .reveal.in{opacity:1;transform:none}
+
+    /* ==== MANIFESTO (FLIP CARDS) ==== */
+    .manifesto{max-width:1100px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+    .flip{perspective:1000px}
+    .flip-inner{position:relative;transform-style:preserve-3d;transition:transform .6s}
+    .flip:hover .flip-inner{transform:rotateY(180deg)}
+    .card{background:var(--nf-card);border-radius:16px;box-shadow:0 10px 22px rgba(0,0,0,.08);padding:1.2rem;min-height:170px;display:grid;place-content:center;text-align:center}
+    .front,.back{position:absolute;inset:0;padding:1.2rem;border-radius:16px;backface-visibility:hidden}
+    .front{display:grid;place-content:center}
+    .back{transform:rotateY(180deg);background:#fff7dc;border:1px solid #ffe18b;color:#8a6d00}
+    .front h3{margin:.2rem 0 .4rem;color:#8e44ad}
+
+    /* ==== TIMELINE ==== */
+    .timeline{max-width:1100px;margin:2rem auto;padding:0 1rem}
+    .timeline h2{text-align:center}
+    .steps{position:relative;margin:1rem 0 0}
+    .steps::before{content:"";position:absolute;left:20px;top:0;bottom:0;width:3px;background:var(--nf-or)}
+    .step{position:relative;margin:1rem 0 1.2rem 3.2rem}
+    .step::before{content:"";position:absolute;left:-36px;top:.25rem;width:16px;height:16px;border-radius:50%;background:var(--nf-rose);box-shadow:0 0 0 4px rgba(231,76,60,.25)}
+    .step h4{margin:0;color:#8e44ad}
+
+    /* ==== FONDATEURS ==== */
+    .founders{max-width:1100px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+    .founder{position:relative;background:#fff;border-radius:16px;box-shadow:0 10px 22px rgba(0,0,0,.08);padding:1rem;text-align:center;overflow:hidden}
+    .founder::before{content:"";position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(closest-side, rgba(241,196,15,.32), rgba(241,196,15,0));transform:scale(.6);opacity:0;transition:.25s;z-index:0}
+    .founder:hover::before{opacity:1;transform:scale(1)}
+    .founder img{width:96px;height:96px;border-radius:999px;border:3px solid var(--nf-or);box-shadow:0 0 0 4px rgba(241,196,15,.2);object-fit:cover;position:relative;z-index:1}
+    .founder h3{margin:.5rem 0 .2rem;color:var(--nf-violet);position:relative;z-index:1}
+    .founder small{opacity:.8}
+    .badges{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin:.4rem 0}
+    .badges span{background:#f3e9ff;border:1px solid #ead9ff;padding:.24rem .5rem;border-radius:999px;font-size:.78rem}
+    .founder .btns{display:flex;gap:.5rem;justify-content:center;margin-top:.5rem;position:relative;z-index:1}
+    .founder .btn{background:#fff;border:1px solid #ead9ff;border-radius:10px;padding:.35rem .6rem;text-decoration:none;color:var(--nf-violet);font-weight:700}
+
+    /* ==== PACTE (ACCORDÉON) ==== */
+    .pacte{max-width:900px;margin:2rem auto;padding:0 1rem}
+    .acc{background:#fff;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,.08);overflow:hidden}
+    .acc details+details{border-top:1px solid #eee}
+    .acc summary{cursor:pointer;padding:1rem 1.2rem;font-weight:700;list-style:none}
+    .acc summary::marker, .acc summary::-webkit-details-marker{display:none}
+    .acc .panel{padding:0 1.2rem 1rem 1.2rem;color:#333}
+
+    /* ==== GALERIE ==== */
+    .gallery{max-width:1100px;margin:2rem auto;padding:0 1rem;columns:3 260px;column-gap:14px}
+    .gallery img{width:100%;margin:0 0 14px;border-radius:12px;display:block;break-inside:avoid;cursor:pointer;transition:transform .2s}
+    .gallery img:hover{transform:scale(1.02)}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999;padding:1rem}
+    .lightbox[aria-hidden="false"]{display:flex}
+    .lightbox img{max-width:min(90vw,1200px);max-height:85vh;border-radius:12px}
+
+    /* ==== TÉMOIGNAGES (CARROUSEL) ==== */
+    .testi{max-width:900px;margin:2rem auto;padding:0 1rem}
+    .testi .viewport{position:relative;overflow:hidden;border-radius:16px;background:#fff;box-shadow:0 10px 22px rgba(0,0,0,.08)}
+    .testi .track{display:flex;transition:transform .6s ease}
+    .testi .item{min-width:100%;padding:1.2rem}
+    .testi .item p{font-size:1.05rem}
+    .testi .dots{display:flex;gap:.4rem;justify-content:center;margin:.6rem 0}
+    .testi .dots button{width:8px;height:8px;border-radius:999px;border:0;background:#ddd}
+    .testi .dots button.active{background:var(--nf-rose)}
+
+    /* ==== CTA STICKY ==== */
+    .sticky-cta{position:fixed;left:50%;transform:translateX(-50%) translateY(120%);
+      bottom:10px;z-index:999;background:var(--nf-rose);color:#fff;text-decoration:none;font-weight:800;
+      padding:.8rem 1.1rem;border-radius:999px;box-shadow:0 14px 28px rgba(231,76,60,.35);transition:transform .35s}
+    .sticky-cta.show{transform:translateX(-50%) translateY(0)}
+
+    /* ==== ACCESSIBILITÉ ==== */
+    a:focus-visible, button:focus-visible{outline:3px solid var(--nf-or);outline-offset:3px}
+    @media (prefers-reduced-motion: reduce){
+      .kinetic{animation:none;border-right:0}
+      .flip:hover .flip-inner{transform:none}
+      .reveal{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER commun -->
+  <header>
+    <div class="header-content">
+      <div class="header-logo"><img src="assets/logo.webp" alt="Logo New Family" /></div>
+      <div class="header-text">
+        <h1>🎭 À propos de Twitch Entraide New Family</h1>
+        <p>Découvrez l’histoire, les valeurs et les fondateurs de notre communauté</p>
+      </div>
+         </div>
+       <div class="backbar">
+    <a class="btn btn--soft" href="index.html">🏠 Accueil</a>
+  </div>
+        <!-- Réseaux -->
+      <div class="nf-socials">
+  <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily"
+     target="_blank" rel="noopener" aria-label="Instagram New Family">
+    <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy">
+    @twitchentraidenewfamily
+  </a>
+
+  <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily"
+     target="_blank" rel="noopener" aria-label="TikTok New Family">
+    <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy">
+    @twitchentraidenewfamily
+  </a>
+</div>
+    </div>
+  </header>
+ 
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="parallax" aria-hidden="true"></div>
+    <div class="content reveal">
+      <h1 class="kinetic">Plus qu'un serveur, une aventure à vivre.</h1>
+      <p>Mentorat, raids, moments ensemble : on progresse, ensemble.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://discord.com/invite/BWefgvrPcD" target="_blank" rel="noopener">🤝 Rejoindre la New Family</a>
+        <a class="btn" href="#fondateurs">👥 Découvrir les fondateurs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <article class="flip reveal">
+      <div class="flip-inner card">
+        <div class="front">
+          <h3>🤝 Humain d’abord</h3>
+          <p>Bienveillance et entraide réelle</p>
+        </div>
+        <div class="back">
+          <strong>On valorise la personne, pas l’algorithme.</strong>
+        </div>
+      </div>
+    </article>
+    <article class="flip reveal">
+      <div class="flip-inner card">
+        <div class="front">
+          <h3>🎯 Progresser ensemble</h3>
+          <p>Mentorat & feedbacks</p>
+        </div>
+        <div class="back">
+          <strong>Ateliers, mentorat : chacun apporte sa pierre.</strong>
+        </div>
+      </div>
+    </article>
+    <article class="flip reveal">
+      <div class="flip-inner card">
+        <div class="front">
+          <h3>🛡️ Zéro drama</h3>
+          <p>Cadre clair & safe place</p>
+        </div>
+        <div class="back">
+          <strong>Modération formée, règles claires, safe space.</strong>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="timeline reveal">
+    <h2>🗺️ Notre histoire</h2>
+    <div class="steps">
+      <div class="step"><h4>Création</h4><p>Naissance de TENF : entraide d’abord, chiffres ensuite.</p></div>
+      <div class="step"><h4>Formations</h4><p>Premiers modules twitch & visuels.</p></div>
+      <div class="step"><h4>Partenariats</h4><p>Ouverture et co-projets inter-serveurs.</p></div>
+      <div class="step"><h4>Aujourd’hui</h4><p>Une communauté active, bienveillante et ambitieuse.</p></div>
+    </div>
+  </section>
+
+  <!-- FONDATEURS -->
+  <section id="fondateurs" class="founders">
+    <article class="founder reveal">
+      <img src="assets/clarastonnewall.webp" alt="Clara" />
+      <h3>Clara</h3>
+      <small>@ClaraStoneWall</small>
+      <div class="badges"><span>Événements</span><span>Organisation</span></div>
+      <div class="btns">
+        <a class="btn" href="https://www.twitch.tv/clarastonewall" target="_blank" rel="noopener">Twitch</a>
+        <button class="btn" data-founder="clara">Mot</button>
+      </div>
+    </article>
+    <article class="founder reveal">
+      <img src="assets/nexou31.webp" alt="Nexou" />
+      <h3>Nexou</h3>
+      <small>@Nexou31</small>
+      <div class="badges"><span>Formations</span><span>Visuels</span></div>
+      <div class="btns">
+        <a class="btn" href="https://www.twitch.tv/nexou31" target="_blank" rel="noopener">Twitch</a>
+        <button class="btn" data-founder="nexou">Mot</button>
+      </div>
+    </article>
+    <article class="founder reveal">
+      <img src="assets/red_shadow_31.webp" alt="Red" />
+      <h3>Red</h3>
+      <small>@Red_Shadow_31</small>
+      <div class="badges"><span>Encadrements</span><span>Coordination</span></div>
+      <div class="btns">
+        <a class="btn" href="https://www.twitch.tv/red_shadow_31" target="_blank" rel="noopener">Twitch</a>
+        <button class="btn" data-founder="red">Mot</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- PACTE (Accordéon) -->
+  <section class="pacte reveal">
+    <h2>📜 Le pacte communautaire</h2>
+    <div class="acc">
+      <details>
+        <summary>On s’encourage avant tout</summary>
+        <div class="panel">On valorise le parcours, pas les stats.</div>
+      </details>
+      <details>
+        <summary>Feedbacks utiles & bienveillants</summary>
+        <div class="panel">Toujours avec respect, jamais pour rabaisser.</div>
+      </details>
+      <details>
+        <summary>Cadre clair et safe</summary>
+        <div class="panel">Règles lisibles, modération formée et à l’écoute.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section class="gallery reveal">
+    <img src="assets/gal1.webp" alt="Atelier feedback" loading="lazy" />
+    <img src="assets/gal2.webp" alt="Soirée communauté" loading="lazy" />
+    <img src="assets/gal3.webp" alt="Raid festif" loading="lazy" />
+    <img src="assets/gal4.webp" alt="Behind the scenes" loading="lazy" />
+    <img src="assets/gal5.webp" alt="Moment chill" loading="lazy" />
+  </section>
+
+  <!-- TÉMOIGNAGES -->
+  <section class="testi reveal">
+    <h2>💬 Ce que les membres disent</h2>
+    <div class="viewport">
+      <div class="track" id="testi-track">
+        <div class="item"><p>“Une seconde famille où entraide, respect et passion commune s’unissent grâce à une équipe bienveillante et soudée.” — Livio ON</p></div>
+        <div class="item"><p>“Un refuge qui redonne confiance et unit des personnes qui changent des vies.” — GalactiFox</p></div>
+        <div class="item"><p>“un lieu où je peux être moi-même, en partageant sincèrement mon soutien et mes ondes positives.” — MissLyliee</p></div>
+      </div>
+    </div>
+    <div class="dots" id="testi-dots" aria-label="Témoignages"></div>
+  </section>
+
+  <!-- CTA STICKY -->
+  <a href="https://discord.com/invite/BWefgvrPcD" class="sticky-cta" id="sticky-cta" target="_blank" rel="noopener">✨ Rejoindre la New Family</a>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true"><img alt="" /></div>
+
+  <!-- Modale fondateurs -->
+  <div class="lightbox" id="founder-modal" aria-hidden="true">
+    <div style="background:#fff;max-width:min(680px,95vw);border-radius:16px;padding:1rem;position:relative">
+      <button id="close-founder" style="position:absolute;top:.6rem;right:.6rem;border:1px solid #eee;background:#fff;border-radius:8px;padding:.3rem .6rem;cursor:pointer">✖</button>
+      <h3 id="f-name" style="margin-top:.2rem"></h3>
+      <p id="f-quote" style="margin:.3rem 0"></p>
+    </div>
+  </div>
+
+  <script>
+    // ===== Parallaxe légère (héros) =====
+    (function(){
+      const layer = document.querySelector('.hero .parallax');
+      if(!layer) return;
+      window.addEventListener('scroll', ()=>{
+        const y = Math.min(200, window.scrollY * 0.15);
+        layer.style.setProperty('--offset', y+'px');
+      }, {passive:true});
+    })();
+
+    // ===== Reveal on scroll =====
+    (function(){
+      const els = document.querySelectorAll('.reveal');
+      if(!els.length) return;
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      },{threshold:.18});
+      els.forEach(el=>io.observe(el));
+    })();
+
+    // ===== Lightbox Galerie =====
+    (function(){
+      const lb = document.getElementById('lightbox'); if(!lb) return;
+      const img = lb.querySelector('img');
+      document.addEventListener('click', (e)=>{
+        const t = e.target.closest('.gallery img');
+        if(t){ img.src = t.src; img.alt = t.alt||''; lb.setAttribute('aria-hidden','false'); }
+        if(e.target===lb){ lb.setAttribute('aria-hidden','true'); img.src=''; }
+      });
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape') lb.setAttribute('aria-hidden','true'); });
+    })();
+
+    // ===== Carrousel Témoignages =====
+    (function(){
+      const track = document.getElementById('testi-track');
+      const dotsWrap = document.getElementById('testi-dots');
+      if(!track||!dotsWrap) return;
+      const items = track.children; const n = items.length; let i=0; let timer;
+      for(let k=0;k<n;k++){ const b=document.createElement('button'); if(k===0) b.classList.add('active'); dotsWrap.appendChild(b); }
+      const dots = dotsWrap.querySelectorAll('button');
+      function go(idx){ i = (idx+n)%n; track.style.transform = `translateX(-${i*100}%)`; dots.forEach((d,j)=>d.classList.toggle('active', j===i)); }
+      function auto(){ timer = setInterval(()=>go(i+1), 4500); }
+      dots.forEach((d,idx)=> d.addEventListener('click', ()=>{ clearInterval(timer); go(idx); auto(); }));
+      auto();
+      const vp = dotsWrap.previousElementSibling; vp.addEventListener('mouseenter', ()=>clearInterval(timer)); vp.addEventListener('mouseleave', auto);
+    })();
+
+    // ===== Sticky CTA après 50% scroll =====
+    (function(){
+      const cta = document.getElementById('sticky-cta'); if(!cta) return;
+      function onScroll(){
+        const y = window.scrollY + window.innerHeight;
+        const h = document.documentElement.scrollHeight;
+        if(y > h*0.5) cta.classList.add('show'); else cta.classList.remove('show');
+      }
+      window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+    })();
+
+    // ===== Modale Fondateurs =====
+    (function(){
+      const modal = document.getElementById('founder-modal'); if(!modal) return;
+      const map = {
+        clara: { name: 'Clara', quote: 'Un serveur sain dans un esprit sain.' },
+        nexou: { name: 'Nexou', quote: 'Je crois en la force des liens qu’on crée ensemble.' },
+        red:   { name: 'Red',   quote: 'Le dragon veille : fun, entraide et respect avant tout.' }
+      };
+      document.addEventListener('click', (e)=>{
+        const btn = e.target.closest('[data-founder]');
+        if(btn){ const k = btn.getAttribute('data-founder'); const d = map[k];
+          if(d){ document.getElementById('f-name').textContent = d.name; document.getElementById('f-quote').textContent = d.quote; modal.setAttribute('aria-hidden','false'); }
+        }
+        if(e.target.id==='close-founder' || e.target===modal){ modal.setAttribute('aria-hidden','true'); }
+      });
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape') modal.setAttribute('aria-hidden','true'); });
+    })();
+  </script>
+</body>
+</html>

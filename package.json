@@ -1,0 +1,12 @@
+{
+  "name": "new-family-site",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@netlify/blobs": "^7.0.0",
+    "node-fetch": "^2.7.0"
+  },
+  "scripts": {
+    "build": "echo 'Build terminé sans erreur'"
+  }
+}

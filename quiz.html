@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quizz New Family</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Compléments discrets */
+    .quiz-wrap{max-width:900px;margin:0 auto 40px;padding:0 12px}
+    .quiz-card{background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:18px 20px}
+    .quiz-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .quiz-title{font-weight:800;font-size:1.2rem}
+    .timer{font-weight:900;background:#9146ff;color:#fff;border-radius:999px;padding:6px 10px;min-width:60px;text-align:center}
+    .progress{height:8px;background:#eee;border-radius:999px;overflow:hidden;margin:10px 0 16px}
+    .bar{height:100%;background:#9146ff;width:0%}
+    .answers{display:grid;gap:10px;margin-top:8px}
+    .answers button{background:#f3f4f6;border:none;border-radius:10px;padding:12px 14px;text-align:left;font-weight:700;cursor:pointer}
+    .answers button:hover{background:#e9eaf0}
+    .answers button.correct{background:#d4f7d9}
+    .answers button.wrong{background:#ffe1e1}
+    .controls{display:flex;justify-content:space-between;margin-top:14px}
+    .hidden{display:none !important}
+    .muted{opacity:.7}
+    .score-badge{display:inline-block;background:#fff3c4;border:1px solid #ffe08a;color:#7a5b00;padding:6px 10px;border-radius:8px;font-weight:800}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="header-logo"><img src="assets/logo.webp" alt="Logo New Family"></div>
+      <div class="header-text">
+        <h1>Quizz de la New Family 🎯</h1>
+        <p>Tu as 20 secondes par question. Bonne chance !</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="header-button-wrapper">
+    <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+  </div>
+
+  <main class="quiz-wrap">
+    <section class="quiz-card" id="quiz">
+      <div class="quiz-head">
+        <div class="quiz-title" id="q-title">Question 1/…</div>
+        <div class="timer" id="timer">20</div>
+      </div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+
+      <p id="question" style="font-size:1.1rem;font-weight:700;margin:.2rem 0 1rem"></p>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="controls">
+        <button id="skip" class="event-button">⏭️ Passer</button>
+        <button id="next" class="about-button hidden">Suivante ➡️</button>
+      </div>
+    </section>
+
+    <section class="quiz-card hidden" id="result">
+      <h2>Résultat</h2>
+      <p>Score : <span class="score-badge" id="score-badge">0/0</span></p>
+      <div id="recap" style="margin:12px 0"></div>
+
+      <!-- pseudo + envoi -->
+      <form id="send-form" class="muted">
+        <label>Ton pseudo (facultatif) :
+          <input type="text" id="player" placeholder="ex: Nexou31" style="padding:8px;border-radius:8px;border:1px solid #ddd;margin-left:6px">
+        </label>
+        <button type="submit" class="about-button" style="margin-left:8px">📤 Envoyer mon score</button>
+      </form>
+
+      <div class="button-container" style="margin-top:14px">
+        <a href="quiz.html" class="event-button">🔁 Recommencer</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="quiz.js" defer></script>
+</body>
+</html>

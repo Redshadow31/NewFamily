@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>VIP Élites — Wall of Fame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style/main.css">
+
+  <style>
+    /* ====== Styles spécifiques VIP ====== */
+    :root {
+      --vip-gold:#f1c40f;
+      --vip-deep:#4b0082;
+      --vip-rose:#e74c3c;
+      --vip-bg:#f7f1ff;
+    }
+
+    .vip-hero{
+      position:relative; overflow:hidden; isolation:isolate;
+      background:
+        radial-gradient(1200px 400px at 20% -10%, rgba(255,255,255,.8), transparent),
+        radial-gradient(1200px 400px at 80% 110%, rgba(255,255,255,.7), transparent),
+        linear-gradient(135deg, #fff 0%, #f7f1ff 60%, #fdf6f6 100%);
+      border-radius:0 0 24px 24px;
+      box-shadow:0 10px 24px rgba(0,0,0,.1);
+      padding:2.2rem 1rem; text-align:center; color:var(--vip-deep);
+    }
+
+    .vip-hero h1{ margin:0 0 .35rem; font-size:clamp(1.6rem,4vw,2.2rem); }
+    .vip-hero p{ margin:0; opacity:.9; }
+    .vip-hero .month-tag{
+      display:inline-block; margin-top:.6rem;
+      padding:.35rem .7rem; border-radius:999px; font-weight:700;
+      background:#fff3be; border:1px solid #ffe18b; color:#8a6d00;
+    }
+
+    /* Grille VIP */
+    #vip-users {
+      max-width:1100px;
+      margin:1.2rem auto 2rem;
+      padding:0 1rem;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1rem;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- 🔴🔴🔴 TON HEADER D’ORIGINE (inchangé) 🔴🔴🔴 -->
+  <header>
+    <div class="header-content">
+      <div class="header-logo">
+        <img src="assets/logo.webp" alt="Logo New Family">
+      </div>
+
+      <div class="header-text">
+        <h1>VIP Élites ⭐</h1>
+        <p>Les membres qui font vivre l’entraide et la bonne ambiance du serveur !</p>
+      </div>
+
+      <div class="backbar">
+        <a class="btn btn--soft" href="index.html">🏠 Accueil</a>
+      </div>
+
+      <!-- Réseaux -->
+      <div class="nf-socials">
+        <a class="social-pill"
+           href="https://www.instagram.com/twitchentraidenewfamily"
+           target="_blank" rel="noopener" aria-label="Instagram New Family">
+          <img src="assets/Instagram.webp" width="18" height="18" loading="lazy">
+          @twitchentraidenewfamily
+        </a>
+
+        <a class="social-pill"
+           href="https://www.tiktok.com/@twitchentraidenewfamily"
+           target="_blank" rel="noopener" aria-label="TikTok New Family">
+          <img src="assets/Tiktok.webp" width="18" height="18" loading="lazy">
+          @twitchentraidenewfamily
+        </a>
+      </div>
+    </div>
+  </header>
+  <!-- 🔴🔴🔴 FIN HEADER 🔴🔴🔴 -->
+
+
+
+  <!-- Sélecteur de mois (JS le remplit automatiquement) -->
+  <div style="max-width:1100px; margin:1rem auto 0; padding:0 1rem; text-align:center;">
+    <select id="vip-month-select" class="about-button" aria-label="Mois"></select>
+  </div>
+
+
+  <!-- Stats VIP -->
+  <section id="vip-stats" class="vip-stats" style="text-align:center;margin:1rem 0;">
+    <p id="vip-count"></p>
+  </section>
+
+
+  <!-- Spotlight si futur ajout -->
+  <section id="vip-spotlight" class="vip-spotlight"
+           aria-live="polite"
+           style="max-width:1100px;margin:1rem auto;padding:0 1rem;">
+  </section>
+
+
+  <!-- Grille VIP -->
+  <div id="vip-users"></div>
+
+
+  <!-- Modale VIP (si jamais tu veux afficher plus tard un profil complet) -->
+  <div class="vip-modal" id="vip-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="vip-dialog" role="document">
+      <button class="close" id="vip-close" aria-label="Fermer">✖</button>
+    </div>
+  </div>
+
+
+  <!-- Script -->
+  <script src="vip.js"></script>
+
+</body>
+</html>

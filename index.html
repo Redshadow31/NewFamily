@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Twitch Entraide New Family — Accueil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Communauté Twitch francophone d'entraide : mentorat, feedbacks, raids, événements et visibilité pour créateurs." />
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin>
+  <link rel="preconnect" href="https://api.twitch.tv" crossorigin>
+ <link rel="stylesheet" href="style/main.css">
+
+</head>
+<body>
+  <!-- ===== Hero / Header ===== -->
+  <header class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__inner">
+      <img class="hero__logo" src="assets/logo.webp" alt="Logo Twitch Entraide New Family">
+      <h1 class="hero__title">Bienvenue sur le site de la New Family !</h1>
+      <p class="hero__subtitle">La communauté francophone d’entraide entre streamers & viewers ✨</p>
+
+  <div class="button-container">
+  <a href="a-propos.html" class="btn btn--primary">🎭 En savoir plus</a>
+  <a href="staff.html" class="btn btn--ghost">👥 Staff</a>
+  <a href="blog.html" class="btn btn--ghost">📰 Actualités</a>
+</div>
+
+      <!-- Réseaux -->
+      <div class="nf-socials">
+  <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily"
+     target="_blank" rel="noopener" aria-label="Instagram New Family">
+    <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy">
+    @twitchentraidenewfamily
+  </a>
+
+  <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily"
+     target="_blank" rel="noopener" aria-label="TikTok New Family">
+    <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy">
+    @twitchentraidenewfamily
+  </a>
+</div>
+    </div>
+    <!-- Bouton thème (ton JS le crée si absent, mais on laisse un emplacement propre) -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Changer de thème">🌙</button>
+  </header>
+
+  <main>
+    <!-- ===== Barre live ===== -->
+    <div id="live-strip" class="live-strip" aria-label="Chaînes en direct">
+      <div class="live-strip__inner" id="live-strip-inner">
+        <!-- rempli/actualisé par script.js (si tu le fais plus tard) -->
+      </div>
+    </div>
+
+    <div class="nf-livebar" role="status" aria-live="polite">
+      <span class="dot"></span>
+      <strong id="nf-live-count">0</strong> live(s) en cours •
+      <em id="live-count">Chargement des données…</em>
+    </div>
+
+    <!-- ===== Mise en avant ===== -->
+    <section id="featured-live" class="featured-live" style="display:none;">
+      <div class="featured-card">
+        <div class="featured-media" id="featured-bg" aria-hidden="true"></div>
+        <div class="featured-ribbon">🔥 Mise en avant exceptionnelle</div>
+
+        <div class="featured-content">
+          <div class="featured-meta">
+            <span class="pill pill-live">LIVE</span>
+            <span class="pill" id="featured-game">-</span>
+            <span class="pill" id="featured-viewers" title="Viewers">👁️ 0</span>
+            <span class="pill" id="featured-since" title="Depuis">⏱️ 0 min</span>
+          </div>
+
+          <h3 class="featured-title">
+            <span id="featured-user">@user</span>
+            <span class="dot">•</span>
+            <span id="featured-stream-title">Live en cours</span>
+          </h3>
+
+          <div class="featured-actions">
+            <a id="featured-link" href="#" target="_blank" rel="noopener" class="cta">
+              🎥 Rejoindre le live
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lecteur Twitch -->
+      <div id="featured-player"
+           style="width:100%;max-width:1100px;margin:1rem auto;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.2);display:none;">
+      </div>
+    </section>
+
+    <!-- ===== Boutons principaux ===== -->
+<div class="actions-row" style="margin-top:.8rem">
+  <a href="vip.html" class="btn btn--primary btn--pill">⭐ VIP du mois</a>
+  <a href="evenements.html" class="btn btn--ghost btn--pill">📅 Événements</a>
+  <a href="clips.html" class="btn btn--ghost btn--pill">📽️ Clips</a>
+  <a href="interviews.html" class="btn btn--ghost btn--pill">🎤 Interviews</a>
+  <a href="aventura2026.html" class="btn btn--ghost btn--pill">🌴 Aventura 2026</a>
+</div>
+
+
+    <!-- ===== Stats ===== -->
+    <section class="nf-stats" aria-label="Statistiques de la communauté">
+      <div class="stat">
+        <div class="num" id="stat-members" data-to="418">418</div>
+        <div class="label">Membres (Discord)</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-actifs" data-to="0">0</div>
+        <div class="label">Actifs (entraide)</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-lives" data-to="0">0</div>
+        <div class="label">Lives / jour (moyenne)</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="stat-events" data-to="0">0</div>
+        <div class="label">Événements / mois</div>
+      </div>
+    </section>
+
+    <!-- ===== Pourquoi nous ===== -->
+    <section class="nf-why" aria-label="Pourquoi nous rejoindre">
+      <article><h3>🎯 Progression</h3><p>Mentorat, feedbacks, ateliers et entraide structurée.</p></article>
+      <article><h3>🤝 Humain d’abord</h3><p>Ambiance safe, modération formée, zéro drama.</p></article>
+      <article><h3>🚀 Visibilité</h3><p>Raids, relais, mise en avant des créateurs motivés.</p></article>
+       <article class="nf-tips-card reveal">
+    <h3>💡 Conseils de la New Family</h3>
+    <p class="nf-tips-text">
+      Le live gagnant TENF n’est pas un boost de statistiques, c’est une vitrine pour présenter ta chaîne, ton univers et ta personnalité à toute la communauté.
+    </p>
+  </article>
+    </section>
+
+    <!-- ===== Squelettes chargement ===== -->
+    <div id="nf-skeletons" aria-hidden="true"></div>
+
+    <!-- ===== Grilles membres ===== -->
+ <section id="online" aria-label="Membres actuellement en live">
+  <h2>🎥 Actuellement en direct</h2>
+
+  <!-- 🔎 Outils de recherche & filtre -->
+  <div class="live-tools">
+    <div class="live-tools-group">
+      <label for="search-member" class="sr-only">Rechercher un membre</label>
+      <input
+        id="search-member"
+        type="search"
+        placeholder="🔍 Rechercher un membre…"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="live-tools-group">
+      <label for="filter-game" class="sr-only">Filtrer par jeu</label>
+      <select id="filter-game">
+        <option value="all">🎮 Tous les jeux</option>
+        <!-- options jeux ajoutées en JS -->
+      </select>
+    </div>
+  </div>
+
+  <div id="live-users" class="users-grid"></div>
+</section>
+
+
+    <section id="offline" aria-label="Membres hors ligne">
+      <h2>👀 À découvrir bientôt</h2>
+      <div id="offline-users" class="users-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© New Family — Communauté d’entraide Twitch</p>
+    <div class="socials socials--footer">
+      <a class="socials__item" href="https://www.instagram.com/twitchentraidnewfamily" target="_blank" rel="noopener" aria-label="Instagram New Family">
+        <img src="assets/Instagram.webp" width="22" height="22" alt="Instagram">
+        <span>Instagram</span>
+      </a>
+      <a class="socials__item" href="https://www.tiktok.com/@twitchentraidnewfamily" target="_blank" rel="noopener" aria-label="TikTok New Family">
+        <img src="assets/Tiktok.webp" width="22" height="22" alt="TikTok">
+        <span>TikTok</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- Lecteur Twitch -->
+  <script src="https://player.twitch.tv/js/embed/v1.js" async></script>
+  <!-- Ton JS existant -->
+  <script src="script.js" defer></script>
+
+</body>
+</html>

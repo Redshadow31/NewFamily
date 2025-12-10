@@ -1,0 +1,200 @@
+[
+  {
+    "id": "comm-2025-10-31-deceit2",
+    "title": "Deceit 2",
+    "category": "jeux",
+    "start": "2025-10-31T15:00:00+01:00",
+    "end": "2025-10-31T17:00:00+01:00",
+    "location": "Discord – #event-commu",
+    "description": "Animateur : Rubby"
+  },
+  {
+    "id": "prog-2025-10-31-blackenedforall",
+    "title": "Live – BlackenedForAll",
+    "category": "live",
+    "start": "2025-10-31T21:30:00+01:00",
+    "end": "2025-10-31T23:30:00+01:00",
+    "location": "Twitch",
+    "description": "@BlackenedForAll 21h30 (15h30 Québec, 9h30 Polynésie) – https://www.twitch.tv/blackenedforall"
+  },
+  {
+    "id": "cine-2025-11-03-hp1",
+    "title": "Ciné – Harry Potter à l’école des sorciers",
+    "category": "cine",
+    "start": "2025-11-03T21:00:00+01:00",
+    "end": "2025-11-03T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-04-hp2",
+    "title": "Ciné – Harry Potter et la Chambre des Secrets",
+    "category": "cine",
+    "start": "2025-11-04T21:00:00+01:00",
+    "end": "2025-11-04T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-05-hp3",
+    "title": "Ciné – Harry Potter et le Prisonnier d’Azkaban",
+    "category": "cine",
+    "start": "2025-11-05T21:00:00+01:00",
+    "end": "2025-11-05T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-06-hp4",
+    "title": "Ciné – Harry Potter et la Coupe de Feu",
+    "category": "cine",
+    "start": "2025-11-06T21:00:00+01:00",
+    "end": "2025-11-06T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-07-hp5",
+    "title": "Ciné – Harry Potter et l’Ordre du Phénix",
+    "category": "cine",
+    "start": "2025-11-07T21:00:00+01:00",
+    "end": "2025-11-07T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-08-hp6",
+    "title": "Ciné – Harry Potter et le Prince de Sang-Mêlé",
+    "category": "cine",
+    "start": "2025-11-08T21:00:00+01:00",
+    "end": "2025-11-08T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-09-hp7",
+    "title": "Ciné – Harry Potter et les Reliques de la Mort (Partie 1)",
+    "category": "cine",
+    "start": "2025-11-09T21:00:00+01:00",
+    "end": "2025-11-09T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "cine-2025-11-10-hp8",
+    "title": "Ciné – Harry Potter et les Reliques de la Mort (Partie 2)",
+    "category": "cine",
+    "start": "2025-11-10T21:00:00+01:00",
+    "end": "2025-11-10T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "jeux-2025-11-14-blindtest",
+    "title": "Blind Test Disney",
+    "category": "jeux",
+    "start": "2025-11-14T21:00:00+01:00",
+    "end": "2025-11-14T23:00:00+01:00",
+    "location": "Discord – #event-commu",
+    "description": "Blind Test Disney animé par Oxi & Clara"
+  },
+  {
+    "id": "jeux-2025-11-15-quizzdisney",
+    "title": "Quizz Disney",
+    "category": "jeux",
+    "start": "2025-11-15T21:00:00+01:00",
+    "end": "2025-11-15T23:00:00+01:00",
+    "location": "Discord – #event-commu",
+    "description": "Quiz Disney animé par Rubby"
+  },
+  {
+    "id": "jeux-2025-11-16-speedstorm",
+    "title": "Disney Speedstorm",
+    "category": "jeux",
+    "start": "2025-11-16T21:00:00+01:00",
+    "end": "2025-11-16T23:00:00+01:00",
+    "location": "Discord – #event-commu",
+    "description": "Soirée Disney Speedstorm animée par Nangel"
+  },
+  {
+    "id": "cine-2025-11-17-asterix",
+    "title": "Ciné – Astérix & Obélix : Mission Cléopâtre",
+    "category": "cine",
+    "start": "2025-11-17T21:00:00+01:00",
+    "end": "2025-11-17T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "int-2025-11-17-21h",
+    "title": "Réunion d’intégration ✅",
+    "category": "integration",
+    "start": "2025-11-17T21:00:00+01:00",
+    "end": "2025-11-17T22:00:00+01:00",
+    "location": "Discord – #integration",
+    "description": "Session d’accueil & règles"
+  },
+  {
+    "id": "int-2025-11-21-21h",
+    "title": "Réunion d’intégration ✅",
+    "category": "integration",
+    "start": "2025-11-21T21:00:00+01:00",
+    "end": "2025-11-21T22:00:00+01:00",
+    "location": "Discord – #integration",
+    "description": "Session d’accueil & règles"
+  },
+  {
+    "id": "prog-2025-11-21-noxyre_tv",
+    "title": "Live – Noxyre_TV",
+    "category": "live",
+    "start": "2025-11-21T18:00:00+01:00",
+    "end": "2025-11-21T20:00:00+01:00",
+    "location": "Twitch",
+    "description": "@Noxyre_TV 18h (12h Québec, 5h Polynésie) – https://www.twitch.tv/noxyre_tv"
+  },
+  {
+    "id": "cine-2025-11-24-charlie",
+    "title": "Ciné – Charlie et la Chocolaterie",
+    "category": "cine",
+    "start": "2025-11-24T21:00:00+01:00",
+    "end": "2025-11-24T23:30:00+01:00",
+    "location": "Discord – #cine-clara",
+    "description": "Projection + discussion animée par Clara"
+  },
+  {
+    "id": "int-2025-11-24-21h",
+    "title": "Réunion d’intégration ✅",
+    "category": "integration",
+    "start": "2025-11-24T21:00:00+01:00",
+    "end": "2025-11-24T22:00:00+01:00",
+    "location": "Discord – #integration",
+    "description": "Session d’accueil & règles"
+  },
+  {
+    "id": "int-2025-11-28-21h",
+    "title": "Réunion d’intégration ✅",
+    "category": "integration",
+    "start": "2025-11-28T21:00:00+01:00",
+    "end": "2025-11-28T22:00:00+01:00",
+    "location": "Discord – #integration",
+    "description": "Session d’accueil & règles"
+  },
+  {
+    "id": "prog-2025-11-30-leb1nx",
+    "title": "Live – leb1nx",
+    "category": "live",
+    "start": "2025-11-30T18:00:00+01:00",
+    "end": "2025-11-30T20:00:00+01:00",
+    "location": "Twitch",
+    "description": "@leb1nx 18h (12h Québec, 5h Polynésie) – https://www.twitch.tv/leb1nx"
+  },
+  {
+    "id": "int-2025-11-30-15h",
+    "title": "Réunion d’intégration ✅",
+    "category": "integration",
+    "start": "2025-11-30T15:00:00+01:00",
+    "end": "2025-11-30T16:00:00+01:00",
+    "location": "Discord – #integration",
+    "description": "Session d’accueil & règles"
+  }
+]

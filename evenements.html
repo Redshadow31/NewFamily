@@ -1,0 +1,292 @@
+<!DOCTYPE html> 
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>📅 Événements - Twitch Entraide New Family</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style/main.css">
+
+  <!-- FullCalendar -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --violet:#4b0082;
+      --bg:#f5f5f5;
+      --card:#ffffff;
+      --muted:#6b6b6b;
+      --radius:18px;
+    }
+    body{margin:0;font-family:Arial, sans-serif;background:var(--bg);color:var(--violet);}
+    main{max-width:1100px;margin:auto;padding:2rem;}
+    .header-content{display:flex;gap:1rem;align-items:center;padding:1rem 2rem;}
+    .header-content img {
+      max-height: 64px;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .header-button-wrapper{display:flex;justify-content:center;margin-top:.5rem}
+    .about-button{background:var(--violet);color:#fff;padding:.6rem 1rem;border-radius:999px;text-decoration:none}
+    /* Filtres */
+    .filters{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+    .filter-btn{border:1px solid var(--violet);background:#fff;color:var(--violet);padding:.4rem .8rem;border-radius:999px;cursor:pointer}
+    .filter-btn.active{background:var(--violet);color:#fff}
+    /* Grille d’événements */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.08);padding:1rem;display:flex;flex-direction:column;gap:.6rem}
+    .badge{display:inline-block;padding:.2rem .5rem;border-radius:999px;font-size:.8rem;color:#fff}
+    .badge.jeux{background:#7c3aed}
+    .badge.formations{background:#2563eb}
+    .badge.integration{background:#16a34a}
+    .badge.apero{background:#f97316}
+    .badge.cine{background:#dc2626}
+    /* ✅ Nouveau : badge "Live Gagnant" */
+    .badge.live{
+      background: linear-gradient(135deg,#9146ff,#772ce8);
+      color:#fff;
+      font-weight:700;
+      border:none;
+      box-shadow:0 4px 12px rgba(145,70,255,.25);
+    }
+    .meta{color:var(--muted);font-size:.9rem}
+    .cta{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+    .btn{background:var(--violet);color:#fff;border:none;border-radius:12px;padding:.6rem .9rem;cursor:pointer}
+    .btn.secondary{background:#eae6f3;color:#3d1b72}
+    /* Calendrier */
+    #calendar{background:#fff;border-radius:var(--radius);padding:1rem;box-shadow:0 10px 30px rgba(0,0,0,.08);margin:2rem 0}
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:1rem;z-index:50}
+    .modal{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:1rem 1.2rem;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    .modal h3{margin:.2rem 0 1rem}
+    .modal form{display:grid;gap:.8rem}
+    .modal label{font-size:.9rem;color:#333}
+    .modal input, .modal textarea, .modal select{
+      width:100%;padding:.6rem .7rem;border:1px solid #ddd;border-radius:10px;font-size:1rem
+    }
+    .modal .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    .modal .actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:.6rem}
+    .count{font-size:.9rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="header-logo"><img src="assets/logo.webp" alt="Logo New Family" /></div>
+      <div class="header-text">
+        <h1>📅 Calendrier & Inscriptions</h1>
+        <p>Filtre par type d’événement, consulte le calendrier, et inscris-toi en 10 secondes.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="header-button-wrapper">
+    <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+  </div>
+
+  <main>
+    <!-- Filtres catégories -->
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-cat="all">Tout</button>
+      <button class="filter-btn" data-cat="jeux">🎮 Jeux</button>
+      <button class="filter-btn" data-cat="formations">🎓 Formations</button>
+      <button class="filter-btn" data-cat="integration">✅ Réunions d’intégration</button>
+      <button class="filter-btn" data-cat="apero">🥂 Apéros</button>
+      <button class="filter-btn" data-cat="cine">🎬 Ciné Clara</button>
+      <!-- ✅ Corrigé : minuscule pour le filtre live -->
+      <button class="filter-btn" data-cat="live">🎥 Live Gagnant</button>
+    </div>
+
+    <!-- Grille d’événements -->
+    <section class="grid" id="eventsGrid" aria-live="polite"></section>
+
+    <!-- Calendrier visuel -->
+    <div id="calendar"></div>
+
+    <!-- Modal inscription -->
+    <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal">
+        <h3 id="modalTitle">Inscription à l’événement</h3>
+        <!-- Netlify Forms fallback -->
+        <form name="inscriptions" method="POST" data-netlify="true" id="signupForm">
+          <input type="hidden" name="form-name" value="inscriptions" />
+          <input type="hidden" name="eventId" id="f_eventId" />
+          <input type="hidden" name="eventTitle" id="f_eventTitle" />
+          <div>
+            <label for="f_twitch">Pseudo Twitch (obligatoire)</label>
+            <input id="f_twitch" name="twitch" required placeholder="ex: red_shadow_31" />
+          </div>
+          <div class="row">
+            <div>
+              <label for="f_discord">Discord (optionnel)</label>
+              <input id="f_discord" name="discord" placeholder="ex: Red#1234" />
+            </div>
+            <div>
+              <label for="f_role">Rôle serveur (optionnel)</label>
+              <select id="f_role" name="role">
+                <option value="">—</option>
+                <option>Créateur en développement</option>
+                <option>Créateur affilié</option>
+                <option>Modérateur</option>
+                <option>Communauté</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="f_note">Note pour le staff (optionnel)</label>
+            <textarea id="f_note" name="note" rows="3" placeholder="Besoin particulier, retard, etc."></textarea>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn secondary" id="cancelBtn">Annuler</button>
+            <button type="submit" class="btn">Je m’inscris ✅</button>
+          </div>
+          <p class="count" id="countText"></p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <script>
+    // ------ Data source ------
+    let ALL_EVENTS = [];
+    let CURRENT_FILTER = 'all';
+    const grid = document.getElementById('eventsGrid');
+
+    async function loadEvents(){
+      const res = await fetch('events.json', {cache:'no-store'});
+      ALL_EVENTS = await res.json();
+      renderGrid();
+      renderCalendar();
+    }
+
+    // ------ Filtres ------
+    document.getElementById('filters').addEventListener('click', (e)=>{
+      if(!e.target.matches('.filter-btn')) return;
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      e.target.classList.add('active');
+      CURRENT_FILTER = e.target.dataset.cat;
+      renderGrid();
+    });
+
+    // Ajout de la catégorie "live"
+    function categoryBadge(cat){
+      const map = {
+        jeux:'jeux',
+        formations:'formations',
+        integration:'integration',
+        apero:'apero',
+        cine:'cine',
+        live:'live'
+      };
+      const label = {
+        jeux:'🎮 Jeux',
+        formations:'🎓 Formations',
+        integration:'✅ Réunions',
+        apero:'🥂 Apéros',
+        cine:'🎬 Ciné Clara',
+        live:'🎥 Live Gagnant'
+      }[cat.toLowerCase()] || cat;
+      return `<span class="badge ${map[cat.toLowerCase()]||''}">${label}</span>`;
+    }
+
+    function renderGrid(){
+      const items = (CURRENT_FILTER==='all'? ALL_EVENTS : ALL_EVENTS.filter(e=>e.category.toLowerCase()===CURRENT_FILTER));
+      if(!items.length){ grid.innerHTML = `<p>Aucun événement dans cette catégorie pour le moment.</p>`; return; }
+      grid.innerHTML = items.map(e=>{
+        return `
+          <article class="card">
+            ${categoryBadge(e.category)}
+            <h3>${e.title}</h3>
+            <p class="meta">🗓️ ${new Date(e.start).toLocaleString('fr-FR', {dateStyle:'full', timeStyle:'short'})}${e.end?'' : ''}</p>
+            ${e.location ? `<p class="meta">📍 ${e.location}</p>`:''}
+            <p>${e.description||''}</p>
+            <div class="cta">
+              <button class="btn" onclick="openSignup('${e.id}')">Je m’inscris</button>
+              <span class="count" id="count-${e.id}">Inscrits : …</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+      items.forEach(e=>updateCount(e.id));
+    }
+
+    // ------ Calendrier ------
+    function renderCalendar(){
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        timeZone: 'Europe/Madrid',
+        height: 'auto',
+        events: ALL_EVENTS.map(e=>({
+          id: e.id,
+          title: e.title,
+          start: e.start,
+          end: e.end || null,
+          extendedProps: { category:e.category, location:e.location, description:e.description }
+        })),
+        eventClick: function(info){ openSignup(info.event.id); }
+      });
+      calendar.render();
+    }
+
+    // ------ Modal + Form ------
+    const backdrop = document.getElementById('modalBackdrop');
+    const form = document.getElementById('signupForm');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const countText = document.getElementById('countText');
+
+    function openSignup(id){
+      const ev = ALL_EVENTS.find(x=>x.id===id);
+      if(!ev) return;
+      document.getElementById('modalTitle').textContent = `Inscription – ${ev.title}`;
+      document.getElementById('f_eventId').value = ev.id;
+      document.getElementById('f_eventTitle').value = ev.title;
+      countText.textContent = '';
+      backdrop.style.display = 'flex';
+      updateCount(ev.id, true);
+    }
+    cancelBtn.addEventListener('click', ()=> backdrop.style.display = 'none');
+    backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) backdrop.style.display='none' });
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = new FormData(form);
+      const payload = Object.fromEntries(data.entries());
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(payload).toString()
+      });
+      try{
+        await fetch('/.netlify/functions/register', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+      }catch(e){ console.warn('Discord notification échouée', e); }
+
+      alert('Inscription enregistrée. Merci !');
+      backdrop.style.display = 'none';
+      updateCount(payload.eventId);
+      form.reset();
+    });
+
+    async function updateCount(eventId, intoModal=false){
+      try{
+        const r = await fetch('/.netlify/functions/list-registrations?eventId='+encodeURIComponent(eventId));
+        if(!r.ok) throw new Error('no count');
+        const {count} = await r.json();
+        const target = document.getElementById('count-'+eventId);
+        if(target) target.textContent = `Inscrits : ${count}`;
+        if(intoModal) countText.textContent = `Déjà ${count} inscrit·e·s pour cet événement.`;
+      }catch{
+        const target = document.getElementById('count-'+eventId);
+        if(target) target.textContent = `Inscrits : —`;
+      }
+    }
+
+    loadEvents();
+  </script>
+</body>
+</html>

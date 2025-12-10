@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Staff — New Family</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="style/main.css">
+<link rel="stylesheet" href="style/modules.css">
+<link rel="stylesheet" href="style/cards.css">
+
+
+</head>
+<body>
+<header>
+  <div class="header-content">
+    <div class="header-logo"><img src="assets/logo.webp" alt="Logo New Family" /></div>
+    <div class="header-text">
+      <h1>👥 L’équipe Staff</h1>
+      <p>Organisation interne par pôles — référents, adjoints, mentors et juniors.</p>
+    </div>
+  </div>
+
+  <div class="backbar">
+    <a class="btn btn--soft" href="index.html">🏠 Accueil</a>
+  </div>
+
+  <!-- Réseaux -->
+  <div class="nf-socials">
+    <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily" target="_blank" rel="noopener" aria-label="Instagram New Family">
+      <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy"> @twitchentraidenewfamily
+    </a>
+    <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily" target="_blank" rel="noopener" aria-label="TikTok New Family">
+      <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy"> @twitchentraidenewfamily
+    </a>
+  </div>
+</header>
+
+<!-- Barre d’actions : filtres par PÔLE + recherche (on garde l’apparence) -->
+<section class="staff-actions">
+  <div class="tabs" role="tablist" aria-label="Pôles">
+    <button class="tab is-active" data-pole="all" role="tab" aria-selected="true">Tous</button>
+    <button class="tab" data-pole="red" role="tab">🟥 Accueil & Intégration</button>
+    <button class="tab" data-pole="green" role="tab">🩷 Animation & Événements</button>
+    <button class="tab" data-pole="blue" role="tab">🟦 Communication & Visuels</button>
+    <button class="tab" data-pole="yellow" role="tab">🟨 Coordination & Formation</button>
+    <button class="tab" data-pole="purple" role="tab">🟪 Technique & Automation</button>
+  </div>
+  <div class="search">
+    <input id="staff-search" type="search" placeholder="Rechercher un membre…" aria-label="Rechercher un membre" />
+  </div>
+</section>
+
+<!-- Conteneur rendu par staff.js -->
+<main class="staff-wrap" id="staff-root"></main>
+
+<!-- MODALE STAFF -->
+<div id="staff-modal" class="staff-modal" aria-hidden="true">
+  <div class="dialog">
+    <button id="staff-close" class="close" aria-label="Fermer">×</button>
+
+    <header>
+      <img id="m-avatar" src="" alt="">
+      <h3 id="m-name"></h3>
+      <small id="m-role"></small>
+
+      <!-- Icônes réseaux -->
+      <div class="links" id="m-links"></div>
+    </header>
+
+    <div class="content">
+      <!-- Bloc 1 : rôle au sein de TENF -->
+      <div class="bio-block" id="m-desc-role-wrap" hidden>
+        <h4>Rôle au sein de TENF</h4>
+        <p id="m-desc-role"></p>
+      </div>
+
+      <!-- Bloc 2 : bio personnelle de chaîne -->
+      <div class="bio-block" id="m-desc-personal-wrap" hidden>
+        <h4>Bio de chaîne</h4>
+        <p id="m-desc-personal"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Script -->
+<script src="staff.js" defer></script>
+</body>
+</html>

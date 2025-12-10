@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🌴 NewFamily Aventura 2026</title>
+    <link rel="stylesheet" href="style/main.css">
+
+    <style>
+      /* Ajouts spécifiques à cette page */
+      body { margin: 0; font-family: Arial, sans-serif; background:#f5f5f5; color:#4b0082; }
+      main { max-width: 1000px; margin: auto; padding: 2em 1em; }
+      section.box {
+        background: #fff; border-radius: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,.1);
+        margin: 2rem auto; padding: 2rem;
+      }
+
+      /* HERO avec image/parallaxe */
+      .hero-aventura{
+        position: relative; min-height: 70vh; display:flex; align-items:center; justify-content:center;
+        background: url('assets/aventura-hero.webp') center/cover fixed no-repeat; /* ⇦ remplace l'image si besoin */
+      }
+      .hero-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55));}
+      .hero-content{position:relative; color:#fff; text-align:center; padding:2rem}
+      .hero-content h2{font-size: clamp(2rem, 4vw, 3rem); margin:0 0 .5rem}
+      .hero-content p{opacity:.95; margin:0 0 1rem}
+      .hero-cta{margin-top:1rem}
+
+      /* Compte à rebours */
+      .countdown{display:flex; gap:1rem; justify-content:center; margin:1rem 0 0}
+      .countdown div{background:rgba(255,255,255,.12); padding:.8rem 1rem; border-radius:.8rem; backdrop-filter: blur(4px)}
+      .countdown span{display:block; font-size:clamp(1.6rem, 4vw, 2.2rem); font-weight:800}
+      .countdown small{opacity:.9; text-transform:uppercase; font-size:.75rem}
+
+      /* Highlights grid */
+      .highlights{max-width:1000px; margin:2rem auto; padding:0 1rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem}
+      .card-pop{background:#fff; border-radius:1rem; padding:1.2rem 1.2rem; box-shadow:0 10px 20px rgba(0,0,0,.08); transition:transform .25s ease, box-shadow .25s ease}
+      .card-pop:hover{transform:translateY(-4px); box-shadow:0 14px 28px rgba(0,0,0,.12)}
+      .card-pop h3{margin:.2rem 0 .4rem; color:#c0392b}
+
+      /* Timeline */
+      .timeline{max-width:900px; margin:3rem auto; padding:0 1rem}
+      .timeline h2{text-align:center; margin-bottom:1rem}
+      .steps{position:relative; margin-left:.5rem}
+      .steps::before{content:""; position:absolute; left:18px; top:0; bottom:0; width:3px; background:#f1c40f}
+      .step{position:relative; margin:1rem 0 1.2rem 3rem; opacity:0; transform:translateY(12px); transition:.5s ease}
+      .step::before{content:""; position:absolute; left:-36px; top:.2rem; width:16px; height:16px; border-radius:50%; background:#e74c3c; box-shadow:0 0 0 4px rgba(231,76,60,.25)}
+      .step.revealed{opacity:1; transform:none}
+      .step span{display:inline-block; font-weight:700; color:#8e44ad; margin-bottom:.2rem}
+
+      /* Galerie mosaïque + lightbox */
+      .gallery{max-width:1000px; margin:3rem auto; padding:0 1rem; columns:3 260px; column-gap:14px}
+      .gallery img{width:100%; margin:0 0 14px; border-radius:12px; display:block; break-inside:avoid; cursor:pointer; transition:transform .25s ease}
+      .gallery img:hover{transform:scale(1.02)}
+      .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999; padding:1rem}
+      .lightbox img{max-width:min(90vw,1200px); max-height:85vh; border-radius:12px}
+
+      /* Info cards */
+      .info-cards{max-width:1000px; margin:2rem auto; padding:0 1rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem}
+      .info-card{background:#fff; border-radius:1rem; padding:1.2rem 1.4rem; box-shadow:0 10px 20px rgba(0,0,0,.08); border:2px solid #f7d9e0}
+      .info-card h3{margin:.2rem 0 .4rem; color:#8e44ad}
+
+      /* CTA sticky */
+      .sticky-cta{
+        position:fixed; right:16px; bottom:16px; z-index:999;
+        background:#e74c3c; color:#fff; text-decoration:none; font-weight:700;
+        padding:.8rem 1rem; border-radius:999px; box-shadow:0 10px 24px rgba(231,76,60,.35);
+        transition: transform .2s ease;
+      }
+      .sticky-cta:hover{transform:translateY(-2px)}
+
+      /* Accessibilité: focus visible */
+      a:focus-visible, button:focus-visible{outline:3px solid #f1c40f; outline-offset:3px}
+    </style>
+  </head>
+
+  <body>
+    <!-- Header (modèle commun) -->
+    <header>
+      <div class="header-content">
+        <div class="header-logo">
+          <img src="assets/logo.webp" alt="Logo New Family" />
+        </div>
+        <div class="header-text">
+          <h1>🌴 NewFamily Aventura 2026</h1>
+          <p>Du 13 au 17 mai 2026 (ou dès le 11) — séjour communautaire en Espagne !</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Bouton retour (modèle commun) -->
+    <div class="header-button-wrapper">
+      <a href="index.html" class="about-button">🏠 Retour à l'accueil</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero-aventura">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h2>PortAventura, plage, villa & souvenirs inoubliables</h2>
+        <p>Rejoins l’aventure avec toute la New Family.</p>
+        <div class="countdown" aria-live="polite">
+          <div><span id="cd-days">00</span><small>jours</small></div>
+          <div><span id="cd-hours">00</span><small>heures</small></div>
+          <div><span id="cd-mins">00</span><small>minutes</small></div>
+          <div><span id="cd-secs">00</span><small>secondes</small></div>
+        </div>
+        <a href="https://discord.gg/BWefgvrPcD" target="_blank" class="about-button hero-cta">✨ Je participe</a>
+      </div>
+    </section>
+
+    <main>
+      <!-- Trailer YouTube -->
+      <section class="box" style="padding:0">
+        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:1rem; box-shadow:0 10px 20px rgba(0,0,0,.2);">
+          <iframe
+            src="https://www.youtube.com/embed/WVgvUKb3-XQ"
+            title="Trailer NewFamily Aventura 2026"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="position:absolute; top:0; left:0; width:100%; height:100%">
+          </iframe>
+        </div>
+      </section>
+
+      <!-- Highlights -->
+      <section class="highlights">
+        <article class="card-pop">
+          <h3>🎢 2 jours à PortAventura</h3>
+          <p>Sensations fortes, spectacles & souvenirs de groupe.</p>
+        </article>
+        <article class="card-pop">
+          <h3>🏡 Villa avec piscine</h3>
+          <p>Soirées BBQ, chill & afters conviviaux.</p>
+        </article>
+        <article class="card-pop">
+          <h3>🤝 100% Communauté</h3>
+          <p>Des liens forts, bienveillance et entraide.</p>
+        </article>
+        <article class="card-pop">
+          <h3>☀️ Mer & soleil</h3>
+          <p>Plage, balades & bons plans locaux.</p>
+        </article>
+      </section>
+
+      <!-- Programme (timeline) -->
+      <section class="timeline">
+        <h2>🗺️ Le programme</h2>
+        <div class="steps">
+          <div class="step"><span>Mercredi</span><p>Installation + soirée BBQ chill</p></div>
+          <div class="step"><span>Jeudi</span><p>Chasse au trésor + pique-nique + soirée surprise</p></div>
+          <div class="step"><span>Vendredi</span><p>PortAventura – Jour 1 🎢</p></div>
+          <div class="step"><span>Samedi</span><p>PortAventura – Jour 2 🎢</p></div>
+          <div class="step"><span>Dimanche</span><p>Détente & au revoir ❤️</p></div>
+        </div>
+      </section>
+
+      <!-- Infos pratiques (3 cartes) -->
+      <section class="info-cards">
+        <div class="info-card">
+          <h3>📅 Dates</h3>
+          <p>Du <strong>13 → 17 mai 2026</strong><br>Arrivées possibles dès le <strong>11</strong>.</p>
+        </div>
+        <div class="info-card">
+          <h3>🏠 Hébergements</h3>
+          <p>Villa staff + camping négocié + options en petits groupes.</p>
+        </div>
+        <div class="info-card">
+          <h3>🙋 Pour qui ?</h3>
+          <p>Ouvert à tous les membres. Accompagnants bienvenus.</p>
+        </div>
+      </section>
+
+      <!-- Galerie (remplace les images par les tiennes) -->
+      <section class="gallery">
+        <img src="assets/aventura-1.webp" alt="Villa et piscine" loading="lazy">
+        <img src="assets/aventura-2.webp" alt="PortAventura" loading="lazy">
+        <img src="assets/aventura-3.webp" alt="Plage" loading="lazy">
+        <img src="assets/aventura-4.webp" alt="Soirée BBQ" loading="lazy">
+        <img src="assets/aventura-5.webp" alt="Groupe" loading="lazy">
+        <img src="assets/aventura-6.webp" alt="Attractions" loading="lazy">
+      </section>
+
+      <!-- Sondage intention -->
+      <section class="box" style="text-align:center; max-width:700px;">
+        <h2>📋 Sondage d’intention</h2>
+        <p>
+          Réponds au sondage dans Discord (réaction 1️⃣ à 6️⃣ selon ton groupe).<br>
+          Ça n’engage à rien mais nous aide à prévoir hébergements & transports.
+        </p>
+        <a href="https://discord.gg/BWefgvrPcD" target="_blank" class="about-button">
+          <img src="assets/discord.webp" alt="Discord" style="height:20px; vertical-align:middle; margin-right:8px;">
+          Rejoindre le Discord pour s’inscrire
+        </a>
+      </section>
+    </main>
+
+    <!-- CTA sticky -->
+    <a class="sticky-cta" href="https://discord.gg/BWefgvrPcD" target="_blank" aria-label="S'inscrire via Discord">🤝 Rejoindre la liste d’intention</a>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <img alt="">
+    </div>
+
+    <!-- JS : countdown + reveal + lightbox -->
+    <script>
+      // Countdown → 13 mai 2026 09:00 (Europe/Paris)
+      (function(){
+        const end = new Date('2026-05-13T09:00:00+02:00').getTime();
+        const $d = document.getElementById('cd-days'),
+              $h = document.getElementById('cd-hours'),
+              $m = document.getElementById('cd-mins'),
+              $s = document.getElementById('cd-secs');
+        if(!$d) return;
+        const tick = () => {
+          const now = Date.now(), delta = Math.max(0, end - now);
+          const days = Math.floor(delta/86400000);
+          const hours = Math.floor((delta%86400000)/3600000);
+          const mins = Math.floor((delta%3600000)/60000);
+          const secs = Math.floor((delta%60000)/1000);
+          $d.textContent = String(days).padStart(2,'0');
+          $h.textContent = String(hours).padStart(2,'0');
+          $m.textContent = String(mins).padStart(2,'0');
+          $s.textContent = String(secs).padStart(2,'0');
+          if(delta>0) requestAnimationFrame(()=>setTimeout(tick, 250));
+        };
+        tick();
+      })();
+
+      // Reveal steps on scroll
+      (function(){
+        const steps = document.querySelectorAll('.step');
+        if(!steps.length) return;
+        const io = new IntersectionObserver(entries=>{
+          entries.forEach(e=>{
+            if(e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target); }
+          });
+        }, {threshold: .2});
+        steps.forEach(s=>io.observe(s));
+      })();
+
+      // Lightbox
+      (function(){
+        const lb = document.getElementById('lightbox');
+        if(!lb) return;
+        const img = lb.querySelector('img');
+        document.addEventListener('click', e=>{
+          const t = e.target;
+          if(t.closest('.gallery img')){
+            img.src = t.src; img.alt = t.alt || '';
+            lb.style.display='flex'; lb.setAttribute('aria-hidden','false');
+          } else if(t===lb){
+            lb.style.display='none'; lb.setAttribute('aria-hidden','true'); img.src='';
+          }
+        });
+        document.addEventListener('keydown', e=>{
+          if(e.key==='Escape' && lb.style.display==='flex'){ lb.click(); }
+        });
+      })();
+    </script>
+  </body>
+</html>
