@@ -297,33 +297,12 @@ function mountHover(mediaWrap, login) {
     unmountHover(first);
   }
 
- function mountHover(mediaWrap, login) {
-  if (hoverPlayers.has(mediaWrap)) return;
-
-  if (hoverPlayers.size >= HOVER_MAX) {
-    const first = hoverPlayers.keys().next().value;
-    unmountHover(first);
-  }
-
   const img = mediaWrap.querySelector(".card-thumb");
   if (img) img.style.opacity = "0";
 
   const iframe = document.createElement("iframe");
   iframe.allow = "autoplay; picture-in-picture";
   iframe.src = makeIframeSrc(login);
-  iframe.style.cssText = `
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    border:0;
-    border-radius:.6rem;
-  `;
-
-  mediaWrap.appendChild(iframe);
-  hoverPlayers.set(mediaWrap, iframe);
-}
-
   iframe.style.cssText = `
     position:absolute;
     inset:0;
