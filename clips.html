@@ -6,150 +6,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Clips à la une de la communauté Twitch Entraide New Family." />
   <link rel="icon" href="assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://clips.twitch.tv" crossorigin>
   <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin>
-
-  <!-- Styles locaux : mêmes codes visuels que l’index (compact + boutons unifiés) -->
-  <style>
-    :root{
-      --bg:#f4e9f9; --text:#1f2937; --muted:#444; --surface:#fff; --border:#eee;
-      --brand:#e74c3c; --violet:#4b0082;
-      --ring:rgba(192,57,43,.35); --shadow:0 10px 24px rgba(0,0,0,.10);
-    }
-    @media (prefers-color-scheme: dark){
-      :root{ --bg:#3B1D5A; --text:#ffffff; --muted:#cbb8ff; --surface:#26143F; --border:rgba(255,255,255,.15); --shadow:0 10px 28px rgba(0,0,0,.45); }
-    }
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-
-    /* HERO compact */
-    header{
-      background: radial-gradient(1100px 600px at 75% -50%, rgba(0,0,0,.25), transparent),
-                  linear-gradient(135deg, #6a2c91 0%, #b04b8b 50%, #d06a79 100%);
-      color:#fff; padding:clamp(1rem, 2.2vw + 0.6rem, 2rem) 1rem;
-      border-bottom-left-radius:24px; border-bottom-right-radius:24px;
-      box-shadow: 0 16px 40px rgba(0,0,0,.18);
-    }
-    .hero{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:.8rem}
-    .hero-logo{width:150px;filter: drop-shadow(0 8px 18px rgba(0,0,0,.35));}
-    h1{margin:.2rem 0 0;font-size:clamp(1.6rem,2.2vw+1rem,2.2rem);text-align:center}
-    .sub{opacity:.95;margin:0 0 .2rem;text-align:center}
-
-    /* Boutons unifiés - harmonisés avec design system TENF-V2 */
-    .btn-row{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
-
-    /* Shell page */
-    main{max-width:1100px;margin:1rem auto 2rem;padding:0 1rem}
-
-    /* Carte lecteur + fiche droite */
-    .clip-grid{
-      display:grid;grid-template-columns: 1.3fr .9fr;gap:16px;
-    }
-    @media (max-width: 960px){ .clip-grid{grid-template-columns:1fr} }
-
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
-    .card-body{padding:1rem 1rem 1.1rem}
-
-    /* Lecteur 16/9 */
-    .player-box{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden}
-    .player-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-
-    /* Fiche streamer */
-    .profile{display:grid;grid-template-columns:64px 1fr;gap:.8rem;align-items:center;margin-bottom:.6rem}
-    .avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.6);box-shadow:0 6px 16px rgba(0,0,0,.2)}
-    .name{margin:0;font-size:1.15rem;font-weight:900}
-    .handle{margin:.1rem 0 0;opacity:.8}
-    .bio{margin:.5rem 0 1rem;color:var(--muted);line-height:1.55}
-
-    /* Nav clips */
-    .clip-nav{display:flex;gap:.6rem;justify-content:center;margin:1rem auto 0}
-
-    /* Back button floating */
-    .backbar{position:relative;max-width:1100px;margin:-.6rem auto 0;padding:0 1rem}
-    .backbar .btn{position:relative;top:-18px}
-  </style>
+  <link rel="stylesheet" href="style/main.css">
 </head>
 <body>
+  <!-- Header conforme au design system TENF-V2 -->
+  <header class="hero">
+    <div class="header-content">
+      <div class="header-logo">
+        <img src="assets/logo.webp" alt="Logo New Family" />
+      </div>
+      <div class="header-text">
+        <h1>📼 Clips de la New Family</h1>
+        <p>Nos meilleurs moments, sélectionnés chaque semaine ✨</p>
+      </div>
+    </div>
 
-  <!-- HERO -->
-  <header>
-    <div class="hero">
-      <img src="assets/logo.webp" alt="New Family" class="hero-logo" />
-      <h1>📼 Clips de la New Family</h1>
-      <p class="sub">Nos meilleurs moments, sélectionnés chaque semaine ✨</p>
-    
-       </div>
-       <div class="backbar">
-    <a class="btn btn--ghost" href="index.html">🏠 Accueil</a>
-  </div>
-        <!-- Réseaux -->
-      <div class="nf-socials">
-  <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily"
-     target="_blank" rel="noopener" aria-label="Instagram New Family">
-    <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy">
-    @twitchentraidenewfamily
-  </a>
+    <div class="backbar">
+      <a class="btn btn--ghost" href="index.html">🏠 Accueil</a>
+    </div>
 
-  <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily"
-     target="_blank" rel="noopener" aria-label="TikTok New Family">
-    <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy">
-    @twitchentraidenewfamily
-  </a>
-</div>
+    <!-- Réseaux -->
+    <div class="nf-socials">
+      <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily"
+         target="_blank" rel="noopener" aria-label="Instagram New Family">
+        <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy">
+        @twitchentraidenewfamily
+      </a>
+
+      <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily"
+         target="_blank" rel="noopener" aria-label="TikTok New Family">
+        <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy">
+        @twitchentraidenewfamily
+      </a>
     </div>
   </header>
 
-
   <main>
-
-    <div class="clip-grid">
-      <!-- Lecteur -->
-      <section class="card">
-        <div class="player-box">
-          <!-- clips.js doit remplir ce src avec le bon clip + parent -->
-          <iframe id="clip-iframe"
-                  allow="autoplay; fullscreen; picture-in-picture"
-                  title="Clip Twitch"
-                  src=""
-                  referrerpolicy="strict-origin-when-cross-origin">
-          </iframe>
-        </div>
-
-        <div class="card-body">
-          <div class="clip-nav">
-            <button id="btn-prev" class="btn btn--ghost">⏮️ Clip précédent</button>
-            <button id="btn-next" class="btn btn--ghost">⏭️ Clip suivant</button>
+    <div class="container" style="max-width:1280px; margin:2rem auto; padding:0 1.5rem;">
+      <!-- Grille lecteur + fiche streamer -->
+      <div class="clip-grid" style="display:grid; grid-template-columns: 1.3fr 0.9fr; gap:1.5rem; margin-bottom:2rem;">
+        <!-- Lecteur clip -->
+        <section class="card">
+          <div class="player-box" style="position:relative; aspect-ratio:16/9; background:#000; border-radius:var(--radius-base); overflow:hidden;">
+            <iframe id="clip-iframe"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    title="Clip Twitch"
+                    src=""
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    style="position:absolute; inset:0; width:100%; height:100%; border:0;">
+            </iframe>
           </div>
-        </div>
-      </section>
 
-      <!-- Fiche streamer -->
-      <aside class="card">
-        <div class="card-body">
-          <div class="profile">
-            <img id="stream-avatar" class="avatar" src="https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png" alt="" />
-            <div>
-              <h2 id="stream-name" class="name">Streamer</h2>
-              <p id="stream-handle" class="handle">@handle</p>
+          <div class="card-body" style="padding:1.25rem;">
+            <div class="clip-nav" style="display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
+              <button id="btn-prev" class="btn btn--ghost">⏮️ Clip précédent</button>
+              <button id="btn-next" class="btn btn--ghost">⏭️ Clip suivant</button>
             </div>
           </div>
+        </section>
 
-          <p id="stream-bio" class="bio">
-            Description du créateur. Elle sera remplacée dynamiquement si disponible.
-          </p>
+        <!-- Fiche streamer -->
+        <aside class="card">
+          <div class="card-body" style="padding:1.25rem;">
+            <div class="profile" style="display:grid; grid-template-columns:64px 1fr; gap:.75rem; align-items:center; margin-bottom:.75rem;">
+              <img id="stream-avatar" 
+                   class="avatar" 
+                   src="https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png" 
+                   alt=""
+                   style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:3px solid var(--color-primary); box-shadow:0 0 12px rgba(145,70,255,.35);" />
+              <div>
+                <h2 id="stream-name" class="name" style="margin:0; font-size:1.15rem; font-weight:700; color:var(--color-text);">Streamer</h2>
+                <p id="stream-handle" class="handle" style="margin:.25rem 0 0; font-size:.875rem; color:var(--color-text-secondary);">@handle</p>
+              </div>
+            </div>
 
-          <div class="btn-row">
-            <a id="stream-link" class="btn btn--primary" href="#" target="_blank" rel="noopener">
-              Voir la chaîne Twitch
-            </a>
+            <p id="stream-bio" class="bio" style="margin:.5rem 0 1rem; color:var(--color-text-secondary); line-height:1.6; font-size:.95rem;">
+              Description du créateur. Elle sera remplacée dynamiquement si disponible.
+            </p>
+
+            <div class="btn-row" style="display:flex; gap:.5rem; justify-content:center;">
+              <a id="stream-link" class="btn btn--primary" href="#" target="_blank" rel="noopener">
+                Voir la chaîne Twitch
+              </a>
+            </div>
           </div>
-        </div>
-      </aside>
+        </aside>
+      </div>
+
+      <!-- Responsive : sur mobile, empiler verticalement -->
+      <style>
+        @media (max-width: 960px) {
+          .clip-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      </style>
     </div>
   </main>
 
-  <!-- Script clip (ton fichier) -->
+  <!-- Script clip -->
   <script>
-    // Petite aide utilitaire : construit une URL "parent" sûre pour l’iframe clip
+    // Construit une URL "parent" sûre pour l'iframe clip
     window.CLIPS_PARENT = location.hostname.replace(/^www\./,'') || 'localhost';
   </script>
   <script src="clips.js"></script>
