@@ -497,10 +497,88 @@ function setStatValue(id, value) {
 
 
 /* -------------------------------------------------------
+   HEADER MOBILE - Masquage au scroll
+-------------------------------------------------------- */
+function setupMobileHeader() {
+  // Seulement sur mobile
+  if (window.innerWidth > 767) return;
+
+  const header = document.querySelector('header');
+  if (!header) return;
+
+  // Créer le bouton toggle si absent
+  let toggleBtn = header.querySelector('.header-toggle');
+  if (!toggleBtn) {
+    toggleBtn = document.createElement('button');
+    toggleBtn.className = 'header-toggle';
+    toggleBtn.setAttribute('aria-label', 'Masquer/Afficher le header');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    header.appendChild(toggleBtn);
+  }
+
+  let lastScrollY = window.scrollY;
+  let isScrolling = false;
+  const scrollThreshold = 50; // Pixels de scroll avant d'activer
+
+  function handleScroll() {
+    if (isScrolling) return;
+    isScrolling = true;
+
+    requestAnimationFrame(() => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
+
+      // Scroll vers le bas (masquer)
+      if (scrollDelta > 5 && currentScrollY > scrollThreshold) {
+        header.classList.add('header-hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+      // Scroll vers le haut (afficher)
+      else if (scrollDelta < -5) {
+        header.classList.remove('header-hidden');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+      // En haut de page (toujours afficher)
+      else if (currentScrollY < 10) {
+        header.classList.remove('header-hidden');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+
+      lastScrollY = currentScrollY;
+      isScrolling = false;
+    });
+  }
+
+  // Toggle manuel avec le bouton
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    header.classList.toggle('header-hidden');
+    const isHidden = header.classList.contains('header-hidden');
+    toggleBtn.setAttribute('aria-expanded', !isHidden);
+    
+    // Si on affiche, scroller vers le haut
+    if (!isHidden) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  // Détection du scroll
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
+  // Réinitialiser au redimensionnement
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 767) {
+      header.classList.remove('header-hidden');
+    }
+  });
+}
+
+/* -------------------------------------------------------
    INIT PRINCIPALE
 -------------------------------------------------------- */
 async function init() {
   setupThemeToggle();
+  setupMobileHeader();
   await getToken();
   if (!token) return;
 

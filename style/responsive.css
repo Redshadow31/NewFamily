@@ -14,6 +14,29 @@
     padding: clamp(.8rem, 2vw, 1.2rem) .75rem !important;
   }
 
+  /* Header masqué - transition fluide */
+  header.header-hidden {
+    transform: translateY(-100%);
+    pointer-events: none;
+  }
+
+  /* Quand le header est masqué, on peut toujours cliquer sur le bouton toggle */
+  header.header-hidden .header-toggle {
+    pointer-events: auto;
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+
+  header.header-hidden .header-toggle::before {
+    transform: rotate(180deg);
+  }
+
   .header-content {
     padding: 1rem .75rem !important;
     gap: .75rem !important;
