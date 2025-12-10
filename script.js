@@ -474,8 +474,9 @@ async function loadStats() {
     }
     const stats = await res.json();
 
-    setStatValue("stat-members", stats.members ?? 0);
-    setStatValue("stat-actifs", stats.active ?? 0);
+    // Membres Discord = 445 (fixe), Actifs = nombre de membres calculé
+    setStatValue("stat-members", 445);
+    setStatValue("stat-actifs", stats.members ?? 0);
     setStatValue("stat-lives", stats.liveAvg ?? 0);
     setStatValue("stat-events", stats.events ?? 0);
 
@@ -610,10 +611,7 @@ async function init() {
   applyFiltersAndRender();
   setupLiveFilters(onlineUsers);
 
-  // Barre live
-  renderLiveStrip(onlineUsers, usersInfo);
-
-  // Mise en avant
+    // Mise en avant
   await renderFeaturedLive(onlineUsers, usersInfo);
 
 
