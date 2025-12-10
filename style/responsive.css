@@ -1,0 +1,404 @@
+/* =========================================================
+   RESPONSIVE MOBILE - Optimisations pour tous les écrans
+   Design System TENF-V2
+   ========================================================= */
+
+/* ===== Breakpoints TENF-V2 ===== */
+/* sm: 640px, md: 768px, lg: 1024px, xl: 1280px */
+
+/* ===== MOBILE FIRST - Base mobile (< 640px) ===== */
+@media (max-width: 639px) {
+  /* Header mobile */
+  header {
+    min-height: clamp(200px, 35vh, 280px) !important;
+    padding: clamp(.8rem, 2vw, 1.2rem) .75rem !important;
+  }
+
+  .header-content {
+    padding: 1rem .75rem !important;
+    gap: .75rem !important;
+  }
+
+  .header-logo img,
+  .hero__logo {
+    width: clamp(80px, 15vw, 120px) !important;
+  }
+
+  .header-text h1,
+  .hero__title {
+    font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
+    margin: .2rem 0 !important;
+  }
+
+  .header-text p,
+  .hero__subtitle {
+    font-size: clamp(.85rem, 2.5vw, 1rem) !important;
+    margin: .2rem 0 .5rem !important;
+  }
+
+  /* Boutons mobile */
+  .button-container,
+  .actions-row,
+  .header-button-wrapper {
+    flex-direction: column;
+    gap: .5rem !important;
+    width: 100%;
+    padding: 0 .5rem;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    padding: .6rem 1rem !important;
+    font-size: .875rem;
+  }
+
+  /* Réseaux sociaux mobile */
+  .nf-socials {
+    flex-direction: column;
+    width: 100%;
+    gap: .5rem;
+  }
+
+  .social-pill {
+    width: 100%;
+    justify-content: center;
+    padding: .5rem .75rem;
+  }
+
+  /* Stats mobile */
+  .nf-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: .75rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  .stat {
+    padding: 1rem .75rem !important;
+  }
+
+  .num {
+    font-size: clamp(1.5rem, 5vw, 2rem) !important;
+  }
+
+  /* Sections "Pourquoi nous" mobile */
+  .nf-why {
+    grid-template-columns: 1fr !important;
+    gap: .75rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  /* Grilles utilisateurs mobile */
+  .users-grid {
+    grid-template-columns: 1fr !important;
+    gap: .75rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  /* Live strip mobile */
+  .live-strip {
+    margin: .6rem .75rem 0 !important;
+    padding: .5rem .6rem !important;
+  }
+
+  .live-chip {
+    padding: .4rem .6rem !important;
+    font-size: .85rem;
+  }
+
+  .live-chip__avatar {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* Live bar mobile */
+  .nf-livebar {
+    padding: .6rem .75rem !important;
+    font-size: .85rem;
+    flex-direction: column;
+    gap: .4rem;
+  }
+
+  /* Featured live mobile */
+  .featured-live {
+    padding: 0 .75rem !important;
+  }
+
+  .featured-content {
+    padding: 1.5rem 1rem 1rem !important;
+  }
+
+  .featured-meta {
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+
+  .pill {
+    font-size: .8rem;
+    padding: .2rem .5rem;
+  }
+
+  /* Staff mobile */
+  .staff-actions {
+    flex-direction: column;
+    gap: .6rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .tab {
+    font-size: .8rem;
+    padding: .4rem .7rem;
+    white-space: nowrap;
+  }
+
+  .search input {
+    width: 100%;
+    min-width: auto !important;
+  }
+
+  .staff-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: .75rem !important;
+  }
+
+  .staff-card {
+    max-width: 100% !important;
+  }
+
+  /* Blog mobile */
+  .blog-toolbar {
+    grid-template-columns: 1fr !important;
+    gap: .6rem !important;
+    padding: 0 .75rem 1rem !important;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  /* VIP mobile */
+  .vip-spotlight-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vip-page {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vip-wall {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  #vip-users {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: .75rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  /* Clips mobile */
+  .clip-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .clip-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .clip-nav .btn {
+    width: 100%;
+  }
+
+  /* Modales mobile */
+  .staff-modal .dialog,
+  .modal-content {
+    grid-template-columns: 1fr !important;
+    padding: 1.5rem 1rem !important;
+    max-width: 95vw !important;
+  }
+
+  .staff-modal .dialog header {
+    margin-bottom: 1rem;
+  }
+
+  /* Container mobile */
+  .container {
+    padding: 0 1rem !important;
+  }
+
+  /* Sections mobile */
+  .section {
+    padding: 2rem 0 !important;
+  }
+
+  .section-sm {
+    padding: 1rem 0 !important;
+  }
+
+  /* Live tools mobile */
+  .live-tools {
+    flex-direction: column;
+    gap: .5rem !important;
+    padding: 0 .75rem !important;
+  }
+
+  .live-tools-group {
+    width: 100%;
+  }
+
+  .live-tools input,
+  .live-tools select {
+    width: 100%;
+    min-width: auto !important;
+  }
+}
+
+/* ===== TABLET (640px - 767px) ===== */
+@media (min-width: 640px) and (max-width: 767px) {
+  .users-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .nf-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .nf-why {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .staff-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  #vip-users {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* ===== TABLET LARGE (768px - 1023px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .users-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .nf-stats {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .nf-why {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .staff-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  #vip-users {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* ===== DESKTOP (1024px+) ===== */
+@media (min-width: 1024px) {
+  /* Optimisations desktop déjà gérées dans les autres fichiers */
+}
+
+/* ===== TOUCH DEVICES ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* Désactiver les hover effects sur mobile */
+  .card:hover,
+  .user-card:hover,
+  .staff-card:hover,
+  .vip-card:hover {
+    transform: none;
+  }
+
+  /* Augmenter les zones de touch */
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .tab {
+    min-height: 44px;
+    padding: .5rem 1rem;
+  }
+
+  /* Désactiver les mini-lecteurs au survol sur mobile */
+  .user-card.is-live .media-wrap:hover {
+    cursor: pointer;
+  }
+}
+
+/* ===== LANDSCAPE MOBILE ===== */
+@media (max-width: 767px) and (orientation: landscape) {
+  header {
+    min-height: clamp(150px, 25vh, 200px) !important;
+    padding: clamp(.6rem, 1.5vw, 1rem) .75rem !important;
+  }
+
+  .header-content {
+    padding: .75rem .5rem !important;
+    gap: .5rem !important;
+  }
+}
+
+/* ===== OPTIMISATIONS PERFORMANCE MOBILE ===== */
+@media (max-width: 767px) {
+  /* Réduire les animations sur mobile pour meilleures performances */
+  * {
+    transition-duration: 100ms !important;
+  }
+
+  /* Désactiver les backdrop-filter sur mobile (performance) */
+  header {
+    backdrop-filter: none !important;
+    background-color: var(--color-bg) !important;
+  }
+
+  /* Optimiser les ombres sur mobile */
+  .card,
+  .user-card,
+  .staff-card,
+  .vip-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  }
+}
+
+/* ===== ACCESSIBILITÉ MOBILE ===== */
+@media (max-width: 767px) {
+  /* Augmenter la taille des textes pour lisibilité */
+  body {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Focus visible amélioré sur mobile */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+

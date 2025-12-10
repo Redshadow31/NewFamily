@@ -44,6 +44,14 @@ header.hero {
   justify-items: center;
 }
 
+/* Responsive header-content */
+@media (max-width: 767px) {
+  .header-content {
+    padding: 1rem .75rem;
+    gap: .75rem;
+  }
+}
+
 /* Logo optionnel au centre */
 
 

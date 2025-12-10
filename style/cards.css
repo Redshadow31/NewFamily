@@ -18,10 +18,11 @@
   margin:1rem auto;
   padding:0 1rem;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  grid-template-columns:1fr;
   gap:1rem;
 }
 
+/* Mobile first - 1 colonne par défaut */
 @media (min-width:640px) {
   .users-grid {
     grid-template-columns:repeat(2,1fr);

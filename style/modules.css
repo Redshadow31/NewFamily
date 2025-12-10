@@ -69,6 +69,18 @@
   color:var(--color-text-secondary);
 }
 
+/* Stats responsive */
+@media (max-width: 639px) {
+  .nf-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .75rem;
+    padding: 0 .75rem;
+  }
+  .stat {
+    padding: 1rem .75rem;
+  }
+}
+
 .nf-why{max-width:1100px;margin:1rem auto 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:0 1rem}
 .nf-why article{
   background:var(--color-card);
@@ -84,6 +96,15 @@
 }
 .nf-why h3{margin:.2rem 0 .3rem;color:var(--color-primary);font-weight:700}
 .nf-why p{color:var(--color-text-secondary)}
+
+/* Why responsive */
+@media (max-width: 639px) {
+  .nf-why {
+    grid-template-columns: 1fr;
+    gap: .75rem;
+    padding: 0 .75rem;
+  }
+}
 
 /* ===== Featured (mise en avant) ===== */
 .featured-live{max-width:1100px;margin:1.6rem auto 0;padding:0 1rem}

@@ -163,10 +163,25 @@ nav a:hover::after,
   padding:0 1.5rem;
 }
 
+@media (max-width: 767px) {
+  .container {
+    padding:0 1rem;
+  }
+}
+
 /* Espacement vertical TENF-V2 */
 .section {
   padding:4rem 0;
 }
 .section-sm {
   padding:2rem 0;
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding:2rem 0;
+  }
+  .section-sm {
+    padding:1rem 0;
+  }
 }
