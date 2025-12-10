@@ -59,6 +59,17 @@
     margin: .2rem 0 .5rem !important;
   }
 
+  /* Layout horizontal devient vertical sur mobile */
+  .hero__inner--horizontal {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+
+  .hero__content {
+    text-align: center !important;
+  }
+
   /* Boutons mobile */
   .button-container,
   .actions-row,

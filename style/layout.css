@@ -51,8 +51,7 @@ header{
 }
 
 /* Header compact pour pages secondaires */
-header.compact,
-header.hero {
+header.compact {
   min-height: clamp(180px, 28vh, 320px) !important;
   padding: clamp(.8rem, 2.5vw, 1.4rem) 1rem !important;
 }
@@ -325,8 +324,8 @@ html.dark .header-text p,
 /* 1) Header compact commun (index + staff) - appliqué via classe .hero ou .compact */
 header.hero,
 header.compact {
-  min-height: clamp(180px, 28vh, 320px) !important;
-  padding: clamp(.8rem, 2.5vw, 1.4rem) 1rem !important;
+  min-height: clamp(140px, 20vh, 200px) !important;
+  padding: clamp(.8rem, 2vw, 1.2rem) 1rem !important;
   background:
     radial-gradient(900px 420px at 20% -20%, rgba(145, 70, 255, 0.15), transparent 60%),
     radial-gradient(900px 420px at 110% 10%, rgba(145, 70, 255, 0.1), transparent 60%),
@@ -336,30 +335,110 @@ header.compact {
   background-size: cover !important;
 }
 
-/* 2) INDEX — logo + overlay + blocs de boutons */
-.hero__logo{               /* <img class="hero__logo" ...> */
-  width: clamp(100px, 12vw, 150px);
+/* 2) INDEX — Layout horizontal logo à gauche */
+.hero__inner--horizontal {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 0;
+}
+
+.hero__logo-wrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.hero__logo {
+  width: clamp(80px, 10vw, 120px);
   height: auto;
   display: block;
-  margin: 0 auto .4rem;
   filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
-}
-.hero__overlay{ display:none; } /* si un overlay poussait le header */
-
-.button-container{         /* 1ère rangée de boutons */
-  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
-  margin:.6rem 0 .8rem;
+  transition: transform var(--transition-base);
 }
 
-.actions-row{              /* 2e rangée : VIP / Événements / Clips / ... */
-  display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap;
-  margin:.8rem auto 0; padding:0 1rem; max-width:1100px;
+.hero__logo:hover {
+  transform: scale(1.05);
+}
+
+.hero__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hero__title {
+  font-size: clamp(1.5rem, 2.5vw, 2rem) !important;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 !important;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.hero__subtitle {
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem) !important;
+  color: var(--color-text-secondary);
+  margin: 0 !important;
+  text-align: left;
+}
+
+.button-container {
+  display: flex;
+  gap: .6rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.actions-row {
+  display: flex;
+  gap: .6rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 0;
 }
 
 /* Actions-row dans le header */
 header .actions-row {
-  margin-top:.6rem;
-  margin-bottom:0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Réseaux sociaux alignés à gauche */
+.hero__content .nf-socials {
+  justify-content: flex-start;
+}
+
+/* Responsive mobile - retour à la verticale */
+@media (max-width: 767px) {
+  .hero__inner--horizontal {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero__logo-wrapper {
+    justify-content: center;
+  }
+
+  .hero__logo {
+    margin: 0 auto;
+  }
+
+  .hero__title,
+  .hero__subtitle {
+    text-align: center !important;
+  }
+
+  .button-container,
+  .actions-row,
+  .hero__content .nf-socials {
+    justify-content: center;
+  }
 }
 
 /* 3) STAFF — logo dans la structure header-logo si présent */
