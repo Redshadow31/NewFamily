@@ -269,17 +269,21 @@
 /* Live badge (plus petit) */
 .live-dot{position:absolute;right:6px;top:4px;display:inline-flex;align-items:center;gap:.3rem;background:#dc2626;color:#fff;border-radius:999px;padding:.15rem .4rem;font-weight:700;font-size:.7rem;box-shadow:0 2px 8px rgba(220,38,38,.4)}
 
-/* Boutons */
-.about-button{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border-radius:8px;font-weight:700;padding:.4rem .8rem;transition:.2s}
+/* Boutons dans cartes staff - harmonisés avec design system */
+.staff-card .btns .btn {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+}
 
-/* Bouton Twitch => icône */
-.about-button[href*="twitch.tv"]{background:transparent;border:1px solid var(--color-primary);color:var(--color-primary);transition:var(--transition-colors)}
-.about-button[href*="twitch.tv"]::before{content:"";width:18px;height:18px;background:url("assets/twitch.png") no-repeat center/contain;display:inline-block}
-.about-button[href*="twitch.tv"]:hover{background:var(--color-primary);color:#fff}
-
-/* Bouton Plus – moderne */
-.about-button[data-more]{background:transparent;border:1px solid var(--color-border);color:var(--color-text);backdrop-filter:blur(3px);transition:var(--transition-colors)}
-.about-button[data-more]:hover{background:var(--color-card);border-color:var(--color-border-hover)}
+/* Bouton Twitch dans cartes staff avec icône */
+.staff-card .btns .btn[href*="twitch.tv"]::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: url("assets/twitch.png") no-repeat center/contain;
+  display: inline-block;
+  margin-right: 0.25rem;
+}
 
 /* =========================
    Modale – verre dépoli TENF-V2

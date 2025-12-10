@@ -421,8 +421,8 @@ function renderPole(container, pole, avatarMap, liveSet, q=""){
           <h3 class="name">${escapeHtml(m.name)}</h3>
           <p class="desc">${escapeHtml(m.desc || "")}</p>
           <div class="btns" style="margin-top:.4rem;display:flex;gap:.4rem;justify-content:center">
-            <a class="about-button" href="https://twitch.tv/${loginLc}" target="_blank" rel="noopener">Twitch</a>
-            <button class="about-button" data-more="${loginLc}" data-level="${m.level}">Plus</button>
+            <a class="btn btn--ghost" href="https://twitch.tv/${loginLc}" target="_blank" rel="noopener">Twitch</a>
+            <button class="btn btn--ghost" data-more="${loginLc}" data-level="${m.level}">Plus</button>
           </div>
         </div>
       `;
