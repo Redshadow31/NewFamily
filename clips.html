@@ -21,28 +21,28 @@
         <img src="assets/logo.webp" alt="Logo New Family" />
       </div>
       <div class="header-text">
-        <h1>📼 Clips de la New Family</h1>
+      <h1>📼 Clips de la New Family</h1>
         <p>Nos meilleurs moments, sélectionnés chaque semaine ✨</p>
       </div>
     </div>
-
-    <div class="backbar">
+    
+       <div class="backbar">
       <a class="btn btn--ghost" href="index.html">🏠 Accueil</a>
-    </div>
+  </div>
 
-    <!-- Réseaux -->
-    <div class="nf-socials">
-      <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily"
-         target="_blank" rel="noopener" aria-label="Instagram New Family">
-        <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy">
-        @twitchentraidenewfamily
-      </a>
+        <!-- Réseaux -->
+      <div class="nf-socials">
+  <a class="social-pill" href="https://www.instagram.com/twitchentraidenewfamily"
+     target="_blank" rel="noopener" aria-label="Instagram New Family">
+    <img src="assets/Instagram.webp" alt="" width="18" height="18" loading="lazy">
+    @twitchentraidenewfamily
+  </a>
 
-      <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily"
-         target="_blank" rel="noopener" aria-label="TikTok New Family">
-        <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy">
-        @twitchentraidenewfamily
-      </a>
+  <a class="social-pill" href="https://www.tiktok.com/@twitchentraidenewfamily"
+     target="_blank" rel="noopener" aria-label="TikTok New Family">
+    <img src="assets/Tiktok.webp" alt="" width="18" height="18" loading="lazy">
+    @twitchentraidenewfamily
+  </a>
     </div>
   </header>
 
@@ -51,27 +51,27 @@
       <!-- Grille lecteur + fiche streamer -->
       <div class="clip-grid" style="display:grid; grid-template-columns: 1.3fr 0.9fr; gap:1.5rem; margin-bottom:2rem;">
         <!-- Lecteur clip -->
-        <section class="card">
+      <section class="card">
           <div class="player-box" style="position:relative; aspect-ratio:16/9; background:#000; border-radius:var(--radius-base); overflow:hidden;">
-            <iframe id="clip-iframe"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    title="Clip Twitch"
-                    src=""
+          <iframe id="clip-iframe"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  title="Clip Twitch"
+                  src=""
                     referrerpolicy="strict-origin-when-cross-origin"
                     style="position:absolute; inset:0; width:100%; height:100%; border:0;">
-            </iframe>
-          </div>
+          </iframe>
+        </div>
 
           <div class="card-body" style="padding:1.25rem;">
             <div class="clip-nav" style="display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap;">
-              <button id="btn-prev" class="btn btn--ghost">⏮️ Clip précédent</button>
-              <button id="btn-next" class="btn btn--ghost">⏭️ Clip suivant</button>
-            </div>
+            <button id="btn-prev" class="btn btn--ghost">⏮️ Clip précédent</button>
+            <button id="btn-next" class="btn btn--ghost">⏭️ Clip suivant</button>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- Fiche streamer -->
-        <aside class="card">
+      <!-- Fiche streamer -->
+      <aside class="card">
           <div class="card-body" style="padding:1.25rem;">
             <div class="profile" style="display:grid; grid-template-columns:64px 1fr; gap:.75rem; align-items:center; margin-bottom:.75rem;">
               <img id="stream-avatar" 
@@ -79,23 +79,23 @@
                    src="https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png" 
                    alt=""
                    style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:3px solid var(--color-primary); box-shadow:0 0 12px rgba(145,70,255,.35);" />
-              <div>
+            <div>
                 <h2 id="stream-name" class="name" style="margin:0; font-size:1.15rem; font-weight:700; color:var(--color-text);">Streamer</h2>
                 <p id="stream-handle" class="handle" style="margin:.25rem 0 0; font-size:.875rem; color:var(--color-text-secondary);">@handle</p>
-              </div>
-            </div>
-
-            <p id="stream-bio" class="bio" style="margin:.5rem 0 1rem; color:var(--color-text-secondary); line-height:1.6; font-size:.95rem;">
-              Description du créateur. Elle sera remplacée dynamiquement si disponible.
-            </p>
-
-            <div class="btn-row" style="display:flex; gap:.5rem; justify-content:center;">
-              <a id="stream-link" class="btn btn--primary" href="#" target="_blank" rel="noopener">
-                Voir la chaîne Twitch
-              </a>
             </div>
           </div>
-        </aside>
+
+            <p id="stream-bio" class="bio" style="margin:.5rem 0 1rem; color:var(--color-text-secondary); line-height:1.6; font-size:.95rem;">
+            Description du créateur. Elle sera remplacée dynamiquement si disponible.
+          </p>
+
+            <div class="btn-row" style="display:flex; gap:.5rem; justify-content:center;">
+            <a id="stream-link" class="btn btn--primary" href="#" target="_blank" rel="noopener">
+              Voir la chaîne Twitch
+            </a>
+          </div>
+        </div>
+      </aside>
       </div>
 
       <!-- Responsive : sur mobile, empiler verticalement -->

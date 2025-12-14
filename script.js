@@ -611,7 +611,7 @@ async function init() {
   applyFiltersAndRender();
   setupLiveFilters(onlineUsers);
 
-    // Mise en avant
+  // Mise en avant
   await renderFeaturedLive(onlineUsers, usersInfo);
 
 
