@@ -1,0 +1,109 @@
+/* =========================================================
+   Bandeau Obsolète - Site V1 → V2
+   ========================================================= */
+
+.obsolete-banner {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, rgba(14, 14, 16, 0.98) 0%, rgba(26, 26, 29, 0.98) 100%);
+  border-bottom: 2px solid var(--color-primary);
+  box-shadow: 0 4px 20px rgba(145, 70, 255, 0.2);
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.obsolete-banner__content {
+  max-width: 1280px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.obsolete-banner__main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  color: var(--color-text);
+}
+
+.obsolete-banner__warning {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.obsolete-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--radius-base);
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(145, 70, 255, 0.3);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  font-size: 0.875rem;
+}
+
+.obsolete-banner__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(145, 70, 255, 0.4);
+}
+
+.obsolete-banner__secondary {
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.obsolete-banner__link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-base);
+}
+
+.obsolete-banner__link:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Responsive mobile */
+@media (max-width: 767px) {
+  .obsolete-banner {
+    padding: 0.875rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .obsolete-banner__main {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .obsolete-banner__cta {
+    width: 100%;
+    justify-content: center;
+    padding: 0.7rem 1.25rem;
+  }
+
+  .obsolete-banner__secondary {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
